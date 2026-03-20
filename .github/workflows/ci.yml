@@ -82,7 +82,8 @@ jobs:
               --include='*.json' --include='*.md' --include='*.sh' --include='*.env' \
               --exclude-dir=.git --exclude-dir=tutorials --exclude-dir=phases \
               --exclude-dir=hooks --exclude-dir=templates --exclude-dir=stacks \
-              --exclude-dir=agents . 2>/dev/null \
+              --exclude-dir=agents --exclude-dir=docs --exclude-dir=concepts \
+              --exclude-dir=core . 2>/dev/null \
               | grep -v '.gitignore' \
               | grep -v 'SKILL.md' \
               | grep -v 'fix-templates' \

@@ -53,12 +53,7 @@ The state schema has evolved through three versions:
 | v2 | Added completeness tracking, finding lifecycle |
 | v2.1 | String enum layer status, checksSkipped array |
 
-**Automatic migration:** When a skill reads an older state file, it migrates in place:
-- v1 boolean layer values (`true`/`false`) become `"done"`/`"pending"`
-- Missing `completeness` objects are initialized with zeroed counters
-- Missing `checksSkipped` arrays are added as empty
-
-Migration is transparent -- the skill reads the old format and writes the new format on first update.
+**Automatic migration:** When a skill reads an older state file, it migrates in place -- v1 booleans become string enums, missing `completeness` and `checksSkipped` fields are initialized. Migration is transparent.
 
 ## Phase Tracking
 

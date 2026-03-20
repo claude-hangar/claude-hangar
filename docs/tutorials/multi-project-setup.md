@@ -1,116 +1,24 @@
 # Tutorial: Multi-Project Setup
 
-This tutorial walks you through configuring Claude Hangar to manage multiple projects from a single registry. You will set up project-specific CLAUDE.md files and deploy configurations with a single command.
+Configure Claude Hangar to manage multiple projects from a single registry, with project-specific CLAUDE.md files deployed by a single command.
 
 ## What You Will Build
 
-A registry with three projects:
-- A marketing website (Astro)
-- A web application (SvelteKit)
-- A backend API (Fastify)
+A registry with three projects -- a marketing website (Astro), a web application (SvelteKit), and a backend API (Fastify) -- each with tailored instructions while sharing global hooks and skills.
 
-Each project gets its own CLAUDE.md with tailored instructions, while sharing the global hooks and skills from Claude Hangar.
-
-## Step 1: Understand the Registry
-
-The registry file (`registry/registry.json`) maps project names to their configuration. Each entry specifies:
-
-- **name:** Project identifier
-- **repo:** Git repository URL
-- **defaultPath:** Where the project lives on disk
-- **stack:** Technology stack (used for deploying stack-specific configs)
-
-## Step 2: Create Project Configurations
+## Step 1: Create Project Configurations
 
 For each project, create a directory under `registry/projects/` with a CLAUDE.md file.
 
-### Marketing website
+**`registry/projects/marketing-site/CLAUDE.md`** -- defines stack (Astro, Tailwind, Docker), conventions (self-hosted fonts, no client JS), and quality targets (Lighthouse >90, WCAG AA).
 
-Create `registry/projects/marketing-site/CLAUDE.md`:
+**`registry/projects/web-app/CLAUDE.md`** -- defines stack (SvelteKit, PostgreSQL, Drizzle, bcryptjs), conventions (Svelte 5 runes, form actions, server-only code in +page.server.ts).
 
-```markdown
-# Marketing Site -- Project Instructions
+**`registry/projects/backend-api/CLAUDE.md`** -- defines stack (Fastify, PostgreSQL, JWT), conventions (Fastify schema validation, pino logging, auto-generated OpenAPI spec).
 
-## What Is This?
+Each CLAUDE.md should include: project description, stack, conventions, and quality standards.
 
-Company marketing website built with Astro and Tailwind CSS v4.
-Deployed via Docker + Traefik on Hetzner VPS.
-
-## Stack
-
-- **Frontend:** Astro (SSG, static output)
-- **CSS:** Tailwind CSS v4
-- **Deployment:** Docker, Traefik reverse proxy
-- **Hosting:** Hetzner VPS
-
-## Conventions
-
-- All pages in `src/pages/`
-- Components in `src/components/` (Astro components, no framework)
-- Self-hosted fonts only (GDPR compliance)
-- Images optimized via Astro Image
-- No client-side JavaScript unless absolutely necessary
-
-## Quality Standards
-
-- Lighthouse score > 90 on all categories
-- WCAG AA compliance
-- Core Web Vitals: LCP < 2.5s, CLS < 0.1
-```
-
-### Web application
-
-Create `registry/projects/web-app/CLAUDE.md`:
-
-```markdown
-# Web App -- Project Instructions
-
-## What Is This?
-
-Internal dashboard built with SvelteKit and PostgreSQL.
-
-## Stack
-
-- **Frontend/Backend:** SvelteKit (SSR)
-- **Database:** PostgreSQL via Drizzle ORM
-- **Auth:** Custom bcryptjs + sessions
-- **CSS:** Tailwind CSS v4
-
-## Conventions
-
-- Svelte 5 runes syntax (no legacy $: reactivity)
-- Server-only code in +page.server.ts and +server.ts
-- All database queries through Drizzle, never raw SQL
-- Form actions for mutations, load functions for reads
-```
-
-### Backend API
-
-Create `registry/projects/backend-api/CLAUDE.md`:
-
-```markdown
-# Backend API -- Project Instructions
-
-## What Is This?
-
-REST API for mobile app, built with Fastify.
-
-## Stack
-
-- **Runtime:** Node.js
-- **Framework:** Fastify
-- **Database:** PostgreSQL via Drizzle ORM
-- **Auth:** JWT tokens
-
-## Conventions
-
-- Route handlers in `src/routes/`
-- Fastify schema validation on all endpoints
-- Structured logging with pino
-- OpenAPI spec auto-generated from schemas
-```
-
-## Step 3: Configure the Registry
+## Step 2: Configure the Registry
 
 Create or update `registry/registry.json`:
 
@@ -139,9 +47,7 @@ Create or update `registry/registry.json`:
 }
 ```
 
-## Step 4: Run Setup
-
-Deploy all configurations:
+## Step 3: Run Setup
 
 ```bash
 bash setup.sh
@@ -150,90 +56,45 @@ bash setup.sh
 The setup script processes three phases:
 
 1. **Phase 1 -- Global:** Deploys `core/` to `~/.claude/` (hooks, agents, skills, statusline)
-2. **Phase 2 -- Projects:** For each project in the registry:
-   - Checks if the project path exists
-   - If not, clones the repo
-   - Deploys the project-specific CLAUDE.md
-   - Deploys any project-specific skills or hooks
-3. **Phase 3 -- Infrastructure (optional):** If configured, runs infrastructure setup
+2. **Phase 2 -- Projects:** For each registry entry -- checks path, clones repo if needed, deploys CLAUDE.md and project-specific configs
+3. **Phase 3 -- Infrastructure (optional):** Runs infrastructure setup if configured
 
-### First run
+On the first run, setup asks for each project path. Choices are saved in `.local-config.json` (gitignored). Subsequent runs use saved paths automatically.
 
-On the first run, the setup script asks for each project path:
-
-```
-Project: marketing-site
-  Default path: ~/projects/marketing-site
-  Use default? [Y/n]:
-```
-
-Your choices are saved in `.local-config.json` (gitignored). Subsequent runs use the saved paths automatically.
-
-## Step 5: Verify the Deployment
-
-Check that each project has its CLAUDE.md deployed:
+## Step 4: Verify
 
 ```bash
 bash setup.sh --verify
 ```
 
-This confirms:
-- Global config deployed to `~/.claude/`
-- Each project's CLAUDE.md is in place
-- Hooks and skills are available
-
-You can also verify manually:
-
-```bash
-cat ~/projects/marketing-site/CLAUDE.md
-cat ~/projects/web-app/CLAUDE.md
-cat ~/projects/backend-api/CLAUDE.md
-```
-
-Each file should contain the project-specific instructions you created.
+Confirms global config is deployed and each project has its CLAUDE.md in place.
 
 ## Managing Projects
 
-### Adding a new project
+**Adding:** Create `registry/projects/{name}/CLAUDE.md`, add entry to `registry/registry.json`, run `bash setup.sh`.
 
-1. Create `registry/projects/{name}/CLAUDE.md` with project instructions
-2. Add an entry to `registry/registry.json`
-3. Run `bash setup.sh`
+**Updating:** Edit the master copy in `registry/projects/{name}/CLAUDE.md`, run `bash setup.sh` to sync.
 
-### Updating a project's config
-
-1. Edit `registry/projects/{name}/CLAUDE.md` (this is the master copy)
-2. Run `bash setup.sh` to sync the change to the project path
-
-### Removing a project
-
-1. Remove the entry from `registry/registry.json`
-2. Optionally delete `registry/projects/{name}/`
-3. The CLAUDE.md at the project path remains untouched (no destructive cleanup)
+**Removing:** Remove the entry from `registry/registry.json`. The deployed CLAUDE.md at the project path is not deleted.
 
 ## How It Works in Practice
 
-When you open Claude Code in any registered project, it automatically reads the deployed CLAUDE.md and follows the project-specific instructions. At the same time, the global hooks (bash guard, secret leak check, token warning, etc.) and skills (audit, adversarial-review, polish, etc.) are available because they were deployed to `~/.claude/`.
+When you open Claude Code in any registered project, it reads the deployed CLAUDE.md for project-specific instructions. Global hooks and skills from `~/.claude/` are available everywhere:
 
 ```
-~/.claude/                    -- Global (shared across all projects)
-  hooks/                      -- bash-guard.sh, secret-leak-check.sh, etc.
+~/.claude/                    -- Global (all projects)
+  hooks/                      -- bash-guard, secret-leak-check, etc.
   skills/                     -- audit, adversarial-review, polish, etc.
-  agents/                     -- explorer, security-reviewer, etc.
   settings.json               -- Hook registration, statusline
-  CLAUDE.md                   -- Global instructions
 
 ~/projects/marketing-site/    -- Project-specific
-  CLAUDE.md                   -- Marketing site instructions (from registry)
-  .audit-state.json           -- Audit state (created by /audit)
-
-~/projects/web-app/           -- Project-specific
-  CLAUDE.md                   -- Web app instructions (from registry)
+  CLAUDE.md                   -- From registry (master copy in claude-hangar)
+  .audit-state.json           -- Created by /audit at runtime
 ```
 
 ## Path Overrides
 
-If a project lives at a different path on your machine (e.g., a different drive on Windows), override the default path in `.local-config.json`:
+If a project lives at a non-default path, override it in `.local-config.json`:
 
 ```json
 {
@@ -245,4 +106,4 @@ If a project lives at a different path on your machine (e.g., a different drive 
 }
 ```
 
-This file is gitignored and machine-specific. The registry keeps the standard default paths, while `.local-config.json` handles local deviations.
+This file is gitignored and machine-specific. The registry keeps standard defaults while `.local-config.json` handles local deviations.

@@ -73,9 +73,23 @@ The `session-stop` hook logs session cost data to `${LOCALAPPDATA}/claude-status
 
 ## Task System
 
-The `.tasks.json` file tracks in-session progress and enables handoffs between sessions. Tasks have three states: `"open"`, `"in-progress"`, and `"done"`.
+The `.tasks.json` file tracks in-session progress and enables handoffs between sessions.
 
-**Session start integration:** The `session-start` hook reads `.tasks.json` and surfaces open/in-progress tasks as context for the model.
+**Task states:**
+
+| Status | Meaning |
+|--------|---------|
+| `"open"` | Queued, not yet started |
+| `"in-progress"` | Currently being worked on |
+| `"done"` | Completed |
+
+**Session start integration:** The `session-start` hook reads `.tasks.json` and surfaces open/in-progress tasks as context for the model, e.g.:
+
+```
+Tasks: 1 in progress, 2 open
+  - [in-progress] Continue audit from phase 05
+  - [open] Fix SEC-01 (missing CSP header)
+```
 
 **Auto-created tasks:** Skills create tasks automatically when context runs low during `auto` mode. The task includes a handoff note describing what was completed and what remains. The next session picks up from where the previous session left off.
 
