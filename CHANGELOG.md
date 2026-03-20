@@ -5,20 +5,75 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.0.0] — 2026-03-20
 
 ### Added
 
-- Initial repository structure
-- Core hooks: secret-leak-check, bash-guard, checkpoint, token-warning, session-start, session-stop, post-compact, config-change-guard, skill-suggest, stop-failure
-- Core agents: explorer, explorer-deep, security-reviewer, commit-reviewer, dependency-checker
-- Core skills: audit, project-audit, adversarial-review, polish, deploy-check, git-hygiene, lesson-learned, audit-orchestrator, audit-runner, favicon-check, meta-tags, lighthouse-quick, capture-pdf, design-system
-- Stack extensions: astro, sveltekit, database, auth
-- CI/CD templates: Node.js, Python, VPS deploy, GitHub Pages, Cloudflare Pages
-- Interactive setup wizard with profile selection
-- CLAUDE.md template engine with placeholder system
-- Multi-project registry with schema validation
-- Statusline integration
-- Comprehensive test suite
-- Documentation: getting started, configuration, writing guides, architecture concepts
-- i18n: German translation
+**Core Hooks (10):**
+- secret-leak-check — Block writes containing API keys, tokens, credentials
+- bash-guard — Block destructive commands, validate commits, CI guard
+- checkpoint — Git stash snapshots before file edits
+- token-warning — Context utilization alerts at 70%/80%
+- session-start — STATUS.md/tasks context loading, memory hygiene check
+- session-stop — Temp file cleanup, cost logging
+- post-compact — Token tracking reset after compaction
+- config-change-guard — Log and warn on critical settings changes
+- skill-suggest — Suggest matching skills based on user prompts
+- stop-failure — Error logging on session failures
+
+**Core Agents (5):**
+- explorer — Read-only codebase analysis (Sonnet, fast)
+- explorer-deep — Deep architecture analysis (Opus, worktree isolation)
+- security-reviewer — OWASP Top 10 + Agentic Top 10 checks (Opus, worktree)
+- commit-reviewer — Pre-commit staged changes review (Sonnet)
+- dependency-checker — npm audit + outdated + CVE research (Sonnet)
+
+**Core Skills (17):**
+- scan — Project tech stack detection and profiling
+- consult — Interactive project improvement consultant
+- audit — Three-layer website audit (9 phases)
+- project-audit — Repository audit (10 phases)
+- adversarial-review — Critical review with min. 5 findings
+- polish — Frontend enhancement (6 dimensions, 7 modes)
+- deploy-check — Docker/Traefik deployment readiness
+- git-hygiene — Repository health checks
+- lesson-learned — Learning extraction to memory system
+- capture-pdf — Multi-page website PDF capture
+- favicon-check — Icon and favicon completeness
+- meta-tags — SEO meta-tag validation
+- lighthouse-quick — Core Web Vitals performance check
+- design-system — Tailwind v4 design reference
+- freshness-check — Framework version currency tracking
+- audit-orchestrator — Multi-audit coordination
+- audit-runner — Autonomous batch audit execution
+
+**Stack Extensions (4):**
+- astro — Astro v5/v6 migration checklists and audit
+- sveltekit — SvelteKit 2 + Svelte 5 runes migration
+- database — Drizzle ORM + PostgreSQL audit
+- auth — bcryptjs + sessions security audit
+
+**Infrastructure:**
+- Interactive setup wizard (setup.sh) with --check, --verify, --rollback, --update
+- One-liner installer (install.sh)
+- CLAUDE.md template engine with {{PLACEHOLDER}} system
+- 4 project templates (minimal, web, fullstack, management)
+- 5 CI/CD templates (Node.js, Python, VPS/GHCR, GitHub Pages, Cloudflare Pages)
+- Multi-project registry with JSON schema validation
+- Statusline with OAuth usage tracking, context bar, burn rate
+- Shared lib (common.sh) with OS detection, logging, path conversion
+
+**Documentation (18 files):**
+- Getting started, configuration, multi-project guides
+- Writing guides: skills, hooks, agents
+- Architecture overview with system flow diagrams
+- 5 concept docs: three-layer audit, state management, skill lifecycle, hook system, session continuity
+- 4 tutorials: first audit, custom skill, multi-project setup, statusline customization
+- Patterns reference (anti-patterns, root cause analysis)
+- FAQ (15+ questions)
+
+**Community:**
+- Issue templates (bug report, feature request, skill request)
+- Contributing guide, Code of Conduct, Security policy
+- Release and welcome workflows
+- i18n structure with German placeholder
