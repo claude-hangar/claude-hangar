@@ -1,0 +1,16 @@
+# {{PROJECT_NAME}} — Claude Code Instructions
+
+## What Is This?
+{{PROJECT_DESCRIPTION}}
+
+## Tech Stack
+{{TECH_STACK}}
+
+## Quality Standards
+- No hardcoded versions — always check live
+- Conventional Commits (feat:, fix:, docs:, chore:)
+- Tests before commit when available
+
+## Error Handling
+- On error: stop, explain, suggest alternative
+- Root cause analysis: SYMPTOM → CONTEXT → CAUSE → FIX → PREVENTION

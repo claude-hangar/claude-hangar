@@ -1,0 +1,27 @@
+{
+  "default": true,
+
+  "MD001": false,
+  "MD013": false,
+  "MD022": false,
+  "MD024": { "siblings_only": true },
+  "MD025": false,
+  "MD026": false,
+  "MD029": false,
+  "MD031": false,
+  "MD032": false,
+  "MD033": false,
+  "MD034": false,
+  "MD036": false,
+  "MD037": false,
+  "MD040": false,
+  "MD041": false,
+  "MD050": false,
+  "MD052": false,
+  "MD055": false,
+  "MD056": false,
+  "MD058": false,
+  "MD060": false,
+
+  "$comment": "MD001: Heading increment (skills use own hierarchy), MD013: Line length (tables/URLs), MD022: Heading blank lines, MD025: Single H1 (skills have multiple sections), MD033: Inline HTML (SVG, details/summary), MD040: Fenced code language, MD041: First line heading, MD055/056: Table formatting (template placeholders)"
+}

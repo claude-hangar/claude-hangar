@@ -1,0 +1,277 @@
+#!/usr/bin/env bash
+# ─────────────────────────────────────────────────────────────────────────
+# Claude Hangar — Setup Script
+# ─────────────────────────────────────────────────────────────────────────
+# Deploys hooks, agents, skills, statusline and CLAUDE.md to ~/.claude/
+#
+# Usage:
+#   bash setup.sh              # Interactive wizard (first run) or sync
+#   bash setup.sh --check      # Dry-run — validate without deploying
+#   bash setup.sh --verify     # Verify existing installation
+#   bash setup.sh --rollback   # Restore from backup
+#   bash setup.sh --update     # git pull + sync
+# ─────────────────────────────────────────────────────────────────────────
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CLAUDE_DIR="$HOME/.claude"
+
+# Source shared functions
+# shellcheck source=core/lib/common.sh
+source "$SCRIPT_DIR/core/lib/common.sh" 2>/dev/null || {
+  # Inline fallback if common.sh not found
+  RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'
+  CYAN='\033[0;36m'; NC='\033[0m'
+  info()    { echo -e "${CYAN}[i]${NC} $1"; }
+  success() { echo -e "${GREEN}[+]${NC} $1"; }
+  warn()    { echo -e "${YELLOW}[!]${NC} $1"; }
+  error()   { echo -e "${RED}[x]${NC} $1"; }
+  detect_os() {
+    case "$(uname -s)" in
+      Linux*) echo "linux" ;; MINGW*|MSYS*|CYGWIN*) echo "windows" ;;
+      Darwin*) echo "macos" ;; *) echo "unknown" ;;
+    esac
+  }
+}
+
+# shellcheck disable=SC2034  # OS used by deploy logic
+OS=$(detect_os)
+
+# ─── Prerequisites ─────────────────────────────────────────────────────
+
+check_prerequisites() {
+  local missing=()
+  command -v git &>/dev/null || missing+=("git")
+  command -v node &>/dev/null || missing+=("node")
+  command -v jq &>/dev/null || missing+=("jq (optional, for statusline)")
+
+  if [ ${#missing[@]} -gt 0 ]; then
+    for m in "${missing[@]}"; do
+      if [[ "$m" == *optional* ]]; then
+        warn "Missing (optional): $m"
+      else
+        error "Missing: $m"
+      fi
+    done
+    # Only fail on required deps
+    command -v git &>/dev/null && command -v node &>/dev/null && return 0
+    error "Install missing prerequisites, then re-run setup."
+    return 1
+  fi
+  return 0
+}
+
+# ─── Validate Structure ───────────────────────────────────────────────
+
+validate_structure() {
+  local errors=0
+
+  # Check required directories (core/skills may be empty initially)
+  for dir in core/hooks core/agents core/lib; do
+    if [ ! -d "$SCRIPT_DIR/$dir" ]; then
+      error "Missing directory: $dir"
+      errors=$((errors + 1))
+    fi
+  done
+
+  # Check required files
+  for file in core/lib/common.sh core/statusline-command.sh core/settings.json.template core/CLAUDE.md.template; do
+    if [ ! -f "$SCRIPT_DIR/$file" ]; then
+      error "Missing file: $file"
+      errors=$((errors + 1))
+    fi
+  done
+
+  # Check hooks
+  local hook_count
+  hook_count=$(find "$SCRIPT_DIR/core/hooks" -name '*.sh' 2>/dev/null | wc -l)
+  if [ "$hook_count" -lt 5 ]; then
+    warn "Only $hook_count hooks found (expected 10+)"
+  fi
+
+  # Check agents
+  local agent_count
+  agent_count=$(find "$SCRIPT_DIR/core/agents" -name '*.md' 2>/dev/null | wc -l)
+  if [ "$agent_count" -lt 3 ]; then
+    warn "Only $agent_count agents found (expected 5+)"
+  fi
+
+  # Validate JSON files
+  local json_errors=0
+  while IFS= read -r file; do
+    if ! node -e "JSON.parse(require('fs').readFileSync('$file','utf8'))" 2>/dev/null; then
+      error "Invalid JSON: $file"
+      json_errors=$((json_errors + 1))
+    fi
+  done < <(find "$SCRIPT_DIR" -name '*.json' -not -path '*/.git/*' -not -path '*/node_modules/*')
+
+  errors=$((errors + json_errors))
+
+  if [ "$errors" -eq 0 ]; then
+    success "Structure validation passed"
+    return 0
+  else
+    error "$errors validation error(s) found"
+    return 1
+  fi
+}
+
+# ─── Deploy ────────────────────────────────────────────────────────────
+
+deploy_component() {
+  local src="$1"
+  local dest="$2"
+  local label="$3"
+
+  if [ ! -e "$src" ]; then
+    warn "Source not found: $src"
+    return 1
+  fi
+
+  mkdir -p "$(dirname "$dest")"
+
+  if [ -d "$src" ]; then
+    cp -r "$src/." "$dest/"
+  else
+    cp "$src" "$dest"
+  fi
+  success "Deployed: $label"
+}
+
+deploy_all() {
+  info "Deploying to $CLAUDE_DIR..."
+
+  # Backup existing config
+  if [ -d "$CLAUDE_DIR" ] && [ ! -f "$CLAUDE_DIR/.hangar-backup-done" ]; then
+    local backup_dir
+    backup_dir="$CLAUDE_DIR/.backup-$(date +%Y%m%d-%H%M%S)"
+    mkdir -p "$backup_dir"
+    for item in hooks agents skills lib statusline-command.sh settings.json CLAUDE.md; do
+      [ -e "$CLAUDE_DIR/$item" ] && cp -r "$CLAUDE_DIR/$item" "$backup_dir/" 2>/dev/null || true
+    done
+    success "Backed up existing config to $backup_dir"
+    touch "$CLAUDE_DIR/.hangar-backup-done"
+  fi
+
+  # Deploy components
+  mkdir -p "$CLAUDE_DIR"
+  deploy_component "$SCRIPT_DIR/core/hooks" "$CLAUDE_DIR/hooks" "Hooks ($(find "$SCRIPT_DIR/core/hooks" -name '*.sh' | wc -l) scripts)"
+  deploy_component "$SCRIPT_DIR/core/agents" "$CLAUDE_DIR/agents" "Agents ($(find "$SCRIPT_DIR/core/agents" -name '*.md' | wc -l) definitions)"
+  deploy_component "$SCRIPT_DIR/core/skills" "$CLAUDE_DIR/skills" "Skills"
+  deploy_component "$SCRIPT_DIR/core/lib" "$CLAUDE_DIR/lib" "Shared lib"
+  deploy_component "$SCRIPT_DIR/core/statusline-command.sh" "$CLAUDE_DIR/statusline-command.sh" "Statusline"
+
+  # Deploy stacks into skills
+  if [ -d "$SCRIPT_DIR/stacks" ]; then
+    for stack_dir in "$SCRIPT_DIR"/stacks/*/; do
+      [ -d "$stack_dir" ] || continue
+      local stack_name
+      stack_name=$(basename "$stack_dir")
+      [ "$stack_name" = "README.md" ] && continue
+      deploy_component "$stack_dir" "$CLAUDE_DIR/skills/$stack_name" "Stack: $stack_name"
+    done
+  fi
+
+  # Settings: merge or deploy template
+  if [ ! -f "$CLAUDE_DIR/settings.json" ]; then
+    # First install: deploy template (strip {{LANGUAGE}} placeholder)
+    sed 's/{{LANGUAGE}}/English/' "$SCRIPT_DIR/core/settings.json.template" > "$CLAUDE_DIR/settings.json"
+    success "Deployed: settings.json (from template)"
+  else
+    info "settings.json exists — skipping (manual merge recommended)"
+  fi
+
+  echo ""
+  success "Deployment complete!"
+  info "Open Claude Code in any project to start using your new setup."
+}
+
+# ─── Main ──────────────────────────────────────────────────────────────
+
+main() {
+  echo ""
+  echo "  Claude Hangar — Setup"
+  echo "  ─────────────────────"
+  echo ""
+
+  case "${1:-}" in
+    --check)
+      info "Running dry-run validation..."
+      check_prerequisites || exit 1
+      validate_structure || exit 1
+      success "All checks passed — ready to deploy"
+      ;;
+
+    --verify)
+      info "Verifying installation..."
+      if [ ! -d "$CLAUDE_DIR" ]; then
+        error "\$HOME/.claude/ not found — run setup.sh first"
+        exit 1
+      fi
+      local verified=0 total=0
+      for item in hooks/secret-leak-check.sh hooks/bash-guard.sh hooks/checkpoint.sh \
+                  hooks/token-warning.sh hooks/session-start.sh hooks/session-stop.sh \
+                  hooks/post-compact.sh hooks/config-change-guard.sh hooks/skill-suggest.sh \
+                  hooks/stop-failure.sh agents/explorer.md agents/explorer-deep.md \
+                  agents/security-reviewer.md agents/commit-reviewer.md agents/dependency-checker.md \
+                  statusline-command.sh lib/common.sh settings.json; do
+        total=$((total + 1))
+        if [ -f "$CLAUDE_DIR/$item" ]; then
+          verified=$((verified + 1))
+        else
+          warn "Missing: ~/.claude/$item"
+        fi
+      done
+      echo ""
+      if [ "$verified" -eq "$total" ]; then
+        success "Verification passed: $verified/$total components installed"
+      else
+        warn "Verification: $verified/$total components found"
+      fi
+      ;;
+
+    --rollback)
+      info "Looking for backups..."
+      local latest_backup
+      latest_backup=$(find "$CLAUDE_DIR" -maxdepth 1 -name '.backup-*' -type d 2>/dev/null | sort -r | head -1)
+      if [ -z "$latest_backup" ]; then
+        error "No backup found"
+        exit 1
+      fi
+      info "Restoring from: $latest_backup"
+      for item in hooks agents skills lib statusline-command.sh settings.json CLAUDE.md; do
+        [ -e "$latest_backup/$item" ] && cp -r "$latest_backup/$item" "$CLAUDE_DIR/" 2>/dev/null || true
+      done
+      success "Rollback complete"
+      ;;
+
+    --update)
+      info "Updating..."
+      git -C "$SCRIPT_DIR" pull --ff-only || { error "git pull failed"; exit 1; }
+      success "Repository updated"
+      info "Re-running setup..."
+      deploy_all
+      ;;
+
+    --help|-h)
+      echo "Usage: bash setup.sh [MODE]"
+      echo ""
+      echo "Modes:"
+      echo "  (no args)    Interactive wizard (first run) or sync"
+      echo "  --check      Dry-run validation"
+      echo "  --verify     Verify existing installation"
+      echo "  --rollback   Restore from backup"
+      echo "  --update     git pull + redeploy"
+      echo "  --help       Show this help"
+      ;;
+
+    *)
+      check_prerequisites || exit 1
+      validate_structure || exit 1
+      deploy_all
+      ;;
+  esac
+}
+
+main "$@"

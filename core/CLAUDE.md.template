@@ -1,0 +1,54 @@
+# Claude Code — Global Instructions
+
+## Language & Communication
+{{LANGUAGE_SECTION}}
+
+## Identity
+- Name: {{USER_NAME}}, Email: {{USER_EMAIL}}
+- Commits must only use the configured user identity — no additional attribution
+
+## Environment
+{{OS_SECTION}}
+
+## Design & Quality
+{{QUALITY_SECTION}}
+
+## Versions (CRITICAL)
+NEVER hardcode versions — ALWAYS check live (context7, npm view, WebSearch).
+
+## Tech Defaults
+{{TECH_STACK_SECTION}}
+
+## Git & CI/CD
+{{GIT_SECTION}}
+
+## Error Handling (CRITICAL)
+- On error: stop, explain, suggest alternative. 3x same error → 2 alternatives
+- Root cause analysis REQUIRED: SYMPTOM → CONTEXT → CAUSE → FIX → PREVENTION
+- Reference: `docs/patterns.md`
+
+## Cleanup (CRITICAL)
+Leave workspace cleaner than you found it. Always clean up temp files.
+Session end: `git status`, delete temp files
+
+## Deviation Handling
+Auto-fix: Bug/typo, dep patch/minor. Ask user: Major, architecture, new tool.
+Security CRITICAL: Fix + inform. When in doubt, ask.
+
+## Work Approach
+- Sizing: Small → do it. Medium → clarify. Large → discuss plan
+- Multi-scope: Recognize related issues, note in STATUS.md, fix systematically
+- Project context: Read CLAUDE.md, check registry.json, don't break CI
+- Quality over speed, consider downstream effects
+
+## Session & Continuity
+{{SESSION_SECTION}}
+
+## Code Protection & Anti-Patterns
+- ALWAYS read before modifying, respect existing patterns
+- Working code: ASK before changing
+- Avoid: Scope explosion, phantom fix (verify: IDENTIFY→RUN→READ→VERIFY→CLAIM), cargo cult config, courtesy review (min. 5 findings), silent failure, stub blindness, context amnesia, over-engineering, littering
+
+## Skills & Plugins
+- Before complex actions: Check for matching skill in ~/.claude/skills/
+- Prefer plugins when available

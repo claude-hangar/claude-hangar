@@ -1,0 +1,42 @@
+# {{PROJECT_NAME}} — Claude Code Instructions
+
+## What Is This?
+{{PROJECT_DESCRIPTION}}
+
+## Tech Stack
+{{TECH_STACK}}
+
+## Architecture
+{{ARCHITECTURE_NOTES}}
+
+## Quality Standards
+- WCAG AA accessibility
+- OWASP Top 10 security
+- SEO fundamentals
+- Self-hosted fonts
+- No hardcoded versions — always check live
+- Input validation at system boundaries
+
+## Database
+- Migrations: Always create migration files, never edit schema directly
+- Seed data: Separate from production data
+- Backups: Verify backup strategy exists
+
+## Auth & Security
+- No secrets in code — use environment variables
+- Session management: Secure, HttpOnly, SameSite cookies
+- Password hashing: bcrypt with sufficient rounds
+- CSRF protection on all forms
+
+## Git & CI/CD
+- Conventional Commits (feat:, fix:, docs:, chore:)
+- Feature branches, PR reviews
+- Tests before commit
+- After push: `gh run list --limit 1` — fix on failure
+
+## Error Handling
+- On error: stop, explain, suggest alternative
+- Root cause analysis: SYMPTOM → CONTEXT → CAUSE → FIX → PREVENTION
+
+## Deployment
+{{DEPLOYMENT_NOTES}}

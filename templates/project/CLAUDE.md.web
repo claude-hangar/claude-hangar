@@ -1,0 +1,28 @@
+# {{PROJECT_NAME}} — Claude Code Instructions
+
+## What Is This?
+{{PROJECT_DESCRIPTION}}
+
+## Tech Stack
+{{TECH_STACK}}
+
+## Quality Standards
+- WCAG AA accessibility
+- OWASP Top 10 security awareness
+- SEO fundamentals (meta tags, structured data, sitemap)
+- Self-hosted fonts (no external CDN without consent)
+- No hardcoded versions — always check live
+
+## Design
+- Modern, minimalist, individual — no generic aesthetics
+- SVG icons (Lucide/Heroicons)
+- Responsive design, mobile-first
+
+## Git & CI/CD
+- Conventional Commits (feat:, fix:, docs:, chore:)
+- Tests before commit when available
+- After push: `gh run list --limit 1` — fix on failure
+
+## Error Handling
+- On error: stop, explain, suggest alternative
+- Root cause analysis: SYMPTOM → CONTEXT → CAUSE → FIX → PREVENTION
