@@ -1,0 +1,57 @@
+name: Skill Request
+description: Request a new skill or stack extension
+labels: ["skill-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Want to see a new skill, stack, hook, or agent in Claude Hangar? Tell us what you need and how you'd use it.
+
+  - type: dropdown
+    id: skill-type
+    attributes:
+      label: Skill Type
+      description: What type of addition are you requesting?
+      options:
+        - Core Skill
+        - Stack Extension
+        - Hook
+        - Agent
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What should this skill do?
+      placeholder: Describe what the skill should accomplish...
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case
+      description: When would you use this? What workflow does it support?
+      placeholder: "I would use this when..."
+    validations:
+      required: true
+
+  - type: input
+    id: framework
+    attributes:
+      label: Framework / Tool
+      description: For stack extensions — which framework or tool should it target?
+      placeholder: "e.g. Django, Rails, Flutter"
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other context, examples, or references.
+      placeholder: Add any other context here...
+    validations:
+      required: false

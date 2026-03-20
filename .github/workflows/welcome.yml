@@ -1,0 +1,32 @@
+name: Welcome
+
+on:
+  pull_request_target:
+    types: [opened]
+  issues:
+    types: [opened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  welcome:
+    name: Welcome First-Time Contributors
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/first-interaction@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-message: |
+            Thanks for opening your first issue! We appreciate you taking the time to report this.
+
+            A maintainer will review it soon. In the meantime, check if the [documentation](https://github.com/claude-hangar/claude-hangar/tree/main/docs) covers your question.
+          pr-message: |
+            Thanks for your first pull request! We're excited to review your contribution.
+
+            Please make sure:
+            - [ ] CI passes (ShellCheck, JSON validation, secret scan)
+            - [ ] The [PR template](.github/PULL_REQUEST_TEMPLATE.md) is filled out
+            - [ ] You've read [CONTRIBUTING.md](CONTRIBUTING.md)
