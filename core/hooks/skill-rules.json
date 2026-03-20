@@ -71,6 +71,16 @@
       "skill": "/audit-runner",
       "triggers": ["audit-runner", "autonomous audit", "auto audit", "audit in background", "unattended audit", "run audit"],
       "exclude": []
+    },
+    {
+      "skill": "/scan",
+      "triggers": ["scan", "scan project", "detect stack", "tech stack", "what stack", "analyze project", "project profile"],
+      "exclude": ["secret scan", "security scan"]
+    },
+    {
+      "skill": "/consult",
+      "triggers": ["consult", "improve project", "what should I fix", "project help", "project consultation", "optimize project", "upgrade project", "rebuild", "refactor project"],
+      "exclude": ["audit", "review"]
     }
   ]
 }
