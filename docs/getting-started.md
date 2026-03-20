@@ -8,6 +8,8 @@ A step-by-step guide to installing and using Claude Hangar — the configuration
 
 Claude Hangar is a centralized hub that deploys production-grade hooks, agents, skills, and settings to your Claude Code environment. Instead of manually configuring `~/.claude/` for every project, you clone one repo, run one script, and get a battle-tested setup that includes:
 
+- **Project scanner** (`/scan`) — auto-detect your tech stack and generate CLAUDE.md
+- **Project consultant** (`/consult`) — interactive improvement wizard with targeted questions
 - **Secret leak detection** before every file write
 - **Bash command guard** blocking destructive operations
 - **Token usage warnings** to prevent context overflow

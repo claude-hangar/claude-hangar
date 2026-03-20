@@ -24,7 +24,7 @@ Production-grade configuration management for [Claude Code](https://docs.anthrop
 |-----------|-------|-------------|
 | **Hooks** | 10 | Secret leak detection, bash guard, token warnings, session lifecycle, checkpoints |
 | **Agents** | 5 | Codebase explorer, security reviewer, commit reviewer, dependency checker |
-| **Skills** | 14+ | Three-layer audit, adversarial review, polish, deploy-check, git hygiene |
+| **Skills** | 17 | Project scanner, interactive consultant, three-layer audit, adversarial review, polish, and more |
 | **Templates** | 5+ | CI/CD workflows (Node, Python, VPS, GitHub Pages, Cloudflare Pages) |
 | **Stacks** | 5 | Astro, SvelteKit, Next.js, Database, Auth — community-extensible |
 
@@ -39,6 +39,8 @@ The interactive wizard detects your OS, checks prerequisites, and deploys everyt
 
 ## Key Features
 
+- **Project Scanner** (`/scan`) — Auto-detect tech stack, frameworks, architecture, and generate CLAUDE.md
+- **Project Consultant** (`/consult`) — Interactive improvement wizard with targeted questions and structured plans
 - **Three-Layer Audit System** — Generic audit + project audit + adversarial review for comprehensive code quality
 - **Session Lifecycle** — Automatic STATUS.md tracking, token warnings, checkpoint creation, compact handling
 - **Multi-Project Registry** — Manage configs for multiple repos from one place
