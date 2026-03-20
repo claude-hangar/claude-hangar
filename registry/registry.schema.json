@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Claude Hangar Project Registry",
+  "description": "Schema for the multi-project registry that defines which projects are managed by Claude Hangar, their paths, and which config files, skills, hooks, and workflows to deploy.",
+  "type": "object",
+  "required": ["projects"],
+  "properties": {
+    "projects": {
+      "type": "array",
+      "description": "List of managed projects.",
+      "items": {
+        "type": "object",
+        "required": ["name", "repo", "defaultPath"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Short identifier for the project (e.g., 'my-website')."
+          },
+          "repo": {
+            "type": "string",
+            "description": "Git repository URL or org/repo shorthand (e.g., 'my-org/my-website')."
+          },
+          "defaultPath": {
+            "type": "string",
+            "description": "Default local filesystem path where the project is cloned (e.g., '~/projects/my-website')."
+          },
+          "configFiles": {
+            "type": "array",
+            "description": "List of config files to deploy to this project (e.g., ['CLAUDE.md', '.claude/settings.json']).",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          },
+          "skills": {
+            "type": "array",
+            "description": "List of skill files to deploy (relative paths within the skills directory).",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          },
+          "hooks": {
+            "type": "array",
+            "description": "List of hook files to deploy (relative paths within the hooks directory).",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          },
+          "workflows": {
+            "type": "array",
+            "description": "List of CI/CD workflow templates to deploy (e.g., ['ci-node.yml', 'deploy-ghpages.yml']).",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          },
+          "description": {
+            "type": "string",
+            "description": "Short description of the project."
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,48 @@
+node_modules/
+dist/
+
+# Local machine config (path overrides)
+.local-config.json
+
+# Screenshots
+*.png
+*.jpg
+*.jpeg
+
+# OS / Editor
+.DS_Store
+*.log
+Thumbs.db
+
+# Secrets & Credentials
+.env
+.env.*
+*.key
+*.pem
+credentials*
+*.age
+age-key*
+
+# State files (machine-specific)
+.project-audit-state.json
+.audit-orchestrator-state.json
+.audit-state.json
+.astro-audit-state.json
+.polish-state.json
+.freshness-state.json
+
+# Audit runner
+.audit-runner-logs/
+.audit-runner-config.json
+.audit-runner-batch/
+
+# Task system
+.tasks.json
+
+# Temporary files
+.tmp/
+*.bak
+*.orig
+
+# Claude worktrees
+.claude/agent-*/

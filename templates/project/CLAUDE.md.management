@@ -1,0 +1,25 @@
+# {{PROJECT_NAME}} — Claude Code Instructions
+
+## What Is This?
+{{PROJECT_DESCRIPTION}}
+
+This is a management repo — no applications are built here.
+Configuration, skills, hooks and agents are managed and deployed to target paths.
+
+## Repository Structure
+{{REPO_STRUCTURE}}
+
+## Deployment
+- Master copies live in this repo
+- `bash setup.sh` deploys to target paths
+- Changes: Edit here first, then run setup to sync
+
+## Quality Standards
+- ShellCheck all .sh files
+- Valid JSON for all .json files
+- No secrets in committed files
+- No hardcoded versions
+
+## Git & CI/CD
+- Conventional Commits (feat:, fix:, docs:, chore:)
+- CI must pass before merge (ShellCheck, JSON, secret scan)

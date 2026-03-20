@@ -1,0 +1,76 @@
+{
+  "rules": [
+    {
+      "skill": "/audit",
+      "triggers": ["website audit", "site audit", "audit website", "check website", "start audit", "security check website"],
+      "exclude": ["project-audit", "astro-audit", "repo audit"]
+    },
+    {
+      "skill": "/project-audit",
+      "triggers": ["project-audit", "project audit", "repo audit", "code audit", "check project"],
+      "exclude": ["website audit", "site audit"]
+    },
+    {
+      "skill": "/adversarial-review",
+      "triggers": ["review", "code review", "critical review", "adversarial", "plan review", "audit review"],
+      "exclude": []
+    },
+    {
+      "skill": "/audit-orchestrator",
+      "triggers": ["full audit", "check everything", "complete audit", "all audits", "comprehensive audit"],
+      "exclude": []
+    },
+    {
+      "skill": "/capture-pdf",
+      "triggers": ["capture", "pdf", "screenshot", "page as pdf", "capture pages", "print"],
+      "exclude": []
+    },
+    {
+      "skill": "/lesson-learned",
+      "triggers": ["lesson learned", "what did we learn", "learning", "remember this", "take note"],
+      "exclude": []
+    },
+    {
+      "skill": "/polish",
+      "triggers": ["polish", "improve design", "make it better", "enhance", "beautify",
+        "surprise me", "wow", "improve frontend", "boring", "generic",
+        "too plain", "spice up", "level up", "aha effect", "wow effect", "quick wins"],
+      "exclude": ["audit", "check", "design system"]
+    },
+    {
+      "skill": "/design-system",
+      "triggers": ["design system", "colors", "color palette", "typography", "font pairing", "spacing", "build component", "build landing page", "which colors"],
+      "exclude": []
+    },
+    {
+      "skill": "/favicon-check",
+      "triggers": ["favicon", "check favicon", "icon check", "app icon"],
+      "exclude": []
+    },
+    {
+      "skill": "/meta-tags",
+      "triggers": ["meta tags", "open graph", "og tags", "twitter card", "social preview", "structured data"],
+      "exclude": []
+    },
+    {
+      "skill": "/lighthouse-quick",
+      "triggers": ["lighthouse", "pagespeed", "performance check", "core web vitals", "lcp", "cls", "fid"],
+      "exclude": []
+    },
+    {
+      "skill": "/deploy-check",
+      "triggers": ["deploy check", "deploy ready", "pre-deploy", "deployment check", "ready to deploy"],
+      "exclude": []
+    },
+    {
+      "skill": "/git-hygiene",
+      "triggers": ["git hygiene", "stale branches", "git cleanup", "branch cleanup", "git health"],
+      "exclude": []
+    },
+    {
+      "skill": "/audit-runner",
+      "triggers": ["audit-runner", "autonomous audit", "auto audit", "audit in background", "unattended audit", "run audit"],
+      "exclude": []
+    }
+  ]
+}

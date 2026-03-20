@@ -1,0 +1,129 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 6 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  shellcheck:
+    name: ShellCheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint shell scripts
+        run: |
+          echo "=== ShellCheck ==="
+          find . -name '*.sh' -not -path './.git/*' | while read -r script; do
+            echo "--- $script ---"
+            shellcheck --severity=warning "$script" || true
+          done
+          # Strict run (fail on errors)
+          find . -name '*.sh' -not -path './.git/*' -exec shellcheck --severity=warning {} +
+
+  json-validate:
+    name: JSON Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Validate JSON files
+        run: |
+          echo "=== JSON Validation ==="
+          errors=0
+          while IFS= read -r file; do
+            if node -e "JSON.parse(require('fs').readFileSync('$file','utf8'))" 2>/dev/null; then
+              echo "OK: $file"
+            else
+              echo "ERROR: $file"
+              errors=$((errors + 1))
+            fi
+          done < <(find . -name '*.json' -not -path './.git/*' -not -path './node_modules/*')
+          if [ "$errors" -gt 0 ]; then
+            echo "ERROR: $errors JSON file(s) invalid!"
+            exit 1
+          fi
+
+  secret-scan:
+    name: Secret Leak Detection
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Scan for secrets
+        run: |
+          echo "=== Secret Scan ==="
+          PATTERNS=(
+            'PRIVATE KEY'
+            "password[[:space:]]*[:=][[:space:]]*[\"'][^\"']{8,}"
+            "api[_-]?key[[:space:]]*[:=][[:space:]]*[\"'][^\"']{8,}"
+            "secret[[:space:]]*[:=][[:space:]]*[\"'][^\"']{8,}"
+            "token[[:space:]]*[:=][[:space:]]*[\"'][^\"']{8,}"
+          )
+          found=0
+          for pattern in "${PATTERNS[@]}"; do
+            if grep -rniE "$pattern" \
+              --include='*.json' --include='*.md' --include='*.sh' --include='*.env' \
+              --exclude-dir=.git --exclude-dir=tutorials --exclude-dir=phases \
+              --exclude-dir=hooks --exclude-dir=templates --exclude-dir=stacks \
+              --exclude-dir=agents . 2>/dev/null \
+              | grep -v '.gitignore' \
+              | grep -v 'SKILL.md' \
+              | grep -v 'fix-templates' \
+              | grep -v 'CONTRIBUTING' \
+              | grep -v 'SECURITY'; then
+              echo "WARNING: Potentially sensitive content found (pattern: $pattern)"
+              found=1
+            fi
+          done
+          if [ "$found" -eq 0 ]; then
+            echo "No secrets found."
+          else
+            echo ""
+            echo "ERROR: Possible secrets in repository!"
+            echo "Please verify if these are actual secrets."
+            echo "(False positives in documentation are OK — add pattern exclude)"
+            exit 1
+          fi
+
+  smoke-test:
+    name: Setup Smoke Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Run setup.sh --check
+        run: bash setup.sh --check
+
+  markdownlint:
+    name: Markdown Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Lint markdown files
+        run: |
+          echo "=== Markdown Lint ==="
+          npx --yes markdownlint-cli '**/*.md' --ignore node_modules --ignore i18n
