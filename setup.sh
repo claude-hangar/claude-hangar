@@ -100,7 +100,12 @@ validate_structure() {
   # Validate JSON files
   local json_errors=0
   while IFS= read -r file; do
-    if ! node -e "JSON.parse(require('fs').readFileSync('$file','utf8'))" 2>/dev/null; then
+    # Convert Git Bash paths to Windows paths for Node.js
+    local node_file="$file"
+    if [ "$OS" = "windows" ] && command -v cygpath &>/dev/null; then
+      node_file="$(cygpath -m "$file")"
+    fi
+    if ! node -e "JSON.parse(require('fs').readFileSync('$node_file','utf8'))" 2>/dev/null; then
       error "Invalid JSON: $file"
       json_errors=$((json_errors + 1))
     fi
