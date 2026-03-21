@@ -124,4 +124,4 @@ This checklist is for projects already successfully running on 6.x.
 
 ---
 
-As of: 2026-03-13 (updated for Astro 6.0.4 Stable — Patch: i18n redirect fix, server islands in prerendered pages, CSS missing on new pages, dev toolbar prebundling, prefetch warning fix)
+As of: 2026-03-21 (updated for Astro 6.0.8 Stable — Patches 6.0.5–6.0.8 since last update)

@@ -62,7 +62,7 @@ After detection:
 | 6.x-beta | 6.x (stable) | `versions/v6-stable/` | Upgrade Beta -> Stable |
 | 6.x | 6.x | `versions/v6-stable/` | Up to date, check best practices |
 
-**Astro 6 has been stable since March 10, 2026 (6.0.2).** For migration 5->6 use the `v6-beta/` checklist (74 checks, all breaking changes). For best practices on 6.x use the `v6-stable/` checklist (28 checks).
+**Astro 6 has been stable since March 10, 2026 (latest: 6.0.8).** For migration 5->6 use the `v6-beta/` checklist (74 checks, all breaking changes). For best practices on 6.x use the `v6-stable/` checklist (28 checks).
 
 4. **Ask user:** "Check current version OR migrate to new version?"
 5. Load checklist and compare with project scan

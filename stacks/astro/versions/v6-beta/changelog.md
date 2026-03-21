@@ -277,10 +277,13 @@ No additional breaking changes compared to beta.20.
 Patch releases:
 - **6.0.1** — First bugfixes after stable release
 - **6.0.2** — Further stabilization
+- **6.0.3** — Additional fixes
+- **6.0.4** — i18n redirect fix, server islands in prerendered pages, CSS missing on new pages, dev toolbar prebundling, prefetch warning fix
+- **6.0.5–6.0.8** — Continued stabilization and bug fixes
 
 -> [Astro 6.0 Blog Post](https://astro.build/blog/astro-6/)
 -> [Upgrade Guide](https://docs.astro.build/en/guides/upgrade-to/v6/)
 
 ---
 
-As of: 2026-03-11 (updated for 6.0.0 Stable Release)
+As of: 2026-03-21 (updated for Astro 6.0.8)
