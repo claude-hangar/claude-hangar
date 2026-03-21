@@ -1,0 +1,44 @@
+## SvelteKit
+
+### Stack
+
+- **Framework:** SvelteKit 2 + Svelte 5 (check `package.json` for versions)
+- **Rendering:** SSR by default, prerender with `export const prerender = true`
+- **CSS:** Tailwind CSS v4 via `@tailwindcss/vite` plugin
+- **Build:** Vite (bundled with SvelteKit)
+- **Adapter:** Check `svelte.config.js` — `adapter-node`, `adapter-auto`, `adapter-static`
+
+### Svelte 5 Runes
+
+- `$state(value)` — reactive state (replaces `let x = value`)
+- `$derived(expression)` — computed values (replaces `$:`)
+- `$effect(() => {})` — side effects (replaces `$:` statements with side effects)
+- `$props()` — component props (replaces `export let`)
+- `$bindable()` — two-way bindable props
+- **No legacy stores** — use runes for all reactivity
+
+### Key Patterns
+
+- **Load functions:** `+page.ts` (universal) or `+page.server.ts` (server-only, DB access)
+- **Form actions:** `+page.server.ts` exports `actions` — use `use:enhance` for progressive enhancement
+- **API routes:** `+server.ts` with `GET`, `POST`, `PUT`, `DELETE` exports
+- **Hooks:** `src/hooks.server.ts` — `handle()` for auth guards, middleware
+- **Error handling:** `+error.svelte` pages, `handleError` hook
+- **Layouts:** `+layout.svelte` with `+layout.ts`/`+layout.server.ts` for shared data
+
+### Conventions
+
+- `$lib` alias for `src/lib/` — use everywhere instead of relative paths
+- Server-only code in `$lib/server/` — SvelteKit prevents client import
+- Environment variables: `$env/static/private`, `$env/static/public`, `$env/dynamic/*`
+- Self-host fonts in `static/fonts/` — no external CDN (GDPR)
+- Form actions over API routes for mutations (progressive enhancement)
+
+### Commands
+
+```bash
+npm run dev      # Start dev server
+npm run build    # Production build
+npm run preview  # Preview production build
+npx svelte-check # TypeScript + Svelte diagnostics
+```

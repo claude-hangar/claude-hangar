@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#16213e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e94560"/>
+      <stop offset="100%" stop-color="#ff6b6b"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="120" height="120" rx="24" fill="url(#bg)"/>
+  <!-- Hangar roof -->
+  <path d="M20 65 L60 30 L100 65" stroke="url(#accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Hangar body -->
+  <rect x="28" y="65" width="64" height="30" rx="2" stroke="#e94560" stroke-width="3" fill="none" opacity="0.7"/>
+  <!-- Hangar door opening -->
+  <path d="M42 95 L42 72 Q60 62 78 72 L78 95" stroke="#ff6b6b" stroke-width="2.5" fill="none" opacity="0.5"/>
+  <!-- Code brackets inside -->
+  <text x="52" y="86" font-family="monospace" font-size="16" font-weight="bold" fill="#e94560" opacity="0.9">&lt;/&gt;</text>
+</svg>

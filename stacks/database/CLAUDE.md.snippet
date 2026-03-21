@@ -1,0 +1,42 @@
+## Database
+
+### Stack
+
+- **ORM:** Drizzle ORM — check `package.json` for `drizzle-orm` and `drizzle-kit` versions
+- **Database:** PostgreSQL (or SQLite for simple projects)
+- **Driver:** `pg` (node-postgres) or `postgres` (postgres.js)
+- **Config:** `drizzle.config.ts` — dialect, schema path, migrations output
+
+### Schema Patterns
+
+- Define tables in `src/lib/server/db/schema.ts` (or split by domain)
+- Use `pgTable()` for PostgreSQL, `sqliteTable()` for SQLite
+- Always include `id`, `createdAt`, `updatedAt` on every table
+- Define relations separately via `relations()` for type-safe queries
+- Use `pgEnum()` for constrained string values instead of plain varchar
+- Export inferred types: `type User = typeof users.$inferSelect`
+
+### Connection
+
+- Use connection pool (`Pool` from `pg` or connection string with `postgres()`)
+- Set `max` connections (default: 10 for small apps)
+- Export singleton DB client to avoid connection leaks on hot reload
+- SSL required in production
+
+### Conventions
+
+- Schema files are server-only — never import in client code
+- `DATABASE_URL` in `.env` — never hardcode credentials
+- Production uses `drizzle-kit migrate` — never `push`
+- Seed data in `scripts/seed.ts` — importable but not auto-run
+- Indexes on foreign keys and frequently queried columns
+- Transactions for related multi-table operations
+
+### Commands
+
+```bash
+npx drizzle-kit generate  # Generate migration SQL from schema changes
+npx drizzle-kit migrate   # Apply pending migrations
+npx drizzle-kit push      # Push schema directly (dev only)
+npx drizzle-kit studio    # Visual DB browser
+```

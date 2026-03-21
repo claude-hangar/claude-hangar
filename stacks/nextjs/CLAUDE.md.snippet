@@ -1,0 +1,38 @@
+## Next.js
+
+### Stack
+
+- **Framework:** Next.js (App Router) — check `package.json` for version
+- **Rendering:** Server Components by default, `'use client'` for Client Components
+- **CSS:** Tailwind CSS v4 or CSS Modules
+- **Build:** Turbopack (dev), Webpack/Turbopack (production)
+
+### Key Patterns
+
+- **Server Components** (default) — no client JS, direct DB/API access, async components
+- **Client Components** — `'use client'` directive at top of file, for interactivity/hooks
+- **Server Actions** — `'use server'` for mutations, form handling, data writes
+- **Route Handlers** — `app/api/*/route.ts` with `GET`, `POST`, `PUT`, `DELETE` exports
+- **Middleware** — `middleware.ts` at project root for auth guards, redirects, rewrites
+- **Metadata** — `export const metadata` or `generateMetadata()` in `layout.tsx`/`page.tsx`
+- **Loading/Error UI** — `loading.tsx`, `error.tsx`, `not-found.tsx` per route segment
+
+### Conventions
+
+- Prefer Server Components — only add `'use client'` when hooks or interactivity are needed
+- Server Actions for form submissions and data mutations (not API routes)
+- Environment variables: `process.env.*` (server), `NEXT_PUBLIC_*` prefix for client
+- Images via `next/image` component (automatic optimization)
+- Links via `next/link` component (client-side navigation)
+- Self-host fonts via `next/font` — no external CDN (GDPR, performance)
+- Dynamic routes: `[slug]` folders, catch-all with `[...slug]`
+- Parallel routes: `@modal`, `@sidebar` for simultaneous layouts
+
+### Commands
+
+```bash
+npm run dev      # Start dev server (Turbopack)
+npm run build    # Production build
+npm run start    # Start production server
+npx next lint    # Run ESLint with Next.js rules
+```

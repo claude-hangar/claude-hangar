@@ -1,14 +1,18 @@
 # Writing Agents
 
-A guide to creating custom agents for Claude Hangar.
+How to create custom agents for Claude Hangar.
+
+---
 
 ## What Is an Agent?
 
-An agent is a markdown file with YAML frontmatter that defines a specialized sub-agent. When invoked via the `Agent` tool, Claude Code spawns a sub-conversation that runs independently with its own model, tools, and scope. The agent performs a focused task and returns its result to the main conversation.
+An agent is a markdown file with YAML frontmatter that defines a specialized sub-agent. When invoked, Claude Code spawns a sub-conversation with its own model, tools, and scope. The agent performs a focused task and returns its result to the main conversation.
 
-Agents are ideal for tasks that need a different model (cheaper or more capable), restricted tool access, or isolated write operations that should not affect the main project directly.
+Agents are ideal when you need a different model (cheaper or more capable), restricted tool access, or isolated write operations.
 
-## Frontmatter Fields
+---
+
+## Frontmatter
 
 Every agent file starts with YAML frontmatter:
 
@@ -16,8 +20,7 @@ Every agent file starts with YAML frontmatter:
 ---
 name: changelog-writer
 description: >
-  Generates changelogs from git history. Analyzes commits,
-  groups by type, and produces a formatted CHANGELOG entry.
+  Generates changelogs from git history.
   Use when: "changelog", "what changed", "release notes".
 model: sonnet
 effort: low
@@ -29,88 +32,83 @@ maxTurns: 10
 
 ### Field Reference
 
-| Field | Required | Type | Description |
-|-------|----------|------|-------------|
-| `name` | Yes | string | Agent identifier, matches filename (without `.md`) |
-| `description` | Yes | string | What the agent does + trigger phrases |
-| `model` | Yes | string | `sonnet` (fast/cheap) or `opus` (deep analysis) |
-| `effort` | No | string | `low`, `medium`, `high` -- controls thinking depth |
-| `tools` | Yes | string | Comma-separated list of allowed tools |
-| `disallowedTools` | No | string | Explicitly blocked tools (overrides defaults) |
-| `isolation` | No | string | `none` (default) or `worktree` (isolated git worktree) |
-| `memory` | No | string | `project` -- enables persistent MEMORY.md across sessions |
-| `maxTurns` | No | integer | Maximum conversation turns before forced stop |
+| Field | Required | Description |
+|-------|----------|-------------|
+| `name` | Yes | Matches filename without `.md` |
+| `description` | Yes | What it does + trigger phrases |
+| `model` | Yes | `sonnet` (fast/cheap) or `opus` (deep analysis) |
+| `effort` | No | `low`, `medium`, `high` |
+| `tools` | Yes | Comma-separated allowed tools |
+| `disallowedTools` | No | Explicitly blocked tools |
+| `isolation` | No | `none` (default) or `worktree` |
+| `memory` | No | `project` for persistent MEMORY.md |
+| `maxTurns` | No | Max conversation turns |
+
+---
 
 ## Model Selection
 
-Choose the model based on the task complexity and cost sensitivity:
+| Model | Best For |
+|-------|----------|
+| `sonnet` | Quick searches, simple checks, read-only analysis |
+| `opus` | Deep analysis, multi-file reasoning, security review |
 
-| Model | Cost | Speed | Best For |
-|-------|------|-------|----------|
-| `sonnet` | Low | Fast | Quick searches, simple checks, read-only analysis |
-| `opus` | High | Slower | Deep analysis, multi-file reasoning, security review |
+Guidelines: read-only tasks use `sonnet` with `effort: low`. Analysis tasks use `opus` with `effort: high`. Write tasks use `opus` with `isolation: worktree`.
 
-### Guidelines
+---
 
-- **Read-only tasks** (search, explain, list): `sonnet` with `effort: low`
-- **Analysis tasks** (architecture, patterns, connections): `opus` with `effort: high`
-- **Write tasks** (prototyping fixes, creating reports): `opus` with `isolation: worktree`
+## The 5 Included Agents
+
+| Agent | Model | Effort | Tools | Isolation | maxTurns |
+|-------|-------|--------|-------|-----------|----------|
+| `explorer` | sonnet | low | Read, Glob, Grep, Bash, WebFetch | none | 15 |
+| `explorer-deep` | opus | high | All + Write/Edit | worktree | 35 |
+| `security-reviewer` | opus | high | All + Write/Edit | worktree | 25 |
+| `commit-reviewer` | sonnet | low | Bash, Read, Grep, Glob | none | 10 |
+| `dependency-checker` | sonnet | low | Bash, Read, Grep, Glob, WebSearch | none | 10 |
+
+---
 
 ## Tool Permissions
 
-Follow the principle of least privilege. An agent should only have the tools it needs.
-
-### Common Tool Sets
+Follow least privilege. Common profiles:
 
 | Profile | Tools | Use Case |
 |---------|-------|----------|
-| Read-only | `Read, Glob, Grep, Bash` | Search, explain, analyze |
-| Read + web | `Read, Glob, Grep, Bash, WebFetch, WebSearch` | Research, documentation lookup |
-| Full access | `Read, Glob, Grep, Bash, WebFetch, WebSearch, Write, Edit` | Prototyping, report generation |
+| Read-only | `Read, Glob, Grep, Bash` | Search, explain |
+| Read + web | `+ WebFetch, WebSearch` | Research, docs lookup |
+| Full access | `+ Write, Edit` | Prototyping (use with worktree) |
 
-### Bash Restrictions
+Use `disallowedTools` to explicitly block tools — stronger than simply not listing them.
 
-When an agent has `Bash` access, document what commands are permitted in the agent body:
+Document Bash restrictions in the agent body:
 
 ```markdown
 ## Rules
-- **Bash** only for: `git log`, `git diff`, `npm ls`, `node -e` (read-only)
+- **Bash** only for: `git log`, `git diff`, `npm ls` (read-only)
 ```
 
-This instruction tells Claude Code to limit Bash usage even though the tool itself is available. The bash-guard hook provides an additional safety layer.
-
-### Blocking Tools Explicitly
-
-Use `disallowedTools` to prevent an agent from modifying files:
-
-```yaml
-disallowedTools: Write, Edit, NotebookEdit
-```
-
-This is stronger than simply not listing them in `tools` -- it explicitly rejects them even if the agent tries to use them.
+---
 
 ## Isolation Modes
 
-| Mode | Behavior | Use When |
-|------|----------|----------|
-| `none` (default) | Agent reads/writes in the main project | Read-only agents, quick checks |
-| `worktree` | Agent gets an isolated git worktree | Write access needed, prototyping fixes |
+| Mode | Behavior | When |
+|------|----------|------|
+| `none` | Reads/writes in main project | Read-only agents |
+| `worktree` | Isolated git worktree | Write access needed |
 
-### Worktree Isolation
-
-When `isolation: worktree` is set, the agent operates in a separate git worktree. Changes do not affect the main project. The user decides whether to adopt the changes.
-
-Always document this clearly in the agent body:
+With `worktree`, changes do not affect the main project. The user decides whether to adopt them. Always document this:
 
 ```markdown
 ## Isolation
 
-You work in an isolated git worktree. This means:
-- You can read AND write files without affecting the main project
-- Changes are suggestions -- the user decides whether to adopt them
+You work in an isolated git worktree. Changes are suggestions —
+the user decides whether to adopt them.
 ```
 
-## Minimal Example: changelog-writer
+---
+
+## Minimal Example
 
 Create `core/agents/changelog-writer.md`:
 
@@ -119,7 +117,7 @@ Create `core/agents/changelog-writer.md`:
 name: changelog-writer
 description: >
   Generates changelog entries from git history.
-  Use when: "changelog", "what changed", "release notes", "what's new".
+  Use when: "changelog", "what changed", "release notes".
 model: sonnet
 effort: low
 tools: Bash, Read, Grep, Glob
@@ -127,19 +125,19 @@ disallowedTools: Write, Edit, NotebookEdit
 maxTurns: 10
 ---
 
-You are a changelog generator. Analyze git history and produce structured entries.
+You are a changelog generator. Analyze git history and produce
+structured entries.
 
 ## Procedure
 
 1. Find latest tag: `git describe --tags --abbrev=0`
 2. List commits since tag: `git log {tag}..HEAD --oneline`
-3. Group by type: Added (feat), Fixed (fix), Changed (refactor, perf)
-4. Format as changelog entry
+3. Group by type: Added (feat), Fixed (fix), Changed (refactor)
 
 ## Rules
 
-- **Read-only** -- Bash only for: `git log`, `git tag`, `git describe`
-- If no tags: use last 20 commits. Skip merge commits.
+- **Read-only** -- Bash only for: git log, git tag, git describe
+- No tags? Use last 20 commits. Skip merge commits.
 
 ## Output Format
 
@@ -148,86 +146,38 @@ You are a changelog generator. Analyze git history and produce structured entrie
 - Description (commit hash)
 ```
 
-## Agent vs Skill: When to Use Which
+---
+
+## Agent vs Skill
 
 | Criterion | Agent | Skill |
 |-----------|-------|-------|
-| **Execution model** | Separate sub-conversation | Instructions in main conversation |
-| **Model control** | Can use different model (sonnet for cheap tasks) | Uses the session model |
-| **Tool isolation** | Own tool permissions | Shares session permissions |
-| **Worktree support** | Yes (`isolation: worktree`) | No |
-| **Persistent memory** | Yes (`memory: project`) | Via state files only |
-| **Turn limits** | Yes (`maxTurns`) | No built-in limit |
-| **State persistence** | Via memory files | Via `.{skill}-state.json` |
-| **Invocation** | Via Agent tool (automatic or user request) | Via `/skill-name` command |
-| **Best for** | Focused subtasks, parallel work, different model needs | Complex workflows, multi-phase processes, user interaction |
+| Execution | Separate sub-conversation | Instructions in main conversation |
+| Model control | Own model (sonnet/opus) | Uses session model |
+| Tool isolation | Own permissions | Shares session permissions |
+| Worktree | Yes | No |
+| Memory | `memory: project` | Via state files |
+| Turn limits | `maxTurns` | No built-in limit |
+| Invocation | Via Agent tool | Via `/skill-name` |
+| Best for | Focused subtasks, different model | Multi-phase workflows, user interaction |
 
-### Rules of Thumb
+**Rule of thumb:** Agent for isolated subtasks with different model needs. Skill for complex multi-step workflows in the main conversation. They can be combined — a skill can delegate subtasks to agents.
 
-- **Use an agent** when you need a different model, isolated writes, or a focused subtask that should not pollute the main conversation context.
-- **Use a skill** when you need multi-phase workflows, user interaction between steps, or complex state management across sessions.
-- **Combine both**: A skill can delegate subtasks to agents. For example, the audit-orchestrator skill delegates phases to agent-like sub-processes.
+---
 
 ## Best Practices
 
-### 1. Set maxTurns
+1. **Always set maxTurns** — 10 for quick checks, 15-25 for analysis, 25-35 for deep work
+2. **Define clear scope** — what the agent does AND does not do
+3. **Structured output** — define exact format with code block examples
+4. **Trigger phrases** — include in description for discoverability
+5. **Read-only by default** — add Write/Edit only when needed, with worktree isolation
+6. **Document Bash usage** — list specific permitted commands
 
-Always set `maxTurns` to prevent runaway agents:
+---
 
-| Agent Type | Recommended maxTurns |
-|------------|---------------------|
-| Quick check (read-only) | 10 |
-| Standard analysis | 15-25 |
-| Deep analysis with writes | 25-35 |
+## Next Steps
 
-### 2. Clear Scope Definition
-
-Define what the agent does and does not do. Include a comparison table if similar agents exist (see explorer.md for an example).
-
-### 3. Structured Output Format
-
-Define the exact output format with a code block example. This ensures consistent results across invocations.
-
-### 4. Trigger Phrases in Description
-
-Include natural language phrases in the description: `Use when: "changelog", "what changed", "release notes".`
-
-### 5. Read-Only by Default
-
-Start with minimum tools. Only add Write/Edit if genuinely needed, and use `isolation: worktree` when you do.
-
-### 6. Document Bash Usage
-
-List specific permitted commands: `**Bash** only for: git log, npm audit, curl (read-only)`.
-
-### 7. Use Memory for Learning Agents
-
-Enable `memory: project` for agents that should remember across sessions. Reference it in the body: "Use your MEMORY.md to build on previous findings."
-
-## File Naming
-
-Agents live in `core/agents/` as individual markdown files:
-
-```
-core/agents/
-├── explorer.md
-├── explorer-deep.md
-├── security-reviewer.md
-├── commit-reviewer.md
-├── dependency-checker.md
-└── changelog-writer.md      # Your new agent
-```
-
-The filename (without `.md`) becomes the agent name. Use kebab-case.
-
-## Contributing
-
-When submitting an agent via PR:
-
-1. Follow naming: `core/agents/{kebab-case-name}.md`
-2. Include all required frontmatter fields
-3. Define clear scope, rules, and output format
-4. Set appropriate `maxTurns` limit
-5. Use minimum required tools
-6. Test on both Linux and Git Bash (Windows) if the agent uses Bash
-7. Conventional Commit: `feat(agents): add changelog-writer agent`
+- [Writing Skills](writing-skills.md) — create skill workflows
+- [Writing Hooks](writing-hooks.md) — create custom hooks
+- [Architecture](architecture.md) — how agents are deployed

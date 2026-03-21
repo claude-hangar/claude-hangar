@@ -1,0 +1,49 @@
+## Astro
+
+### Stack
+
+- **Framework:** Astro (check `package.json` for version)
+- **Output:** Check `astro.config.*` for `output` — `'static'` (SSG), `'server'` (SSR), `'hybrid'`
+- **CSS:** Tailwind CSS v4 via `@tailwindcss/vite` plugin (CSS-first config, no `tailwind.config.*`)
+- **Build:** Vite (bundled with Astro)
+
+### Key Patterns
+
+- **Astro components** (`.astro`) for static content — no client JS by default
+- **Islands architecture:** Use `client:*` directives only when interactivity is needed
+  - `client:load` — hydrate immediately (interactive on load)
+  - `client:idle` — hydrate when browser is idle
+  - `client:visible` — hydrate when element enters viewport
+- **Content Collections:** Define in `src/content/config.ts`, query via `getCollection()`
+- **Content Layer API:** Loaders for external data sources (files, APIs, CMS)
+- **View Transitions:** `<ViewTransitions />` in layout for SPA-like navigation
+- **TypeScript:** Strict mode, path aliases via `tsconfig.json`
+
+### File Structure
+
+```
+src/
+  components/    # Astro + framework components
+  content/       # Content collections (Markdown, MDX)
+  layouts/       # Page layouts
+  pages/         # File-based routing
+  styles/        # Global CSS
+public/          # Static assets (fonts, images, favicons)
+```
+
+### Conventions
+
+- Prefer `.astro` components over framework components when no client JS is needed
+- Self-host fonts in `public/fonts/` — no Google Fonts CDN (GDPR)
+- Images via `<Image />` component from `astro:assets` (automatic optimization)
+- Environment variables: `import.meta.env.*` (prefix `PUBLIC_` for client-side)
+- API routes: `src/pages/api/*.ts` (SSR mode only)
+
+### Commands
+
+```bash
+npm run dev      # Start dev server
+npm run build    # Production build
+npm run preview  # Preview production build locally
+npx astro check  # TypeScript + Astro diagnostics
+```

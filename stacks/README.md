@@ -1,105 +1,95 @@
-# How to Add a Stack
+# Stacks
 
-Stacks are framework-specific configurations for Claude Code. Each stack provides audit skills, templates, and CI workflows tailored to a particular framework or technology.
+Framework-specific extensions for Claude Code. Each stack provides audit skills, CLAUDE.md snippets, and fix templates tailored to a particular framework or technology.
+
+## Available Stacks
+
+| Stack | Directory | Audit Skill | Description |
+|-------|-----------|-------------|-------------|
+| **Astro** | `astro/` | `/astro-audit` | SSG/SSR with Astro, Content Collections, View Transitions |
+| **SvelteKit** | `sveltekit/` | `/sveltekit-audit` | SSR/SSG with SvelteKit 2 + Svelte 5 runes |
+| **Next.js** | `nextjs/` | — | App Router, Server Components, Server Actions |
+| **Database** | `database/` | `/db-audit` | Drizzle ORM + PostgreSQL schema, migrations, performance |
+| **Auth** | `auth/` | `/auth-audit` | Custom bcryptjs + sessions (no external auth providers) |
 
 ## Directory Structure
 
 ```
 stacks/
-├── astro/              # Astro (SSG) stack
-│   ├── SKILL.md        # Astro-specific audit skill
-│   └── templates/      # Astro project templates
-├── sveltekit/          # SvelteKit (SSR) stack
-│   ├── SKILL.md
-│   └── templates/
-├── nextjs/             # Next.js stack
-│   ├── SKILL.md
-│   └── templates/
-├── auth/               # Authentication stack
-│   └── SKILL.md
-├── database/           # Database stack
-│   └── SKILL.md
-└── README.md           # This file
+├── astro/
+│   ├── SKILL.md            # /astro-audit — migration + best-practice audit
+│   ├── CLAUDE.md.snippet   # Paste into project CLAUDE.md
+│   ├── README.md           # Stack documentation
+│   ├── fix-templates.md    # Quick-fix templates
+│   └── versions/           # Version-specific checklists
+│       ├── v5-stable/
+│       ├── v6-beta/
+│       └── v6-stable/
+├── sveltekit/
+│   ├── SKILL.md            # /sveltekit-audit — SvelteKit + Svelte 5 audit
+│   ├── CLAUDE.md.snippet   # Paste into project CLAUDE.md
+│   ├── README.md           # Stack documentation
+│   ├── fix-templates.md    # Quick-fix templates
+│   └── versions/
+│       └── kit2-svelte5/
+├── nextjs/
+│   ├── CLAUDE.md.snippet   # Paste into project CLAUDE.md
+│   └── README.md           # Stack documentation
+├── database/
+│   ├── SKILL.md            # /db-audit — Drizzle ORM + PostgreSQL audit
+│   ├── CLAUDE.md.snippet   # Paste into project CLAUDE.md
+│   ├── README.md           # Stack documentation
+│   ├── fix-templates.md    # Quick-fix templates
+│   └── state-schema.md     # Audit state schema
+├── auth/
+│   ├── SKILL.md            # /auth-audit — custom auth security audit
+│   ├── CLAUDE.md.snippet   # Paste into project CLAUDE.md
+│   ├── README.md           # Stack documentation
+│   ├── fix-templates.md    # Quick-fix templates
+│   └── state-schema.md     # Audit state schema
+└── README.md               # This file
 ```
+
+## How to Use a Stack
+
+### 1. CLAUDE.md Snippets
+
+Each stack includes a `CLAUDE.md.snippet` file. Copy its contents into your project's `CLAUDE.md` to give Claude Code framework-specific context:
+
+```bash
+# Example: Add Astro context to your project
+cat stacks/astro/CLAUDE.md.snippet >> your-project/CLAUDE.md
+```
+
+Snippets are designed to be concise (under 50 lines) and practical. They cover key patterns, file structure, conventions, and commands.
+
+### 2. Audit Skills
+
+Stacks with a `SKILL.md` file provide dedicated audit slash commands:
+
+```
+/astro-audit start       # Astro version + best practices
+/sveltekit-audit start   # SvelteKit 2 + Svelte 5 patterns
+/db-audit start          # Database schema + migrations
+/auth-audit start        # Auth security (OWASP ASVS)
+```
+
+### 3. Fix Templates
+
+When an audit finds issues, it loads matching fix templates from `fix-templates.md` — ready-to-apply code snippets adapted to your project.
 
 ## Creating a New Stack
 
-### 1. Create the Directory
+1. Create a directory: `stacks/my-framework/`
+2. Add `CLAUDE.md.snippet` — paste-ready section for project CLAUDE.md (under 50 lines)
+3. Add `README.md` — what the stack includes and how to use it
+4. Optionally add `SKILL.md` — audit skill with version detection, areas, fix templates
+5. Reference the stack in this README
 
-```bash
-mkdir stacks/my-framework
-```
-
-### 2. Add a SKILL.md
-
-Every stack needs a `SKILL.md` file. This is the audit skill that Claude Code uses when working with projects of this type. It should contain:
-
-- **Framework version** awareness (always check live, never hardcode)
-- **Best practices** specific to the framework
-- **Common pitfalls** to check for
-- **Security considerations**
-- **Performance guidelines**
-
-Example structure:
-
-```markdown
-# My Framework Audit
-
-## What This Checks
-- Configuration correctness
-- Security best practices
-- Performance optimizations
-
-## Checklist
-1. Check framework version compatibility
-2. Verify build configuration
-3. Review security headers
-4. Validate environment variables
-...
-```
-
-### 3. Add Templates (Optional)
-
-If your stack benefits from starter templates, add them under `templates/`:
-
-```
-stacks/my-framework/
-├── SKILL.md
-└── templates/
-    ├── component.tsx.template
-    ├── page.tsx.template
-    └── config.ts.template
-```
-
-Templates use placeholder variables like `{{PROJECT_NAME}}` and `{{DESCRIPTION}}` that the setup wizard replaces.
-
-### 4. Add a CI Template (Optional)
-
-If the stack needs a specific CI workflow, add it to `templates/ci/`:
-
-```bash
-# Create a CI template for the stack
-cp templates/ci/ci-node.yml templates/ci/ci-my-framework.yml
-# Customize for framework-specific build/test commands
-```
-
-### 5. Register the Stack
-
-Add your stack to the documentation so users can discover it. Reference it in the registry when configuring projects that use this stack.
-
-## Guidelines
+### Guidelines
 
 - **One SKILL.md per stack** — keep it focused on the specific framework
 - **No hardcoded versions** — always instruct Claude to check versions live
-- **Cross-reference** — if your stack depends on another (e.g., database + auth), reference the related stacks
-- **Test your skill** — run it against a real project to verify it catches real issues
-
-## Existing Stacks as Reference
-
-Look at the existing stacks for examples of well-structured audit skills:
-
-- `stacks/astro/` — Static site generation with Astro
-- `stacks/sveltekit/` — Server-side rendering with SvelteKit
-- `stacks/nextjs/` — Full-stack React with Next.js
-- `stacks/auth/` — Authentication patterns (bcrypt, sessions)
-- `stacks/database/` — Database auditing (Drizzle ORM, PostgreSQL)
+- **Cross-reference** related stacks (e.g., database + auth)
+- **CLAUDE.md.snippet** must be practical and under 50 lines
+- **Test your skill** against a real project before committing
