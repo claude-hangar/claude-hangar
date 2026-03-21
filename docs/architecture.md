@@ -11,7 +11,7 @@ claude-hangar/
 ├── core/                          # Global config → deployed to ~/.claude/
 │   ├── hooks/                     #   10 lifecycle hooks (.sh)
 │   ├── agents/                    #   5 agent definitions (.md)
-│   ├── skills/                    #   14+ skill workflows (SKILL.md per dir)
+│   ├── skills/                    #   17 skill workflows (SKILL.md per dir)
 │   ├── lib/common.sh              #   Shared shell functions
 │   ├── statusline-command.sh      #   Statusline script
 │   ├── settings.json.template     #   Settings template (hooks, env, effort)
