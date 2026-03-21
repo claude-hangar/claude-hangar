@@ -12,10 +12,11 @@ For best practices on already-migrated projects -> `v6-stable/checklist.md`.
 
 - [ ] **ENV-01** [CRITICAL] Node.js >= 22.12.0 on all environments (local, CI/CD, Docker, VPS)
   - Astro 6 dropped Node 18 + Node 20 completely
-  - Check `node --version`, create `.nvmrc` with `24` (Active LTS, Minimum: 22.12.0)
+  - Check `node --version`, create `.nvmrc` with `24` (Maintenance LTS, Minimum: 22.12.0)
   - -> PR #14427
+  - Note: From October 2026, Node.js switches to annual releases (every version becomes LTS)
 - [ ] **ENV-02** [HIGH] .nvmrc updated to `24`
-  - v24 = Active LTS (support until April 2028), v22 = Maintenance LTS (EOL April 2027)
+  - v24 = Maintenance LTS (support until April 2028), v22 = EOL
 - [ ] **ENV-03** [MEDIUM] Hosting platform supports Node 24
   - Check VPS, Docker images, CI/CD runners
 

@@ -60,6 +60,17 @@ Finding-Prefix: `DSGVO`
 - [ ] Kontaktformular: Bestaetigung an Absender?
 - [ ] Auto-Reply-Mails: Datenschutz-konform? Keine ueberfluessigen Daten?
 
+### 7. EU AI Act (ab August 2, 2026)
+
+- [ ] Verwendet die Website KI-generierte Inhalte? (Texte, Bilder, Chatbots)
+- [ ] **Transparenzpflicht (Art. 50):** KI-generierte Inhalte als solche kennzeichnen?
+  - Betrifft: Chatbots, AI-generierte Texte/Bilder, Deep Fakes
+  - Pflicht zur Kennzeichnung ab August 2026
+- [ ] AI-Chatbot vorhanden? → Muss als AI-System gekennzeichnet sein
+- [ ] High-Risk AI System? (Recruiting, Scoring, Biometrie) → Zusaetzliche Pflichten
+- [ ] AI-Literacy: Betreiber muessen Grundwissen ueber eingesetzte AI-Systeme haben
+- [ ] Dokumentation: Welche AI-Systeme werden eingesetzt, zu welchem Zweck?
+
 ---
 
 ## Ergebnis

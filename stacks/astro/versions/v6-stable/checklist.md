@@ -13,7 +13,8 @@ This checklist is for projects already successfully running on 6.x.
 
 - [ ] **V6-ENV-01** [HIGH] Node.js >= 22.12.0 on all environments
   - Local, CI/CD, Docker, VPS — identical version everywhere
-  - `.nvmrc` with `24` present (Active LTS, Minimum: 22.12.0)
+  - `.nvmrc` with `24` present (Maintenance LTS, Minimum: 22.12.0)
+  - Note: From October 2026, Node.js switches to annual releases (every version becomes LTS)
 - [ ] **V6-ENV-02** [MEDIUM] Node 24 LTS features utilized
   - Native Fetch, Web Streams, node:test if relevant
 
@@ -124,4 +125,4 @@ This checklist is for projects already successfully running on 6.x.
 
 ---
 
-As of: 2026-03-21 (updated for Astro 6.0.8 Stable — Patches 6.0.5–6.0.8 since last update)
+As of: 2026-03-21 (updated for Astro 6.0.8 Stable + Node.js LTS status correction)
