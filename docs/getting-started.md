@@ -129,6 +129,7 @@ bash setup.sh --rollback   # restore from automatic backup
 
 ## Next Steps
 
+- [Companion Tools](companion-tools.md) — extend Hangar with Superpowers, ccusage, and more
 - [Configuration Reference](configuration.md) — every setting explained
 - [Multi-Project Setup](multi-project.md) — manage multiple repos
 - [Writing Skills](writing-skills.md) — create your own skills

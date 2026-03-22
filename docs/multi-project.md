@@ -150,10 +150,22 @@ On first run, setup asks where each project lives. Answers are saved to `.local-
 - **Keep it lean** — remove projects you no longer work on
 - **Use descriptions** — they help when reviewing the registry months later
 
+## Parallel Execution with claude-squad
+
+The registry defines *which config* each project gets. [claude-squad](https://github.com/smtg-ai/claude-squad) can run them *simultaneously* — each instance inherits Hangar's full setup from `~/.claude/`.
+
+```bash
+# Start claude-squad, create an instance per project
+# Each instance loads Hangar hooks, agents, and skills automatically
+```
+
+→ [Companion Tools Guide](companion-tools.md) for setup details.
+
 ---
 
 ## Next Steps
 
+- [Companion Tools](companion-tools.md) — Superpowers, ccusage, claude-squad
 - [Configuration Reference](configuration.md) — settings details
 - [Architecture](architecture.md) — how deployment works internally
 - [Getting Started](getting-started.md) — initial setup

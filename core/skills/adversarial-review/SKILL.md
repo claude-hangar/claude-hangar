@@ -205,6 +205,7 @@ Review of an implementation plan for gaps and risks.
 5. **Goal-Backward always** — Does it exist? Substantial? Wired up?
 6. **No scope creep** — only review what was requested
 7. **On re-review** after fixes: Only new/changed findings, no repetitions
+8. **Anti-rationalization** — Resist the urge to soften findings or reduce severity. See `_shared/anti-rationalization.md`
 
 ## Smart Next Steps
 

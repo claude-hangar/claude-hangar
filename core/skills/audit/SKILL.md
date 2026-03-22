@@ -415,6 +415,7 @@ Level 4 (Functional) is mandatory when live layer is available. READ + VERIFY ne
 **Website audit specific:**
 - **SSH readonly** during audit — write only during explicit fix with user confirmation
 - **Dual-Layer:** Per phase, document whether source layer, live layer, or both were checked
+- **Anti-rationalization** — Do not skip MUST-checks or reduce severity because "it looks fine". See `_shared/anti-rationalization.md`
 
 ---
 

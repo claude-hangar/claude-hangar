@@ -532,6 +532,7 @@ After a scan, recommend based on findings:
 6. **Full mode can use runtime** — `node -v`, `python --version` etc. are allowed in full mode
 7. **Idempotent** — Running scan twice produces the same result
 8. **State is optional** — Other skills should work without `.scan-profile.json`, it is a bonus
+9. **Anti-rationalization** — Do not skip phases because the project "looks simple". See `_shared/anti-rationalization.md`
 
 ---
 

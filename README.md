@@ -175,7 +175,23 @@ Each project gets the right CLAUDE.md, stack-specific skills, and CI templates �
 | [Writing Hooks](docs/writing-hooks.md) | Extend the hook system |
 | [Writing Agents](docs/writing-agents.md) | Custom agent definitions |
 | [Architecture](docs/architecture.md) | System design and internals |
+| [Companion Tools](docs/companion-tools.md) | Superpowers, Trail of Bits, ccusage, claude-squad |
 | [FAQ](docs/faq.md) | Common questions |
+
+## Works Great With
+
+Claude Hangar is the infrastructure layer. These companion tools extend it:
+
+| Tool | Stars | What It Adds |
+|------|------:|-------------|
+| [**Superpowers**](https://github.com/obra/superpowers) | 104K+ | Deep workflow methodology — brainstorming, TDD, subagent-driven development, systematic debugging |
+| [**Trail of Bits Skills**](https://github.com/trailofbits/skills) | 3.7K+ | Professional security skills — CodeQL, Semgrep, variant analysis, fix verification |
+| [**ccusage**](https://github.com/ryoppippi/ccusage) | 11K+ | Historical usage analytics — token costs, session history, dashboards |
+| [**claude-squad**](https://github.com/smtg-ai/claude-squad) | 6.4K+ | Multi-session management — run multiple Claude Code instances in parallel |
+
+All four are compatible with Hangar and each other. No conflicts, no overlap.
+
+→ [Companion Tools Guide](docs/companion-tools.md)
 
 ## Contributing
 

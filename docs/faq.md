@@ -190,8 +190,19 @@ Hangar default is 80%. Without override, Claude Code uses 95%.
 
 ---
 
+### Can I use Hangar with Superpowers or other plugins?
+
+Yes. Hangar is the infrastructure layer — it handles safety hooks, config, and multi-project management. Companion tools like [Superpowers](https://github.com/obra/superpowers) (workflow methodology), [Trail of Bits Skills](https://github.com/trailofbits/skills) (security), [ccusage](https://github.com/ryoppippi/ccusage) (analytics), and [claude-squad](https://github.com/smtg-ai/claude-squad) (multi-session) are fully compatible. See the [Companion Tools Guide](companion-tools.md).
+
+### What should I NOT combine with Hangar?
+
+**GSD** (`gsd-build/gsd-2`) — GSD is its own CLI that replaces Claude Code. Hangar hooks won't fire inside GSD. Use one or the other.
+
+---
+
 ## Next Steps
 
+- [Companion Tools](companion-tools.md) — Superpowers, Trail of Bits, ccusage, claude-squad
 - [Getting Started](getting-started.md) — installation guide
 - [Configuration Reference](configuration.md) — all settings
 - [Multi-Project Setup](multi-project.md) — manage multiple repos
