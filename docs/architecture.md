@@ -9,7 +9,7 @@ System architecture of Claude Hangar.
 ```
 claude-hangar/
 ├── core/                          # Global config → deployed to ~/.claude/
-│   ├── hooks/                     #   10 lifecycle hooks (.sh)
+│   ├── hooks/                     #   13 lifecycle hooks (.sh)
 │   ├── agents/                    #   5 agent definitions (.md)
 │   ├── skills/                    #   17 skill workflows (SKILL.md per dir)
 │   ├── lib/common.sh              #   Shared shell functions

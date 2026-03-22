@@ -145,6 +145,32 @@ ccusage reads from `~/.claude/projects/*/sessions/`. You need at least one compl
 
 ---
 
+## 5. claude-mem (thedotmack/claude-mem)
+
+**What it adds:** Persistent memory system as a plugin. Automatic session captures, AI-powered compression, semantic search via SQLite + Chroma vector DB.
+
+**Why alongside Hangar:** Hangar's `session-start` hook loads STATUS.md and tasks. claude-mem adds deep cross-session memory with AI compression and semantic retrieval. Together: Hangar manages project state, claude-mem manages knowledge.
+
+**Install:**
+
+```bash
+claude install thedotmack/claude-mem
+```
+
+**Compatibility:** No conflicts. claude-mem operates as an independent MCP server.
+
+---
+
+## 6. Everything Claude Code (affaan-m/everything-claude-code)
+
+**What it adds:** Comprehensive reference system with instincts, memory patterns, security guidelines, and curated best practices. The most popular community contribution (97K+ stars).
+
+**Why alongside Hangar:** Good reference material for understanding Claude Code capabilities. Use it as a learning resource alongside Hangar's operational infrastructure.
+
+**Link:** [https://github.com/affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code)
+
+---
+
 ## What NOT to Combine
 
 **GSD (gsd-build/gsd-2)**

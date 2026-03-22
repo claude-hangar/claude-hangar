@@ -8,7 +8,7 @@ Install and configure Claude Hangar — configuration management for [Claude Cod
 
 One repo, one script, a production-grade Claude Code environment:
 
-- **10 hooks** — secret leak detection, bash command guard, token warnings, checkpoints, and more
+- **13 hooks** — secret leak detection, bash command guard, token warnings, model routing, quality gates, and more
 - **5 agents** — codebase explorer, security reviewer, commit reviewer, dependency checker
 - **14+ skills** — audit, deploy-check, polish, scan, consult, and more
 - **Statusline** — model, context bar, rate limits, cost, session duration
@@ -64,16 +64,19 @@ Setup copies files from the repo into `~/.claude/`:
 
 ```
 ~/.claude/
-  hooks/                   # 10 hook scripts
+  hooks/                   # 13 hook scripts
     secret-leak-check.sh   #   PreToolUse — blocks secrets in file writes
     bash-guard.sh          #   PreToolUse — blocks destructive commands + enforces commits
     checkpoint.sh          #   PreToolUse — git stash checkpoint before writes
     token-warning.sh       #   PostToolUse — warns at 70% and 80% context usage
     skill-suggest.sh       #   UserPromptSubmit — suggests matching skills
+    model-router.sh        #   UserPromptSubmit — suggests optimal model tier
     session-start.sh       #   SessionStart — loads STATUS.md, tasks, memory hygiene
     session-stop.sh        #   Stop — cleanup temp files, log session cost
-    post-compact.sh        #   PostCompact — resets token tracking after compaction
+    post-compact.sh        #   PostCompact — resets tracking + context reload reminder
     config-change-guard.sh #   ConfigChange — warns on critical settings changes
+    task-completed-gate.sh #   TaskCompleted — quality gate for task completion
+    subagent-tracker.sh    #   SubagentStart/Stop — subagent observability
     stop-failure.sh        #   StopFailure — logs errors on session failure
   agents/                  # 5 agent definitions
     explorer.md            #   Quick codebase search (Sonnet, read-only)

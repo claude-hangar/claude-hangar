@@ -71,12 +71,15 @@ Hooks are registered in the `hooks` section. Each event contains an array of mat
 | `PreToolUse` | Before tool executes | `"Write\|Edit"` | secret-leak-check, checkpoint |
 | `PreToolUse` | Before tool executes | `"Bash"` | bash-guard |
 | `PostToolUse` | After tool completes | `""` (all) | token-warning |
-| `UserPromptSubmit` | User sends prompt | `""` | skill-suggest |
-| `PostCompact` | After `/compact` | `""` | post-compact |
+| `UserPromptSubmit` | User sends prompt | `""` | skill-suggest, model-router |
+| `PostCompact` | After `/compact` | `""` | post-compact (+ context reload) |
 | `ConfigChange` | Settings modified | `""` | config-change-guard |
 | `SessionStart` | Session begins | `""` | session-start (`once: true`) |
 | `Stop` | Session ends normally | `""` | session-stop |
 | `StopFailure` | Session ends with error | `""` | stop-failure |
+| `TaskCompleted` | Task marked done | `""` | task-completed-gate |
+| `SubagentStart` | Subagent spawned | `""` | subagent-tracker |
+| `SubagentStop` | Subagent finished | `""` | subagent-tracker |
 
 ### Entry Fields
 

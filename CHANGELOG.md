@@ -5,6 +5,55 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] — 2026-03-22
+
+### Added
+
+**New Hooks (3):**
+- model-router — Suggests optimal model tier (haiku/opus) based on task complexity keywords (UserPromptSubmit)
+- task-completed-gate — Quality gate that rejects tasks with errors or empty results (TaskCompleted)
+- subagent-tracker — Tracks subagent lifecycle for observability (SubagentStart/SubagentStop)
+
+**New Hook Events in settings.json:**
+- TaskCompleted — Quality gate hook support
+- SubagentStart / SubagentStop — Subagent observability
+
+### Changed
+
+**Hook Improvements:**
+- post-compact — Now injects context reload reminder after compaction (re-read CLAUDE.md, STATUS.md, .tasks.json). Based on community pattern from Dicklesworthstone/post_compact_reminder
+- settings.json.template — Added model-router to UserPromptSubmit hooks
+
+**Stack Version Updates:**
+- Astro v6-stable: Updated Vite 7 → 8 references (Vite 8.0.1)
+- Astro v6-stable/beta: Updated as-of dates for Astro 6.0.8, Vite 8.0.1, Zod 4.3.6
+- Astro audit supplement: Fixed outdated `output: 'hybrid'` reference (removed since Astro 5)
+- Auth fix-templates: Updated bcryptjs verify command for ESM (bcryptjs 3.0.3)
+- Astro fix-templates: Updated Vite section header to Vite 8
+
+**Documentation:**
+- README — Updated hooks table (10 → 13), added Event column, added companion tools (claude-mem, Everything Claude Code)
+- Companion tools — Updated star counts
+
+### Freshness Check Results (2026-03-22)
+
+| Package | Version |
+|---------|---------|
+| Claude Code | 2.1.81 |
+| Astro | 6.0.8 |
+| SvelteKit | 2.55.0 |
+| Svelte | 5.54.1 |
+| Tailwind CSS | 4.2.2 |
+| Vite | 8.0.1 |
+| Drizzle ORM | 0.45.1 |
+| Drizzle Kit | 0.31.10 |
+| bcryptjs | 3.0.3 |
+| Next.js | 16.2.1 |
+| Zod | 4.3.6 |
+| Node.js | 25.8.1 |
+
+---
+
 ## [1.0.0] — 2026-03-20
 
 ### Added

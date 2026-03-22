@@ -26,6 +26,7 @@ Most Claude Code configs are personal dotfiles — useful to read, hard to reuse
 - **Modular stacks** — pick only what you need (Astro, SvelteKit, Next.js, Database, Auth)
 - **Battle-tested hooks** that prevent real incidents (secret leaks, destructive commands, context overflow)
 - **17 skills** from project scanning to deployment readiness checks
+- **13 lifecycle hooks** covering all Claude Code events including TaskCompleted quality gates
 - **Cross-platform** — Linux, macOS, and Windows (Git Bash)
 
 ## Quick Start
@@ -54,7 +55,7 @@ cd ~/.claude-hangar && bash setup.sh
 [+] Prerequisites: git ✓  node ✓
 [+] Structure validation passed
 [i] Deploying to /home/user/.claude/...
-[+] Deployed: Hooks (10 scripts)
+[+] Deployed: Hooks (13 scripts)
 [+] Deployed: Agents (5 definitions)
 [+] Deployed: Skills (17 commands)
 [+] Deployed: Shared lib
@@ -69,20 +70,23 @@ cd ~/.claude-hangar && bash setup.sh
 
 ## What You Get
 
-### Hooks (10) — Automated Safety Net
+### Hooks (13) — Automated Safety Net
 
-| Hook | What It Does |
-|------|-------------|
-| `secret-leak-check` | Blocks writes containing API keys, tokens, or credentials |
-| `bash-guard` | Prevents destructive commands (`rm -rf`, `DROP TABLE`, force-push) |
-| `checkpoint` | Auto-creates git stash snapshots before file edits |
-| `token-warning` | Alerts at 70% and 80% context utilization |
-| `session-start` | Loads STATUS.md, tasks, and memory on session start |
-| `session-stop` | Cleans temp files, logs session cost |
-| `post-compact` | Resets token tracking after context compaction |
-| `config-change-guard` | Warns on critical settings changes |
-| `skill-suggest` | Suggests matching skills based on your prompts |
-| `stop-failure` | Logs errors on session failures |
+| Hook | Event | What It Does |
+|------|-------|-------------|
+| `secret-leak-check` | PreToolUse | Blocks writes containing API keys, tokens, or credentials |
+| `bash-guard` | PreToolUse | Prevents destructive commands (`rm -rf`, `DROP TABLE`, force-push) |
+| `checkpoint` | PreToolUse | Auto-creates git stash snapshots before file edits |
+| `token-warning` | PostToolUse | Alerts at 70% and 80% context utilization |
+| `session-start` | SessionStart | Loads STATUS.md, tasks, and memory on session start |
+| `session-stop` | Stop | Cleans temp files, logs session cost |
+| `post-compact` | PostCompact | Resets token tracking + reminds to re-read CLAUDE.md |
+| `config-change-guard` | ConfigChange | Warns on critical settings changes |
+| `skill-suggest` | UserPromptSubmit | Suggests matching skills based on your prompts |
+| `model-router` | UserPromptSubmit | Suggests optimal model tier (haiku/opus) based on task complexity |
+| `task-completed-gate` | TaskCompleted | Quality gate — rejects tasks with errors or empty results |
+| `subagent-tracker` | SubagentStart/Stop | Tracks subagent lifecycle for observability |
+| `stop-failure` | StopFailure | Logs errors on session failures |
 
 ### Agents (5) — Specialized AI Workers
 
@@ -185,11 +189,13 @@ Claude Hangar is the infrastructure layer. These companion tools extend it:
 | Tool | Stars | What It Adds |
 |------|------:|-------------|
 | [**Superpowers**](https://github.com/obra/superpowers) | 104K+ | Deep workflow methodology — brainstorming, TDD, subagent-driven development, systematic debugging |
-| [**Trail of Bits Skills**](https://github.com/trailofbits/skills) | 3.7K+ | Professional security skills — CodeQL, Semgrep, variant analysis, fix verification |
-| [**ccusage**](https://github.com/ryoppippi/ccusage) | 11K+ | Historical usage analytics — token costs, session history, dashboards |
+| [**Trail of Bits Skills**](https://github.com/trailofbits/skills) | 3.8K+ | Professional security skills — CodeQL, Semgrep, variant analysis, fix verification |
+| [**ccusage**](https://github.com/ryoppippi/ccusage) | 11.8K+ | Historical usage analytics — token costs, session history, dashboards |
 | [**claude-squad**](https://github.com/smtg-ai/claude-squad) | 6.4K+ | Multi-session management — run multiple Claude Code instances in parallel |
+| [**claude-mem**](https://github.com/thedotmack/claude-mem) | 39K+ | Persistent memory plugin — session captures, AI compression, semantic search |
+| [**Everything Claude Code**](https://github.com/affaan-m/everything-claude-code) | 97K+ | Comprehensive system with instincts, memory, and security patterns |
 
-All four are compatible with Hangar and each other. No conflicts, no overlap.
+All are compatible with Hangar and each other. No conflicts, no overlap.
 
 → [Companion Tools Guide](docs/companion-tools.md)
 

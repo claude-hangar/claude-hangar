@@ -63,7 +63,7 @@ MIT
 ### Description
 
 ```
-Production-grade configuration management for Claude Code. Ships 10 hooks (secret leak detection, bash command guard, git checkpoints, token warnings, session lifecycle), 5 agents (codebase explorer, security reviewer, commit reviewer, dependency checker), and 17 skills (project scanning, three-layer audits, deployment checks, and more). All hooks are cross-platform shell scripts that use Node.js for JSON parsing — no jq or platform-specific dependencies. Includes a multi-project registry for managing Claude Code configs across multiple repositories from one source, stack-specific extensions (Astro, SvelteKit, Next.js, Database, Auth), and a setup wizard that deploys everything to ~/.claude/ with automatic backup and rollback.
+Production-grade configuration management for Claude Code. Ships 13 hooks (secret leak detection, bash command guard, git checkpoints, token warnings, model routing, task quality gates, subagent tracking, session lifecycle), 5 agents (codebase explorer, security reviewer, commit reviewer, dependency checker), and 17 skills (project scanning, three-layer audits, deployment checks, and more). All hooks are cross-platform shell scripts that use Node.js for JSON parsing — no jq or platform-specific dependencies. Includes a multi-project registry for managing Claude Code configs across multiple repositories from one source, stack-specific extensions (Astro, SvelteKit, Next.js, Database, Auth), and a setup wizard that deploys everything to ~/.claude/ with automatic backup and rollback.
 ```
 
 ### Validate Claims
@@ -104,7 +104,7 @@ Production-grade configuration management for Claude Code. Ships 10 hooks (secre
    ```bash
    cat core/settings.json.template
    ```
-   Shows: all 10 hooks mapped to Claude Code lifecycle events (PreToolUse, PostToolUse, SessionStart, Stop, etc.)
+   Shows: all 13 hooks mapped to Claude Code lifecycle events (PreToolUse, PostToolUse, UserPromptSubmit, TaskCompleted, SubagentStart/Stop, SessionStart, Stop, etc.)
 
 **No network calls are made** by any hook. The statusline queries `api.anthropic.com` for rate limit data only (documented in docs/faq.md). No project data is transmitted.
 

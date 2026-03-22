@@ -16,12 +16,15 @@ A hook is a shell script that Claude Code executes at specific lifecycle events.
 |-------|---------------|-------------|
 | `PreToolUse` | Before a tool executes | Block dangerous commands, catch secrets |
 | `PostToolUse` | After a tool completes | Token tracking, context warnings |
-| `UserPromptSubmit` | User sends a prompt | Skill suggestions, input validation |
+| `UserPromptSubmit` | User sends a prompt | Skill suggestions, model routing, input validation |
 | `PostCompact` | After `/compact` runs | Reset tracking, re-inject context |
 | `ConfigChange` | Settings modified | Warn on critical changes |
 | `SessionStart` | Session begins | Load project state |
 | `Stop` | Session ends normally | Cleanup, save state |
 | `StopFailure` | Session ends with error | Log errors, cleanup |
+| `TaskCompleted` | Task marked as done | Quality gates, validation checks |
+| `SubagentStart` | Subagent spawned | Observability, resource tracking |
+| `SubagentStop` | Subagent finished | Observability, completion tracking |
 
 ---
 
@@ -42,6 +45,7 @@ Always use fallback defaults — never assume a field exists.
 | Action | JSON | Exit Code |
 |--------|------|-----------|
 | Block | `{"decision":"block","reason":"..."}` | 2 |
+| Reject (TaskCompleted) | `{"result":"reject","reason":"..."}` | 2 |
 | Inject context | `{"additionalContext":"..."}` | 0 |
 | Suggest (UserPromptSubmit) | `{"result":"message","message":"..."}` | 0 |
 | Allow silently | No output | 0 |

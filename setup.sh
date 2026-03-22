@@ -87,7 +87,7 @@ validate_structure() {
   local hook_count
   hook_count=$(find "$SCRIPT_DIR/core/hooks" -name '*.sh' 2>/dev/null | wc -l)
   if [ "$hook_count" -lt 5 ]; then
-    warn "Only $hook_count hooks found (expected 10+)"
+    warn "Only $hook_count hooks found (expected 13+)"
   fi
 
   # Check agents
