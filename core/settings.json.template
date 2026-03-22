@@ -42,6 +42,10 @@
           {
             "type": "command",
             "command": "bash ~/.claude/hooks/skill-suggest.sh"
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/model-router.sh"
           }
         ]
       }
@@ -98,6 +102,39 @@
           {
             "type": "command",
             "command": "bash ~/.claude/hooks/stop-failure.sh"
+          }
+        ]
+      }
+    ],
+    "TaskCompleted": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/task-completed-gate.sh"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/subagent-tracker.sh"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/subagent-tracker.sh"
           }
         ]
       }

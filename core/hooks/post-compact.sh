@@ -3,6 +3,8 @@
 # Trigger: PostCompact (after every context compaction, v2.1.76+)
 # 1. Resets token tracking since compaction reduces context.
 # 2. Saves a context snapshot for recovery after compaction.
+# 3. Injects context reminder to re-read CLAUDE.md and STATUS.md.
+# Source: Dicklesworthstone/post_compact_reminder community pattern
 
 # No set -euo pipefail — hooks must be resilient on Windows
 
@@ -64,5 +66,27 @@ data.warned80 = false;
 fs.writeFileSync(trackFile, JSON.stringify(data));
 " "$TRACK_FILE" "$SNAPSHOT_FILE" 2>/dev/null || true
 
-# Silent — no output on allow path (Git Bash Issue #20034)
-exit 0
+# After compaction: remind Claude to re-read critical files
+# This prevents context amnesia — a known anti-pattern where
+# compaction loses awareness of project context and current work.
+REMINDER_PARTS=""
+
+if [ -f "CLAUDE.md" ]; then
+  REMINDER_PARTS="Re-read CLAUDE.md for project instructions."
+fi
+if [ -f "STATUS.md" ]; then
+  REMINDER_PARTS="$REMINDER_PARTS Re-read STATUS.md for current work state."
+fi
+if [ -f ".tasks.json" ]; then
+  REMINDER_PARTS="$REMINDER_PARTS Check .tasks.json for pending tasks."
+fi
+
+if [ -n "$REMINDER_PARTS" ]; then
+  node -e "console.log(JSON.stringify({
+    result: 'message',
+    message: 'Post-compact context reload: ' + process.argv[1]
+  }))" "$REMINDER_PARTS"
+else
+  # Silent — no output on allow path (Git Bash Issue #20034)
+  exit 0
+fi
