@@ -8,7 +8,7 @@ Astro-spezifische Audit-Checks. Nur §-Sektionen laden die zur aktuellen Phase p
 
 - [ ] Astro-Version pruefen: `astro --version` und package.json (context7 fuer aktuelle Version)
 - [ ] `astro check` ausfuehren — TypeScript-Fehler, fehlende Typen?
-- [ ] Config: `astro.config.*` — Output-Modus (static/hybrid/server)?
+- [ ] Config: `astro.config.*` — Output-Modus (static/server)? Note: `hybrid` removed since Astro 5
 - [ ] Integrationen: Welche Astro-Integrationen installiert? (@astrojs/sitemap, @astrojs/image, etc.)
 - [ ] Seiten-Inventar: `src/pages/` — Anzahl, Routing-Struktur
 - [ ] Komponenten-Inventar: `src/components/` — Anzahl, Framework-Komponenten (React/Vue/Svelte)?

@@ -23,7 +23,7 @@ This checklist is for projects already successfully running on 6.x.
 ## CFG — Configuration (3 Checks)
 
 - [ ] **V6-CFG-01** [HIGH] Config is ESM (.mjs or .ts)
-  - No CommonJS — Vite 7 enforces ESM
+  - No CommonJS — Vite 8 enforces ESM
 - [ ] **V6-CFG-02** [MEDIUM] No `experimental.*` flags that are stable in v6
   - `fonts`, `csp`, `responsiveImages` etc. — remove experimental
 - [ ] **V6-CFG-03** [HIGH] Output mode correct (`static` or `server`)
@@ -91,12 +91,12 @@ This checklist is for projects already successfully running on 6.x.
 
 ---
 
-## VITE — Vite 7 (2 Checks)
+## VITE — Vite 8 (2 Checks)
 
-- [ ] **V6-VITE-01** [HIGH] All Vite plugins compatible
-  - Vite 7 plugin API changes apply
+- [ ] **V6-VITE-01** [HIGH] All Vite plugins compatible with Vite 8
+  - Vite 8 plugin API changes apply (Environment API stable)
   - `npx astro build` without warnings?
-- [ ] **V6-VITE-02** [MEDIUM] Vite Environment API features utilized
+- [ ] **V6-VITE-02** [MEDIUM] Vite 8 Environment API features utilized
   - Dev/prod parity improved — check custom middleware
 
 ---
@@ -125,4 +125,4 @@ This checklist is for projects already successfully running on 6.x.
 
 ---
 
-As of: 2026-03-21 (updated for Astro 6.0.8 Stable + Node.js LTS status correction)
+As of: 2026-03-22 (updated for Astro 6.0.8, Vite 8.0.1, Zod 4.3.6)

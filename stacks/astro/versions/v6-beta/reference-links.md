@@ -13,9 +13,9 @@
 - [Astro Releases](https://github.com/withastro/astro/releases)
 - [Astro npm Page](https://www.npmjs.com/package/astro)
 
-## Vite 7
+## Vite 8
 
-- [Vite 7 Migration Guide](https://vite.dev/guide/migration)
+- [Vite 8 Migration Guide](https://vite.dev/guide/migration)
 - [Vite CHANGELOG](https://github.com/vitejs/vite/blob/main/packages/vite/CHANGELOG.md)
 - [Vite Releases](https://github.com/vitejs/vite/releases)
 
@@ -90,4 +90,4 @@
 
 ---
 
-As of: 2026-03-06 (updated for beta.20 — 14 new PRs)
+As of: 2026-03-22 (updated for Astro 6.0.8 stable, Vite 8.0.1, Zod 4.3.6)

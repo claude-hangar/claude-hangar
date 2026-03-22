@@ -209,7 +209,7 @@ export const prerender = true;
 
 ---
 
-## VITE — Vite 7
+## VITE — Vite 8
 
 ### MIG: CJS Vite Plugins -> ESM
 

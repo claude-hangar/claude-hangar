@@ -28,7 +28,7 @@ async function verifyPassword(password: string, hash: string): Promise<boolean> 
 }
 ```
 
-**Verify:** `node -e "const b=require('bcryptjs'); b.hash('test',12).then(h=>{console.log(h); b.compare('test',h).then(r=>console.log('match:',r))})"` -> Hash + match: true?
+**Verify:** `node -e "import('bcryptjs').then(({default:b})=>b.hash('test',12).then(h=>{console.log(h);b.compare('test',h).then(r=>console.log('match:',r))}))"` -> Hash + match: true?
 
 ---
 
