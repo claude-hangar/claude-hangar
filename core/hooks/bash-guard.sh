@@ -37,8 +37,11 @@ if echo "$COMMAND" | grep -qE 'rm\s+(-[a-zA-Z]*r[a-zA-Z]*f|(-[a-zA-Z]*f[a-zA-Z]*
   BLOCKED+="rm -rf / (root directory deletion)\n"
 fi
 
-# rm -rf ~ or $HOME
-if echo "$COMMAND" | grep -qE 'rm\s+(-[a-zA-Z]*r[a-zA-Z]*f|(-[a-zA-Z]*f[a-zA-Z]*r))\s+(~|\$HOME|\$\{HOME\}|"?\$HOME"?)(\s|$|/)'; then
+# rm -rf ~ or $HOME (but allow rm on specific subdirectories like ~/.claude/skills/foo)
+# Block: rm -rf ~, rm -rf ~/, rm -rf ~/*, rm -rf $HOME
+# Allow: rm -rf ~/.claude/skills/foo (2+ path segments after ~)
+if echo "$COMMAND" | grep -qE 'rm\s+(-[a-zA-Z]*r[a-zA-Z]*f|(-[a-zA-Z]*f[a-zA-Z]*r))\s+(~|\$HOME|\$\{HOME\}|"?\$HOME"?)(\s|$|/(\s|$|\*))' && \
+   ! echo "$COMMAND" | grep -qE 'rm\s+(-[a-zA-Z]*r[a-zA-Z]*f|(-[a-zA-Z]*f[a-zA-Z]*r))\s+(~|\$HOME|\$\{HOME\})/[^/\s]+/[^/\s]+'; then
   BLOCKED+="rm -rf ~ (home directory deletion)\n"
 fi
 

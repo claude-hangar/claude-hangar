@@ -218,6 +218,7 @@ main() {
       for item in hooks/secret-leak-check.sh hooks/bash-guard.sh hooks/checkpoint.sh \
                   hooks/token-warning.sh hooks/session-start.sh hooks/session-stop.sh \
                   hooks/post-compact.sh hooks/config-change-guard.sh hooks/skill-suggest.sh \
+                  hooks/model-router.sh hooks/task-completed-gate.sh hooks/subagent-tracker.sh \
                   hooks/stop-failure.sh agents/explorer.md agents/explorer-deep.md \
                   agents/security-reviewer.md agents/commit-reviewer.md agents/dependency-checker.md \
                   statusline-command.sh lib/common.sh settings.json; do
@@ -259,6 +260,59 @@ main() {
       deploy_all
       ;;
 
+    --sync)
+      info "Syncing deployment — removing orphaned files..."
+      if [ ! -d "$CLAUDE_DIR" ]; then
+        error "\$HOME/.claude/ not found — run setup.sh first"
+        exit 1
+      fi
+
+      local orphaned=0
+
+      # Find orphaned hooks (in deployed but not in repo)
+      for hook_file in "$CLAUDE_DIR"/hooks/*.sh; do
+        [ -f "$hook_file" ] || continue
+        local hook_name
+        hook_name=$(basename "$hook_file")
+        if [ ! -f "$SCRIPT_DIR/core/hooks/$hook_name" ]; then
+          warn "Orphaned hook: $hook_name"
+          rm -f "$hook_file"
+          success "Removed: hooks/$hook_name"
+          orphaned=$((orphaned + 1))
+        fi
+      done
+
+      # Find orphaned backup files
+      for backup_file in "$CLAUDE_DIR"/hooks/*.backup-* "$CLAUDE_DIR"/agents/*.backup-*; do
+        [ -f "$backup_file" ] || continue
+        rm -f "$backup_file"
+        orphaned=$((orphaned + 1))
+      done
+      if [ "$orphaned" -gt 0 ]; then
+        success "Cleaned $orphaned backup file(s)"
+      fi
+
+      # Find empty skill directories
+      for skill_dir in "$CLAUDE_DIR"/skills/*/; do
+        [ -d "$skill_dir" ] || continue
+        if [ -z "$(ls -A "$skill_dir" 2>/dev/null)" ]; then
+          warn "Empty skill directory: $(basename "$skill_dir")"
+          rmdir "$skill_dir"
+          orphaned=$((orphaned + 1))
+        fi
+      done
+
+      if [ "$orphaned" -eq 0 ]; then
+        success "No orphaned files found — deployment is clean"
+      else
+        success "Removed $orphaned orphaned item(s)"
+      fi
+
+      # Redeploy latest from repo
+      info "Re-deploying from repo..."
+      deploy_all
+      ;;
+
     --help|-h)
       echo "Usage: bash setup.sh [MODE]"
       echo ""
@@ -266,6 +320,7 @@ main() {
       echo "  (no args)    Interactive wizard (first run) or sync"
       echo "  --check      Dry-run validation"
       echo "  --verify     Verify existing installation"
+      echo "  --sync       Remove orphaned files + redeploy"
       echo "  --rollback   Restore from backup"
       echo "  --update     git pull + redeploy"
       echo "  --help       Show this help"
