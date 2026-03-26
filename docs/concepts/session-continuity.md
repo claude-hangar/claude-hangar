@@ -47,6 +47,10 @@ Each warning fires only once per session. As a secondary fallback, warnings also
 
 **Performance:** The hook runs on every `PostToolUse` event but evaluates at most every 30 seconds via a cooldown file. Per-session state (`calls`, `bytes`, `warned70`, `warned80`) is stored in `${TEMP}/claude-token-track-${SESSION_ID}`.
 
+## Idle-Return Prompt
+
+Claude Code 2.1.84+ shows an idle-return prompt when users return after 75+ minutes of inactivity. It nudges to `/clear`, which reduces unnecessary token re-caching on stale sessions. This complements the `session-start` hook — if a user clears and starts fresh, `session-start` re-injects STATUS.md and task context.
+
 ## Compaction Handling
 
 When context is compacted, the `post-compact` hook:

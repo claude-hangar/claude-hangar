@@ -22,7 +22,22 @@ PreToolUse            -- before a tool executes (Write, Edit, Bash, etc.)
 PostToolUse           -- after a tool completes
   |
   v
+TaskCreated           -- when a task is created via TaskCreate
+  |
+  v
   ... (repeat for each tool call)
+  |
+  v
+SubagentStart         -- when a subagent is spawned
+  |
+  v
+SubagentStop          -- when a subagent finishes
+  |
+  v
+TaskCompleted         -- when a task is marked done
+  |
+  v
+WorktreeCreate        -- when a git worktree is created
   |
   v
 PostCompact           -- after context compaction (if triggered)
@@ -44,6 +59,7 @@ Claude Hangar registers hooks via `settings.json`:
 |-------|------|---------|
 | `SessionStart` | `session-start.sh` | Load STATUS.md, .tasks.json, check MEMORY.md hygiene |
 | `UserPromptSubmit` | `skill-suggest.sh` | Suggest matching skill based on prompt |
+| `UserPromptSubmit` | `model-router.sh` | Suggest optimal model tier based on task complexity |
 | `PreToolUse (Write\|Edit)` | `secret-leak-check.sh` | Block writes containing secrets/API keys |
 | `PreToolUse (Write\|Edit)` | `checkpoint.sh` | Create git stash checkpoint before edits |
 | `PreToolUse (Bash)` | `bash-guard.sh` | Block dangerous commands, validate commits, CI checks |
@@ -52,6 +68,9 @@ Claude Hangar registers hooks via `settings.json`:
 | `ConfigChange` | `config-change-guard.sh` | Log config changes, warn on critical settings |
 | `Stop` | `session-stop.sh` | Check for leftover temp files, log session cost |
 | `StopFailure` | `stop-failure.sh` | Log error details for tracking |
+| `TaskCompleted` | `task-completed-gate.sh` | Quality gate — rejects tasks with errors/empty results |
+| `SubagentStart` | `subagent-tracker.sh` | Track subagent lifecycle for observability |
+| `SubagentStop` | `subagent-tracker.sh` | Track subagent lifecycle for observability |
 
 ## Hook Chain
 

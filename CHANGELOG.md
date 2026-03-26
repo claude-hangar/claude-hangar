@@ -5,6 +5,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] — 2026-03-26
+
+### Changed
+
+**Documentation Updates (Claude Code 2.1.84):**
+- claude-code-referenz — Updated from v2.1.45 to v2.1.84 with all new features:
+  - New hook events: TaskCreated, WorktreeCreate
+  - New hook type: `http` (for WorktreeCreate and remote integrations)
+  - New CLI flags: `--bare` (scripted calls), `--channels` (permission relay)
+  - New env vars: CLAUDE_STREAM_IDLE_TIMEOUT_MS, ANTHROPIC_DEFAULT_{OPUS,SONNET,HAIKU}_MODEL_SUPPORTS
+  - MCP: 2KB description cap, local/remote deduplication
+  - Skills: `paths:` YAML glob list in frontmatter
+  - Token display: >=1M shown as "1.5m" instead of "1512.6k"
+- writing-hooks — Added TaskCreated + WorktreeCreate events, HTTP hook type documentation
+- writing-skills — Added `paths:` frontmatter field documentation
+- configuration — Added TaskCreated, WorktreeCreate events, HTTP hook type, CLAUDE_STREAM_IDLE_TIMEOUT_MS
+- hook-system — Updated event timeline with all 14 events, registered hooks table
+- session-continuity — Added idle-return prompt documentation (75+ min inactivity)
+
+**Stack Version Updates:**
+- Astro v6-stable/beta: Updated Vite 8.0.1 → 8.0.3 in as-of dates
+
+### Freshness Check Results (2026-03-26)
+
+| Package | Version |
+|---------|---------|
+| Claude Code | 2.1.84 |
+| Astro | 6.0.8 |
+| SvelteKit | 2.55.0 |
+| Svelte | 5.55.0 |
+| Tailwind CSS | 4.2.2 |
+| Vite | 8.0.3 |
+| Drizzle ORM | 0.45.1 |
+| Drizzle Kit | 0.31.10 |
+| bcryptjs | 3.0.3 |
+| Next.js | 16.2.1 |
+| Zod | 4.3.6 |
+| Node.js | 25.8.1 |
+
+---
+
 ## [1.1.0] — 2026-03-22
 
 ### Added

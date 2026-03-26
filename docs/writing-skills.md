@@ -44,13 +44,19 @@ name: health-check
 description: >
   Quick health check for HTTP services.
   Use when: "health check", "is it up", "check endpoint".
+paths:
+  - "docker-compose*.yml"
+  - "**/*.service"
 ---
 ```
+
+The `paths` field accepts a YAML list of globs. When set, the skill only activates in projects where at least one matching file exists. This prevents irrelevant skill suggestions.
 
 | Field | Required | Purpose |
 |-------|----------|---------|
 | `name` | Yes | Matches directory name |
 | `description` | Yes | What it does + trigger phrases for skill-suggest hook |
+| `paths` | No | YAML list of globs — skill only activates when matching files exist |
 
 ### Quick Reference (Optional)
 

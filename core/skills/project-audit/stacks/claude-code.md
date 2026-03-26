@@ -35,7 +35,7 @@ Die Referenz ist die Source of Truth fuer den aktuellen Stand von Claude Code.
 
 - [ ] SKILL.md Format: YAML-Frontmatter gueltig? Pflicht-Felder vorhanden?
   - Pflicht: `name`, `description`
-  - Optional: `allowed-tools`, `disable-model-invocation`, `context`, `agent`, `hooks`
+  - Optional: `allowed-tools`, `disable-model-invocation`, `context`, `agent`, `hooks`, `paths` (YAML-Glob-Liste)
 - [ ] Agent .md Format: Frontmatter-Felder gueltig?
   - `name`, `description`, `model`, `tools`, `disallowedTools`, `memory`, `maxTurns`, `skills`, `hooks`
 - [ ] Skill-Descriptions: Beschreiben WANN der Skill getriggert werden soll?

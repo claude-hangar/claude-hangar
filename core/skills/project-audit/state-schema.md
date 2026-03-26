@@ -15,7 +15,7 @@ State file: `.project-audit-state.json`
     "shell": { "detected": true, "version": null },
     "docker": { "detected": true, "version": null },
     "monorepo": { "detected": false, "version": null },
-    "claude-code": { "detected": true, "version": "2.1.45" }
+    "claude-code": { "detected": true, "version": "2.1.84" }
   },
   "auditScope": "full",
   "phases": {

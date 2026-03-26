@@ -23,8 +23,10 @@ A hook is a shell script that Claude Code executes at specific lifecycle events.
 | `Stop` | Session ends normally | Cleanup, save state |
 | `StopFailure` | Session ends with error | Log errors, cleanup |
 | `TaskCompleted` | Task marked as done | Quality gates, validation checks |
+| `TaskCreated` | Task created via TaskCreate | Logging, task policies, naming conventions |
 | `SubagentStart` | Subagent spawned | Observability, resource tracking |
 | `SubagentStop` | Subagent finished | Observability, completion tracking |
+| `WorktreeCreate` | Git worktree created | Path control, setup (supports `type: "http"`) |
 
 ---
 
@@ -158,6 +160,32 @@ Add your hook to `core/settings.json.template`:
 ```
 
 The `matcher` is a regex against tool names. Empty string matches all tools. Use `"once": true` for SessionStart hooks.
+
+### Hook Types
+
+| Type | Description |
+|------|-------------|
+| `command` | Shell command (default, cross-platform) |
+| `http` | HTTP request to external service — returns JSON with `hookSpecificOutput` |
+
+**HTTP hooks** are useful for `WorktreeCreate` (return `worktreePath` via `hookSpecificOutput.worktreePath`) and remote integrations:
+
+```json
+{
+  "WorktreeCreate": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "http",
+          "url": "https://internal-api.example.com/worktree-setup",
+          "method": "POST"
+        }
+      ]
+    }
+  ]
+}
+```
 
 ---
 

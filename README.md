@@ -26,7 +26,7 @@ Most Claude Code configs are personal dotfiles — useful to read, hard to reuse
 - **Modular stacks** — pick only what you need (Astro, SvelteKit, Next.js, Database, Auth)
 - **Battle-tested hooks** that prevent real incidents (secret leaks, destructive commands, context overflow)
 - **17 skills** from project scanning to deployment readiness checks
-- **13 lifecycle hooks** covering all Claude Code events including TaskCompleted quality gates
+- **13 lifecycle hooks** covering 14 Claude Code events including TaskCompleted quality gates
 - **Cross-platform** — Linux, macOS, and Windows (Git Bash)
 
 ## Quick Start

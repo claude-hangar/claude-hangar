@@ -80,14 +80,17 @@ Hooks are registered in the `hooks` section. Each event contains an array of mat
 | `TaskCompleted` | Task marked done | `""` | task-completed-gate |
 | `SubagentStart` | Subagent spawned | `""` | subagent-tracker |
 | `SubagentStop` | Subagent finished | `""` | subagent-tracker |
+| `TaskCreated` | Task created | `""` | *(available, not registered by default)* |
+| `WorktreeCreate` | Worktree created | `""` | *(available, not registered by default)* |
 
 ### Entry Fields
 
 | Field | Description |
 |-------|-------------|
 | `matcher` | Regex against tool names. Empty string = match all tools |
-| `type` | Always `"command"` |
-| `command` | Shell command to execute |
+| `type` | `"command"` (shell) or `"http"` (HTTP request) |
+| `command` | Shell command to execute (for `type: "command"`) |
+| `url` | HTTP endpoint URL (for `type: "http"`) |
 | `once` | If `true`, run only once per session (SessionStart) |
 
 ### Exit Codes
@@ -116,6 +119,7 @@ Hooks are registered in the `hooks` section. Each event contains an array of mat
 | `CLAUDE_CODE_OAUTH_TOKEN` | OAuth token for usage API (auto-detected from `~/.claude/.credentials.json`) |
 | `CLAUDE_CODE_EFFORT_LEVEL` | Override effort level for current session |
 | `CLAUDE_SESSION_ID` | Session identifier used by hooks for state tracking |
+| `CLAUDE_STREAM_IDLE_TIMEOUT_MS` | Streaming idle watchdog threshold (default 90s) |
 
 ---
 

@@ -1,6 +1,6 @@
 # Claude Code CLI – Vollstaendige Referenz
 
-## Stand: v2.1.45 (17. Februar 2026)
+## Stand: v2.1.84 (26. Maerz 2026)
 
 ---
 
@@ -12,7 +12,7 @@ Claude Code ist ein agentisches CLI-Tool, das Codebases liest, Befehle ausführt
 
 - **Konfiguration**: claude.md, settings.json, .claude.json
 - **Berechtigungen**: Gestuftes Permission-System mit Wildcard-Support
-- **Skills**: On-demand Wissens- und Workflow-Pakete (Hot-Reload, Forked Context)
+- **Skills**: On-demand Wissens- und Workflow-Pakete (Hot-Reload, Forked Context, `paths:` YAML-Glob-Filter)
 - **Sub-Agenten**: Isolierte Claude-Instanzen mit eigenen Tools/Modellen/Memory
 - **Hooks**: Automatisierung vor/nach Tool-Aufrufen (inkl. Setup, Agent Teams Events)
 - **MCP**: Anbindung externer Services (stdio, SSE, Streamable HTTP, OAuth)
@@ -321,17 +321,21 @@ Automatische Aktionen die an bestimmten Punkten im Agentic Loop ausgeführt werd
 | PreToolUse | Vor jedem Tool-Aufruf | Validierung, Sicherheitschecks |
 | PostToolUse | Nach jedem Tool-Aufruf | Linting, Formatting, Tests |
 | Stop | Session endet | Cleanup, Notifications |
+| SubagentStart | Sub-Agent gestartet | Observability, Ressourcen-Tracking |
 | SubagentStop | Sub-Agent fertig | Ergebnis-Verarbeitung |
+| TaskCreated | Task wird erstellt (TaskCreate) | Logging, Validierung, Task-Policies |
+| TaskCompleted | Task abgeschlossen | Naechsten Schritt triggern, Quality Gates |
+| WorktreeCreate | Worktree erstellt | Pfad-Kontrolle, Setup (auch HTTP-Hook) |
 | TeammateIdle | Teammate wartet (Agent Teams) | Task-Zuweisung |
-| TaskCompleted | Task abgeschlossen (Agent Teams) | Naechsten Schritt triggern |
 
 ## 5.2 Hook-Typen
 
 | Typ | Beschreibung |
 |-----|-------------|
-| command | Shell-Befehl ausführen |
+| command | Shell-Befehl ausfuehren |
 | prompt | Schneller Single-Turn an Claude |
 | agent | Sub-Agent mit Tool-Zugriff spawnen |
+| http | HTTP-Request an externen Service (JSON-Antwort mit hookSpecificOutput) |
 
 ## 5.3 Konfiguration
 
@@ -466,7 +470,12 @@ claude mcp add --client-id ID --client-secret SECRET slack-server
 ```
 Pre-configured OAuth für Server ohne Dynamic Client Registration (z.B. Slack).
 
-## 6.4 MCP + Skills Zusammenspiel
+## 6.4 MCP Limits & Deduplication
+
+- Tool-Beschreibungen und Server-Instruktionen sind auf **2KB** gekappt (verhindert Context-Bloat bei OpenAPI-generierten Servern)
+- MCP-Server die sowohl lokal als auch via claude.ai Connectors konfiguriert sind, werden **dedupliziert** — lokale Config gewinnt
+
+## 6.5 MCP + Skills Zusammenspiel
 
 - MCP: Verbindung zum Service
 - Skill: Lehrt Claude WIE den Service nutzen
@@ -714,6 +723,9 @@ Plugins können auf spezifische Git-Commit-SHAs gepinnt werden für Reproduzierb
 | CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1 | claude.md aus --add-dir laden |
 | CLAUDE_CODE_DISABLE_BACKGROUND_TASKS | Hintergrund-Tasks deaktivieren |
 | CLAUDE_CODE_TMPDIR | Custom Temp Directory |
+| CLAUDE_STREAM_IDLE_TIMEOUT_MS | Streaming Idle Watchdog Threshold (Default: 90s) |
+| ANTHROPIC_DEFAULT_{OPUS,SONNET,HAIKU}_MODEL_SUPPORTS | Capability-Override fuer 3P-Modelle (Bedrock/Vertex/Foundry) |
+| ANTHROPIC_DEFAULT_{OPUS,SONNET,HAIKU}_MODEL_NAME | Label im `/model`-Picker fuer 3P-Modelle |
 
 ---
 
@@ -744,6 +756,8 @@ Browser-Steuerung direkt aus dem Terminal:
 | `--from-pr <PR>` | Session an GitHub PR verknuepfen |
 | `--add-dir <Pfad>` | Zusaetzliches Verzeichnis fuer Skills + claude.md + enabledPlugins/extraKnownMarketplaces laden |
 | `--chrome` | Browser-Integration starten |
+| `--bare` | Scripted `-p` Calls ohne Hooks/LSP/Plugins/Skill-Walks (erfordert ANTHROPIC_API_KEY) |
+| `--channels` | Permission Relay — Tool-Approvals ans Handy weiterleiten |
 
 ## 15.2 Installation
 
@@ -771,7 +785,7 @@ claude install
 
 ---
 
-# 16. CLI AUTH (neu in v2.1.41+)
+# 16. CLI AUTH
 
 ```bash
 claude auth login      # Anmelden
@@ -796,11 +810,12 @@ Output Styles überschreiben Teile des System-Prompts direkt – anders als clau
 
 ---
 
-# 18. TOKEN-METRIKEN (neu in v2.1.30+)
+# 18. TOKEN-METRIKEN
 
 - Token-Count, Tool-Uses und Duration in Task-Ergebnissen
 - Context Window Info in der Statuszeile
-- Phantom "(no content)" Blöcke behoben (reduziert Token-Waste)
+- Token-Anzeige: >= 1M als "1.5m" statt "1512.6k"
+- Phantom "(no content)" Bloecke behoben (reduziert Token-Waste)
 
 ---
 
