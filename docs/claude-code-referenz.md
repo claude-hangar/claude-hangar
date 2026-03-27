@@ -1,6 +1,6 @@
 # Claude Code CLI – Vollstaendige Referenz
 
-## Stand: v2.1.84 (26. Maerz 2026)
+## Stand: v2.1.85 (27. Maerz 2026)
 
 ---
 
@@ -360,7 +360,9 @@ Automatische Aktionen die an bestimmten Punkten im Agentic Loop ausgeführt werd
 - `matcher` unterstuetzt Regex (`Write|Edit`, `Bash`)
 - `$CLAUDE_PROJECT_DIR` wird vom System expandiert — fuer zuverlaessige Pfade nutzen
 - `once: true` — Hook wird nur einmal pro Session ausgefuehrt (z.B. einmaliges Setup)
+- **`if` (2.1.85+):** Bedingungsfeld mit Permission-Rule-Syntax (z.B. `Bash(git *)`) — Hook wird nur ausgefuehrt wenn der Tool-Call dem Pattern entspricht. Reduziert Prozess-Overhead erheblich
 - `PreToolUse`-Hooks koennen `additionalContext` im stdout zurueckgeben → wird an das Modell weitergereicht
+- **PreToolUse + AskUserQuestion (2.1.85+):** Hooks koennen `AskUserQuestion` beantworten indem sie `updatedInput` zusammen mit `permissionDecision: "allow"` zurueckgeben — ermoeglicht Headless-Integrationen mit eigener UI
 
 ## 5.4 Hook-Input (KRITISCH)
 
@@ -418,6 +420,8 @@ FILE_PATH=$(cat | jq -r '.tool_input.file_path')
 | `$CLAUDE_PROJECT_DIR` | Alle Hooks — Projekt-Root-Pfad |
 | `$CLAUDE_ENV_FILE` | Nur SessionStart — Env-Vars fuer spaetere Bash-Aufrufe |
 | `$CLAUDE_PLUGIN_ROOT` | Nur Plugin-Hooks |
+| `$CLAUDE_CODE_MCP_SERVER_NAME` | headersHelper — Name des anfragenden MCP-Servers |
+| `$CLAUDE_CODE_MCP_SERVER_URL` | headersHelper — URL des anfragenden MCP-Servers |
 
 ## 5.7 Definierbar in
 
@@ -469,6 +473,8 @@ In settings.json:
 claude mcp add --client-id ID --client-secret SECRET slack-server
 ```
 Pre-configured OAuth für Server ohne Dynamic Client Registration (z.B. Slack).
+
+**RFC 9728 (2.1.85+):** MCP OAuth folgt jetzt Protected Resource Metadata Discovery zur Ermittlung des Authorization-Servers. Step-Up-Authorization bei `403 insufficient_scope` loest korrekt den Re-Authorization-Flow aus.
 
 ## 6.4 MCP Limits & Deduplication
 

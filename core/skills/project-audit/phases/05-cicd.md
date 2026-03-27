@@ -26,6 +26,8 @@ Finding-Prefix: `CICD`
 - [ ] Keine Secrets in Logs/Artifacts?
 - [ ] `pull_request_target`: Nicht verwendet? (oder sicher konfiguriert)
 - [ ] Environment Protection Rules fuer Prod-Deployments?
+- [ ] **Timezone Cron (Maerz 2026):** `timezone` Feld neben cron-Expression? (IANA, z.B. `Europe/Berlin`) — verhindert UTC-Versatz
+- [ ] **Environments ohne Deployment (Maerz 2026):** `deployment: false` wenn Environment nur fuer Secrets/Approval, nicht fuer Deployments genutzt wird
 
 ### 3. Deployment-Pipeline
 
@@ -71,3 +73,7 @@ Severity: MEDIUM wenn Dependabot fehlt, LOW wenn nur Auto-Merge fehlt.
 
 Findings als CICD-01, CICD-02, ... dokumentieren.
 Actions mit write-all Permissions: HIGH. Keine CI/CD: MEDIUM. Kein Caching: LOW.
+
+---
+
+As of: 2026-03-27 (added GitHub Actions timezone cron, deployment:false environments)

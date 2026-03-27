@@ -50,6 +50,7 @@ Always use fallback defaults — never assume a field exists.
 | Reject (TaskCompleted) | `{"result":"reject","reason":"..."}` | 2 |
 | Inject context | `{"additionalContext":"..."}` | 0 |
 | Suggest (UserPromptSubmit) | `{"result":"message","message":"..."}` | 0 |
+| Answer AskUserQuestion | `{"permissionDecision":"allow","updatedInput":"answer"}` | 0 |
 | Allow silently | No output | 0 |
 
 ---
@@ -161,6 +162,29 @@ Add your hook to `core/settings.json.template`:
 
 The `matcher` is a regex against tool names. Empty string matches all tools. Use `"once": true` for SessionStart hooks.
 
+### Conditional Hooks with `if` (v2.1.85+)
+
+Add an `if` field using permission rule syntax to filter when a hook runs. This avoids spawning a process for every tool call:
+
+```json
+{
+  "PreToolUse": [
+    {
+      "matcher": "Bash",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash ~/.claude/hooks/secret-leak-check.sh",
+          "if": "Bash(git *)"
+        }
+      ]
+    }
+  ]
+}
+```
+
+The hook only fires for `Bash` calls matching `git *`. Without `if`, the hook fires for every `Bash` call. Use this to reduce process spawning overhead on frequently-called tools.
+
 ### Hook Types
 
 | Type | Description |
@@ -209,14 +233,45 @@ Always test: empty input (`echo ''`), malformed JSON, and large input (>32KB). A
 
 ---
 
+## Headless AskUserQuestion (v2.1.85+)
+
+PreToolUse hooks can intercept `AskUserQuestion` and provide answers programmatically — useful for CI/CD pipelines or custom UIs:
+
+```bash
+#!/usr/bin/env bash
+# Hook: Auto-answer AskUserQuestion — PreToolUse (AskUserQuestion)
+
+INPUT=$(cat 2>/dev/null) || true
+[ -z "$INPUT" ] && INPUT='{}'
+
+TOOL=$(echo "$INPUT" | node -e "
+  const d = JSON.parse(require('fs').readFileSync(0,'utf8'));
+  console.log(d.tool_name || '');
+" 2>/dev/null || echo "")
+
+[ "$TOOL" != "AskUserQuestion" ] && exit 0
+
+# Provide answer via your own UI, API, or default
+ANSWER="yes"
+
+node -e "console.log(JSON.stringify({
+  permissionDecision: 'allow',
+  updatedInput: process.argv[1]
+}))" "$ANSWER"
+exit 0
+```
+
+---
+
 ## Best Practices
 
 1. **Silent on allow** — no stdout when action is permitted
 2. **Fail open** — if the hook crashes, exit 0 (action proceeds)
 3. **Fast** — hooks run synchronously; slow hooks degrade UX
-4. **Consolidate** — combine related checks (see bash-guard.sh: command guard + commit validator + CI guard)
-5. **Cooldown for PostToolUse** — avoid hundreds of invocations per session
-6. **Defensive parsing** — `2>/dev/null || true` everywhere
+4. **Use `if` conditions** — reduce process spawning with permission rule syntax (v2.1.85+)
+5. **Consolidate** — combine related checks (see bash-guard.sh: command guard + commit validator + CI guard)
+6. **Cooldown for PostToolUse** — avoid hundreds of invocations per session
+7. **Defensive parsing** — `2>/dev/null || true` everywhere
 
 ---
 

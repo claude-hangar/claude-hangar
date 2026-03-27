@@ -48,6 +48,18 @@ Finding-Prefix: `SEC`
 - [ ] Lock-File committet? (Supply-Chain-Angriffe verhindern)
 - [ ] Unbekannte oder kaum gewartete Dependencies?
 
+### 5b. AI Agent Security (wenn AI-Agenten eingesetzt)
+
+Basierend auf OWASP Top 10 for Agentic Applications 2026:
+
+- [ ] Setzt das Projekt AI-Agenten ein? (Claude Code, LangChain, AutoGPT, Custom Agents)
+- [ ] **Goal Hijacking:** Sind Agent-Ziele gegen Prompt Injection geschuetzt?
+- [ ] **Tool Misuse:** Haben Agenten minimale Tool-Berechtigungen? (Least Privilege)
+- [ ] **Rogue Agents:** Koennen Agenten unkontrolliert andere Agenten starten?
+- [ ] **Cascading Failures:** Fehlerbehandlung bei Agent-Ketten? (kein unkontrolliertes Retry)
+- [ ] **Identity & Auth:** Agenten-Aktionen nachvollziehbar? (Audit Trail)
+- [ ] **Data Exfiltration:** Koennen Agenten sensitive Daten nach aussen senden?
+
 ### 6. CI/CD Pipeline Security
 
 - [ ] GitHub Actions / CI Workflows vorhanden?
@@ -70,3 +82,8 @@ Finding-Prefix: `SEC`
 
 Findings als SEC-01, SEC-02, ... dokumentieren.
 Security-Findings immer mindestens HIGH, bei Datenexposition CRITICAL.
+AI-Agent ohne Berechtigungsgrenzen: HIGH. Agent-Datenexfiltration: CRITICAL.
+
+---
+
+As of: 2026-03-27 (added OWASP Top 10 for Agentic Applications 2026 section)

@@ -9,6 +9,7 @@ Astro-spezifische Audit-Checks. Nur §-Sektionen laden die zur aktuellen Phase p
 - [ ] Astro-Version pruefen: `astro --version` und package.json (context7 fuer aktuelle Version)
 - [ ] `astro check` ausfuehren — TypeScript-Fehler, fehlende Typen?
 - [ ] Config: `astro.config.*` — Output-Modus (static/server)? Note: `hybrid` removed since Astro 5
+- [ ] **Astro 6 Breaking:** `import.meta.env` Werte werden im Build immer inlined — Runtime-Lesen in SSR-Code funktioniert nicht mehr, `process.env` oder `astro:env` nutzen
 - [ ] Integrationen: Welche Astro-Integrationen installiert? (@astrojs/sitemap, @astrojs/image, etc.)
 - [ ] Seiten-Inventar: `src/pages/` — Anzahl, Routing-Struktur
 - [ ] Komponenten-Inventar: `src/components/` — Anzahl, Framework-Komponenten (React/Vue/Svelte)?
@@ -22,12 +23,17 @@ Astro-spezifische Audit-Checks. Nur §-Sektionen laden die zur aktuellen Phase p
 - [ ] SSR-Modus: Wenn hybrid/server — Environment-Variablen sicher? (PUBLIC_ Prefix beachten)
 - [ ] `astro:env` genutzt? Secrets korrekt als `secret` markiert?
 - [ ] Keine sensitiven Daten in statischem Output (dist/)?
+- [ ] **CSRF checkOrigin (6.1+):** `security.checkOrigin` und `security.allowedDomains` werden jetzt auch im Dev-Server respektiert (X-Forwarded-Proto hinter TLS-Proxy)
 
 ## §Performance
 
 - [ ] `<Image>` Komponente statt `<img>` fuer lokale Bilder?
 - [ ] `astro:assets` — Automatische Optimierung aktiv?
+- [ ] **Sharp Codec Config (6.1+):** `image.service.config` genutzt? Codec-Defaults optimierbar:
+  - `jpeg.mozjpeg`, `webp.effort`, `webp.alphaQuality`, `avif.effort`, `avif.chromaSubsampling`, `png.compressionLevel`
+  - Per-Image `quality` auf `<Image>` / `<Picture>` / `getImage()` hat Vorrang
 - [ ] View Transitions: Aktiviert? Scripts mit `astro:after-swap` Event?
+- [ ] **View Transition Gesture Skip (6.1+):** Client Router ueberspringt Animationen bei Browser-Swipe-Gesten
 - [ ] Islands-Architektur: `client:*` Direktiven minimal eingesetzt?
 - [ ] `client:idle` / `client:visible` statt `client:load` wo moeglich?
 - [ ] Prerender: Statische Seiten vorgerendert?
@@ -37,6 +43,7 @@ Astro-spezifische Audit-Checks. Nur §-Sektionen laden die zur aktuellen Phase p
 
 - [ ] `<BaseHead>` oder aehnliche Komponente: Meta-Tags zentral verwaltet?
 - [ ] `@astrojs/sitemap` Integration installiert und konfiguriert?
+- [ ] **i18n Fallback Routes (6.1+):** Bei `fallbackType: 'rewrite'` — `fallbackRoutes` in `astro:routes:resolved` verfuegbar fuer Sitemap-Integration
 - [ ] `astro.config` → `site` Property gesetzt? (fuer Sitemap, Canonical)
 - [ ] Trailing Slash: Konsistent konfiguriert? (`trailingSlash: 'always'` / `'never'`)
 - [ ] Redirects: In Config oder per `Astro.redirect()`?
@@ -56,6 +63,7 @@ Astro-spezifische Audit-Checks. Nur §-Sektionen laden die zur aktuellen Phase p
 - [ ] Frontmatter: Logik kurz halten, Utilities auslagern
 - [ ] Slots: Benannte Slots korrekt genutzt?
 - [ ] Content Collections: Schema validiert? `getCollection()` statt manuelle Imports?
+- [ ] **Markdown SmartyPants (6.1+):** Bei i18n-Projekten — `markdown.smartypants` als Objekt konfigurierbar (lokalisierte Anfuehrungszeichen, Dash-Stile)
 
 ## §DSGVO
 
@@ -69,3 +77,7 @@ Astro-spezifische Audit-Checks. Nur §-Sektionen laden die zur aktuellen Phase p
 - [ ] Build-Container: Node-Version passt zu Astro-Anforderungen?
 - [ ] Static Output: Wird per nginx/Caddy ausgeliefert?
 - [ ] Asset-Hashing: Astro generiert hashed Filenames — Cache-Header passend?
+
+---
+
+As of: 2026-03-27 (updated for Astro 6.1.1 — Sharp codec config, i18n fallback routes, SmartyPants, CSRF dev fix)
