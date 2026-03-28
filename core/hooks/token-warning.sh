@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Hook: Token Warning
-# Trigger: PostToolUse (after every tool call)
+# Trigger: PostToolUse (context-heavy tools only)
+# Matcher: Bash|Read|Write|Edit|Grep|Glob|Agent|WebFetch|WebSearch|NotebookEdit
+# Skips: Task*, ToolSearch, SendMessage, Cron*, Plan*, Worktree* (minimal context)
 # Warns on high context utilization.
 #
 # Primary: used_percentage from hook input (if provided by Claude Code)

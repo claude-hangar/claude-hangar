@@ -171,10 +171,37 @@ claude install thedotmack/claude-mem
 
 ---
 
+## 7. GSD v1 — Get Shit Done (gsd-build/get-shit-done)
+
+**What it adds:** Meta-prompting and spec-driven development system as a Claude Code plugin. ~44 slash commands (`/gsd:*`), 16 agents, planning workflows, and context monitoring.
+
+**Why alongside Hangar:** GSD v1 provides structured project planning (requirements, roadmap, phases) that Hangar doesn't cover. Hangar provides safety hooks and operational skills that GSD doesn't.
+
+**Install (local only — avoids global conflicts):**
+
+```bash
+cd your-project
+npx get-shit-done-cc --claude --local
+```
+
+**Compatibility:** GSD v1 installed locally (`.claude/`) does not conflict with Hangar's global `~/.claude/` config. All GSD files use `gsd-` prefix. **Do NOT install globally** — this would conflict with Hangar's statusline and hooks.
+
+**Conflict zones (global install only):**
+
+| Area | Risk | Detail |
+|------|------|--------|
+| statusLine | HIGH | Only one active — GSD would replace Hangar's |
+| settings.json hooks | MEDIUM | Both register SessionStart, PostToolUse, PreToolUse |
+| package.json | MEDIUM | GSD writes `{"type":"commonjs"}` |
+
+**Recommendation:** Always use `--local` when combining with Hangar.
+
+---
+
 ## What NOT to Combine
 
-**GSD (gsd-build/gsd-2)**
-GSD replaces Claude Code entirely with its own CLI. Hangar's hooks won't fire inside GSD. Use one or the other, not both.
+**GSD v2 (gsd-build/gsd-2)**
+GSD v2 is a standalone CLI agent built on the Pi SDK — it replaces Claude Code entirely. Hangar's hooks won't fire inside GSD v2. Use one or the other, not both. (GSD v1 as a local plugin is fine — see above.)
 
 **Competing config managers**
 Don't install multiple `settings.json` managers. Hangar is your config manager — let it own that layer.

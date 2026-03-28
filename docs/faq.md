@@ -24,7 +24,7 @@ sudo apt install git nodejs jq   # Debian/Ubuntu
 
 ### What Claude Code version is required?
 
-Any recent version. If your version does not support a specific hook event (e.g., `StopFailure`), that hook simply will not fire — no errors.
+**Minimum: 2.1.85+** (for conditional `if` on hooks, AskUserQuestion in PreToolUse). Older versions work but miss optimizations. If your version does not support a specific hook event (e.g., `StopFailure`), that hook simply will not fire — no errors.
 
 ---
 
