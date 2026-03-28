@@ -22,6 +22,10 @@
         "ci-node.yml",
         "deploy-ghpages.yml"
       ],
+      "mcpServers": [
+        "github",
+        "playwright"
+      ],
       "description": "Marketing website built with Astro (SSG) and Tailwind CSS."
     },
     {
@@ -46,6 +50,11 @@
       "workflows": [
         "ci-node.yml",
         "deploy-vps-ghcr.yml"
+      ],
+      "mcpServers": [
+        "github",
+        "playwright",
+        "postgres"
       ],
       "description": "Full-stack web application built with SvelteKit (SSR), Drizzle ORM, and PostgreSQL."
     }

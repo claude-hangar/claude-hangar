@@ -11,6 +11,9 @@ Framework-specific extensions for Claude Code. Each stack provides audit skills,
 | **Next.js** | `nextjs/` | — | App Router, Server Components, Server Actions |
 | **Database** | `database/` | `/db-audit` | Drizzle ORM + PostgreSQL schema, migrations, performance |
 | **Auth** | `auth/` | `/auth-audit` | Custom bcryptjs + sessions (no external auth providers) |
+| **GitHub** | `github/` | — | GitHub repos, PRs, issues via MCP |
+| **Web** | `web/` | — | Browser automation (Playwright) via MCP |
+| **Security** | `security/` | — | Security scanning (Snyk) via MCP |
 
 ## Directory Structure
 
@@ -47,6 +50,15 @@ stacks/
 │   ├── README.md           # Stack documentation
 │   ├── fix-templates.md    # Quick-fix templates
 │   └── state-schema.md     # Audit state schema
+├── github/
+│   ├── mcp.json              # GitHub MCP server configuration
+│   └── README.md             # Stack documentation
+├── web/
+│   ├── mcp.json              # Playwright MCP server configuration
+│   └── README.md             # Stack documentation
+├── security/
+│   ├── mcp.json              # Snyk MCP server configuration
+│   └── README.md             # Stack documentation
 └── README.md               # This file
 ```
 
@@ -93,3 +105,4 @@ When an audit finds issues, it loads matching fix templates from `fix-templates.
 - **Cross-reference** related stacks (e.g., database + auth)
 - **CLAUDE.md.snippet** must be practical and under 50 lines
 - **Test your skill** against a real project before committing
+- **MCP servers** — if your stack includes an MCP server, add a `mcp.json` file (see `core/mcp/README.md` for format)

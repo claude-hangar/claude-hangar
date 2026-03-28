@@ -56,6 +56,14 @@
             },
             "default": []
           },
+          "mcpServers": {
+            "type": "array",
+            "description": "MCP server IDs from core/mcp/registry.json to activate for this project.",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          },
           "description": {
             "type": "string",
             "description": "Short description of the project."
