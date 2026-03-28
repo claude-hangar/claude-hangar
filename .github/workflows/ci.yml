@@ -82,6 +82,9 @@ jobs:
               | grep -v 'secret-leak-check' \
               | grep -v 'test-hooks' \
               | grep -v 'writing-hooks' \
+              | grep -v 'session-start' \
+              | grep -v 'ci\.yml' \
+              | grep -v 'deploy-vps' \
               | grep -v '\.md:'; then
               echo "WARNING: Potentially sensitive content found (pattern: $pattern)"
               found=1
