@@ -44,6 +44,7 @@ check_prerequisites() {
   local missing=()
   command -v git &>/dev/null || missing+=("git")
   command -v node &>/dev/null || missing+=("node")
+  command -v npx &>/dev/null || missing+=("npx (optional, for MCP servers)")
   command -v jq &>/dev/null || missing+=("jq (optional, for statusline)")
 
   if [ ${#missing[@]} -gt 0 ]; then
@@ -68,7 +69,7 @@ validate_structure() {
   local errors=0
 
   # Check required directories (core/skills may be empty initially)
-  for dir in core/hooks core/agents core/lib; do
+  for dir in core/hooks core/agents core/lib core/mcp; do
     if [ ! -d "$SCRIPT_DIR/$dir" ]; then
       error "Missing directory: $dir"
       errors=$((errors + 1))
@@ -144,6 +145,15 @@ deploy_component() {
   success "Deployed: $label"
 }
 
+# ─── MCP ──────────────────────────────────────────────────────────────
+
+deploy_mcp() {
+  if [ -f "$SCRIPT_DIR/core/mcp/install.sh" ]; then
+    info "Configuring MCP servers..."
+    bash "$SCRIPT_DIR/core/mcp/install.sh"
+  fi
+}
+
 deploy_all() {
   info "Deploying to $CLAUDE_DIR..."
 
@@ -177,6 +187,9 @@ deploy_all() {
       deploy_component "$stack_dir" "$CLAUDE_DIR/skills/$stack_name" "Stack: $stack_name"
     done
   fi
+
+  # Deploy MCP server configs from stacks
+  deploy_mcp
 
   # Settings: merge or deploy template
   if [ ! -f "$CLAUDE_DIR/settings.json" ]; then
