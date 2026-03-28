@@ -2,32 +2,32 @@
   "rules": [
     {
       "skill": "/audit",
-      "triggers": ["website audit", "site audit", "audit website", "check website", "start audit", "security check website"],
-      "exclude": ["project-audit", "astro-audit", "repo audit"]
+      "triggers": ["website audit", "site audit", "audit website", "check website", "start audit", "security check website", "audit the site", "web audit"],
+      "exclude": ["project-audit", "astro-audit", "repo audit", "code audit"]
     },
     {
       "skill": "/project-audit",
-      "triggers": ["project-audit", "project audit", "repo audit", "code audit", "check project"],
-      "exclude": ["website audit", "site audit"]
+      "triggers": ["project-audit", "project audit", "repo audit", "code audit", "check project", "audit repo", "repository audit", "check codebase"],
+      "exclude": ["website audit", "site audit", "web audit"]
     },
     {
       "skill": "/adversarial-review",
-      "triggers": ["review", "code review", "critical review", "adversarial", "plan review", "audit review"],
-      "exclude": []
+      "triggers": ["review", "code review", "critical review", "adversarial", "plan review", "audit review", "find problems", "what's wrong"],
+      "exclude": ["commit review", "pr review"]
     },
     {
       "skill": "/audit-orchestrator",
-      "triggers": ["full audit", "check everything", "complete audit", "all audits", "comprehensive audit"],
+      "triggers": ["full audit", "check everything", "complete audit", "all audits", "comprehensive audit", "audit everything", "thorough audit"],
       "exclude": []
     },
     {
       "skill": "/capture-pdf",
-      "triggers": ["capture", "pdf", "screenshot", "page as pdf", "capture pages", "print"],
-      "exclude": []
+      "triggers": ["capture", "pdf", "screenshot", "page as pdf", "capture pages", "print pages", "save as pdf"],
+      "exclude": ["capture flag", "screenshot test"]
     },
     {
       "skill": "/lesson-learned",
-      "triggers": ["lesson learned", "what did we learn", "learning", "remember this", "take note"],
+      "triggers": ["lesson learned", "what did we learn", "learning", "remember this", "take note", "save learning", "extract lesson"],
       "exclude": []
     },
     {
@@ -39,48 +39,58 @@
     },
     {
       "skill": "/design-system",
-      "triggers": ["design system", "colors", "color palette", "typography", "font pairing", "spacing", "build component", "build landing page", "which colors"],
+      "triggers": ["design system", "colors", "color palette", "typography", "font pairing", "spacing", "build component", "build landing page", "which colors", "ui components"],
       "exclude": []
     },
     {
       "skill": "/favicon-check",
-      "triggers": ["favicon", "check favicon", "icon check", "app icon"],
+      "triggers": ["favicon", "check favicon", "icon check", "app icon", "site icons"],
       "exclude": []
     },
     {
       "skill": "/meta-tags",
-      "triggers": ["meta tags", "open graph", "og tags", "twitter card", "social preview", "structured data"],
+      "triggers": ["meta tags", "open graph", "og tags", "twitter card", "social preview", "structured data", "seo meta"],
       "exclude": []
     },
     {
       "skill": "/lighthouse-quick",
-      "triggers": ["lighthouse", "pagespeed", "performance check", "core web vitals", "lcp", "cls", "fid"],
+      "triggers": ["lighthouse", "pagespeed", "performance check", "core web vitals", "lcp", "cls", "fid", "speed check", "web vitals"],
       "exclude": []
     },
     {
       "skill": "/deploy-check",
-      "triggers": ["deploy check", "deploy ready", "pre-deploy", "deployment check", "ready to deploy"],
+      "triggers": ["deploy check", "deploy ready", "pre-deploy", "deployment check", "ready to deploy", "production ready", "before deploy"],
       "exclude": []
     },
     {
       "skill": "/git-hygiene",
-      "triggers": ["git hygiene", "stale branches", "git cleanup", "branch cleanup", "git health"],
-      "exclude": []
+      "triggers": ["git hygiene", "stale branches", "git cleanup", "branch cleanup", "git health", "clean branches", "git check"],
+      "exclude": ["git status", "git diff"]
     },
     {
       "skill": "/audit-runner",
-      "triggers": ["audit-runner", "autonomous audit", "auto audit", "audit in background", "unattended audit", "run audit"],
+      "triggers": ["audit-runner", "autonomous audit", "auto audit", "audit in background", "unattended audit", "run audit automatically"],
       "exclude": []
     },
     {
       "skill": "/scan",
-      "triggers": ["scan", "scan project", "detect stack", "tech stack", "what stack", "analyze project", "project profile"],
-      "exclude": ["secret scan", "security scan"]
+      "triggers": ["scan", "scan project", "detect stack", "tech stack", "what stack", "analyze project", "project profile", "what framework"],
+      "exclude": ["secret scan", "security scan", "scan for"]
     },
     {
       "skill": "/consult",
-      "triggers": ["consult", "improve project", "what should I fix", "project help", "project consultation", "optimize project", "upgrade project", "rebuild", "refactor project"],
+      "triggers": ["consult", "improve project", "what should I fix", "project help", "project consultation", "optimize project", "upgrade project", "rebuild", "refactor project", "how to improve"],
       "exclude": ["audit", "review"]
+    },
+    {
+      "skill": "/handoff",
+      "triggers": ["handoff", "session handoff", "end session", "save progress", "switch context", "hand off", "continue later", "pass the baton", "wrap up session"],
+      "exclude": []
+    },
+    {
+      "skill": "/freshness-check",
+      "triggers": ["freshness", "version check", "check versions", "outdated", "update check", "is everything current", "dependency versions"],
+      "exclude": ["npm update", "npm install"]
     }
   ]
 }

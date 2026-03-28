@@ -108,9 +108,34 @@ Result: 5 checks, 3 OK, 1 WARNING, 1 ERROR
 Recommendation: Set missing .env variables before deploy
 ```
 
+### 6. AI Act Compliance (Conditional)
+
+Only for projects that deploy or integrate AI models/agents:
+
+- GPAI provider obligations (transparency, documentation, copyright compliance)
+- High-risk AI system classification check
+- AI content labeling requirements (extended to Feb 2027)
+- Finding: `DEPLOY-07: AI component detected but no AI Act compliance documentation`
+
+**Context:** EU AI Act GPAI enforcement powers effective August 2, 2026.
+Fines up to EUR 15M or 3% of global turnover (Art. 101).
+
+### 7. DSA Platform Obligations (Conditional)
+
+Only for platforms with user-generated content or advertising:
+
+- Age verification measures for restricted content
+- Advertising repository transparency
+- Researcher data access provisions
+- Minor protection measures
+- Finding: `DEPLOY-08: UGC platform without DSA compliance measures`
+
+**Context:** DSA enforcement 2026. First fine: EUR 120M (X). Focus: age verification, minor protection.
+
 ## Rules
 
 - **Read-only** — does not modify any files
 - Works even without a running Docker daemon (config check)
 - SSL/health check only when domain is reachable
 - If `docker compose` is unavailable: file-based checks only
+- AI Act / DSA checks only triggered when project type warrants it

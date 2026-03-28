@@ -2,6 +2,12 @@
 # GitHub Actions workflow for Node.js projects.
 # Runs on every push and PR. Checks out code, installs dependencies,
 # runs tests, and lints.
+#
+# Supports timezone-aware cron schedules (March 2026+).
+# Example: schedule nightly builds in your timezone:
+#   schedule:
+#     - cron: '0 2 * * *'
+#       timezone: 'Europe/Berlin'
 
 name: CI
 

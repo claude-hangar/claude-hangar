@@ -1,10 +1,18 @@
 #!/usr/bin/env bash
-# Hook: Model Router — UserPromptSubmit
-# Analyzes user prompt and suggests the optimal model tier based on task complexity.
-# Tiers: haiku (simple/fast), sonnet (default — no suggestion), opus (complex/deep).
+# Hook: Model Router — Smart Complexity Analysis
+# Trigger: UserPromptSubmit
+# Inspired by: SDD model selection (mechanical/integration/architecture tiers)
+#
+# Analyzes user prompt for task complexity and suggests optimal model tier:
+# - Haiku: Mechanical tasks (rename, format, typo, 1-2 files)
+# - Sonnet: Default — no suggestion (integration, moderate complexity)
+# - Opus: Architecture, deep analysis, security audits, large refactors
+#
+# Complexity signals: keyword matching + structural indicators (file counts,
+# scope markers, review/audit language, multi-step descriptions)
 #
 # IMPORTANT: No stdout output when no suggestion is needed!
-# Git Bash redirects stdout to stderr (Issue #20034) → "hook error" in TUI.
+# Git Bash redirects stdout to stderr (Issue #20034) -> "hook error" in TUI.
 # Output ONLY when a model suggestion is made.
 
 # No set -euo pipefail — hooks must be resilient on Windows
@@ -27,33 +35,62 @@ USER_PROMPT=$(echo "$INPUT" | node -e "
   console.log((input.user_prompt || '').toLowerCase());
 " 2>/dev/null || echo "")
 
-# Empty prompt → skip
+# Empty prompt -> skip
 [ -z "$USER_PROMPT" ] && exit 0
 
 # ============================================================
-# Tier detection via Node (keyword matching with word boundaries)
+# Smart Complexity Analysis via Node
 # ============================================================
 
 TIER=$(node -e "
   const prompt = process.argv[1];
 
-  // Keyword lists per tier
-  const haiku = [
+  // --- HAIKU tier: mechanical, simple, single-file tasks ---
+  const haikuKeywords = [
     'rename', 'typo', 'format', 'lint', 'simple', 'quick',
-    'trivial', 'one-liner', 'delete this', 'remove this'
+    'trivial', 'one-liner', 'delete this', 'remove this',
+    'fix import', 'fix typo', 'add comment', 'update version',
+    'change name', 'swap', 'toggle'
   ];
 
-  const opus = [
-    'architect', 'design', 'refactor', 'security audit', 'migrate',
-    'rewrite', 'complex', 'analyze the', 'deep dive',
-    'review the entire', 'plan the', 'system design'
+  // --- OPUS tier: architecture, deep analysis, multi-system ---
+  const opusKeywords = [
+    'architect', 'design system', 'refactor', 'security audit',
+    'migrate', 'rewrite', 'complex', 'deep dive', 'deep analysis',
+    'review the entire', 'plan the', 'system design', 'full audit',
+    'analyze architecture', 'performance audit', 'threat model',
+    'code review', 'comprehensive', 'ultrathink'
+  ];
+
+  // --- Structural complexity signals ---
+  const opusSignals = [
+    // Multi-file scope indicators
+    /\\b(all files|entire|whole|every file|across the|throughout)\\b/,
+    // Multi-step descriptions
+    /\\b(step 1|phase 1|first .* then|and then|after that|finally)\\b/,
+    // Large scope markers
+    /\\b(refactor|redesign|overhaul|rebuild|rearchitect)\\b/,
+    // Audit/review language
+    /\\b(audit|review|analyze|evaluate|assess|investigate)\\b.*\\b(all|every|entire|whole|complete)\\b/,
+    // Security-specific
+    /\\b(vulnerability|exploit|injection|xss|csrf|owasp)\\b/,
+    // Planning language
+    /\\b(plan|strategy|roadmap|proposal|rfc|adr)\\b/
+  ];
+
+  const haikuSignals = [
+    // Single-file scope
+    /\\b(this file|this line|line \\d+|just the)\\b/,
+    // Minimal change language
+    /\\b(just|only|simply|quick|small)\\b.*\\b(change|fix|update|add|remove)\\b/,
+    // Direct small actions
+    /^(fix|add|remove|update|change|rename|delete|swap|toggle)\\s/
   ];
 
   /**
    * Match keywords against the prompt.
    * Multi-word keywords use includes (phrase match).
-   * Single-word keywords use word-boundary regex to avoid
-   * false positives (e.g. 'format' inside 'information').
+   * Single-word keywords use word-boundary regex.
    */
   function matchesTier(keywords) {
     return keywords.some(kw => {
@@ -63,17 +100,32 @@ TIER=$(node -e "
     });
   }
 
-  // Opus checked first — complex tasks take priority over simple keyword overlap
-  if (matchesTier(opus)) {
-    console.log('opus');
-  } else if (matchesTier(haiku)) {
-    console.log('haiku');
-  } else {
-    console.log('');
+  function matchesSignals(signals) {
+    return signals.filter(re => re.test(prompt)).length;
   }
+
+  // Score both tiers
+  const opusKeywordMatch = matchesTier(opusKeywords);
+  const opusSignalCount = matchesSignals(opusSignals);
+  const haikuKeywordMatch = matchesTier(haikuKeywords);
+  const haikuSignalCount = matchesSignals(haikuSignals);
+
+  // Prompt length as complexity proxy (>300 chars suggests complex task)
+  const isLongPrompt = prompt.length > 300;
+
+  // Decision logic with signal weighting
+  if (opusKeywordMatch || opusSignalCount >= 2 || (opusSignalCount >= 1 && isLongPrompt)) {
+    console.log('opus');
+  } else if (haikuKeywordMatch && opusSignalCount === 0) {
+    // Only suggest haiku if NO opus signals present
+    if (haikuSignalCount > 0 || !isLongPrompt) {
+      console.log('haiku');
+    }
+  }
+  // Default: no output (sonnet is fine)
 " "$USER_PROMPT" 2>/dev/null || echo "")
 
-# No tier matched (sonnet-level / default) → exit silently
+# No tier matched (sonnet-level / default) -> exit silently
 [ -z "$TIER" ] && exit 0
 
 # ============================================================
@@ -102,11 +154,11 @@ date +%s > "$COOLDOWN_FILE"
 if [ "$TIER" = "haiku" ]; then
   node -e "console.log(JSON.stringify({
     result: 'message',
-    message: 'Model hint: This looks like a quick task — Haiku could handle it faster and cheaper. Consider switching with /model haiku.'
+    message: 'Model hint: This looks like a quick/mechanical task. Haiku could handle it faster and cheaper. Switch with /model haiku.'
   }))"
 elif [ "$TIER" = "opus" ]; then
   node -e "console.log(JSON.stringify({
     result: 'message',
-    message: 'Model hint: This looks like a complex task — Opus may deliver better results for deep analysis, architecture, and large refactors. Consider switching with /model opus.'
+    message: 'Model hint: This looks like a complex/architectural task. Opus may deliver better results for deep analysis, planning, and large-scope work. Switch with /model opus.'
   }))"
 fi

@@ -1,6 +1,18 @@
 # Claude Code CLI – Vollstaendige Referenz
 
-## Stand: v2.1.85 (27. Maerz 2026)
+## Stand: v2.1.86 (27. Maerz 2026)
+
+### Aenderungen v2.1.86
+
+- `X-Claude-Code-Session-Id` Header in API-Requests fuer Proxy-Session-Tracking
+- `.jj` und `.sl` in VCS-Ausschlusslisten (Jujutsu, Sapling Support)
+- MCP-Tool-Beschreibungen auf 2KB gekappt (OpenAPI-Server Context-Schutz)
+- MCP-Server Deduplizierung (lokal > claude.ai Connector)
+- Voice Push-to-Talk Fix (keine Zeichenlecks mehr)
+- Remote Control /poll Rate 300x reduziert (10min statt 1-2s)
+- VS Code: Plan-Dokument-Ansicht mit Kommentaren
+- VS Code: Native MCP-Server-Verwaltung via `/mcp`
+- Default Opus 4.6 auf Bedrock, Vertex und Microsoft Foundry (war Opus 4.1)
 
 ---
 

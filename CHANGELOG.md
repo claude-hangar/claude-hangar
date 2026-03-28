@@ -5,6 +5,93 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] — 2026-03-28
+
+### Added
+
+**New Agent:**
+- plan-reviewer — Spec/plan compliance reviewer inspired by Superpowers SDD two-stage review. Verifies implementation matches plan (nothing more, nothing less). Sonnet model, 15 maxTurns.
+
+**New Skill:**
+- /handoff — Structured session handoff for seamless context continuity. Creates HANDOFF.md with what was done, key decisions, files modified, known issues, and next steps. Inspired by GSD HANDOFF.json pattern.
+
+**New Documentation:**
+- docs/concepts/quality-gates.md — Iron laws, 4-level verification, anti-rationalization patterns, gate functions, forensics. Combines Superpowers + GSD + Hangar quality patterns.
+
+### Changed
+
+**Hook Enhancements (Superpowers + GSD patterns adopted):**
+
+- **task-completed-gate** — Upgraded from simple error check to 4-level quality gate:
+  - L1: Existence (empty, placeholder markers like TBD/TODO)
+  - L2: Error Resolution (unresolved errors require resolution language)
+  - L3: Test Evidence (test tasks must include pass/fail output)
+  - L4: Substance (vague one-word results rejected, proportional detail required)
+  - Iron Law: "No completion claims without evidence"
+
+- **post-compact** — Smart context preservation replacing generic reminder:
+  - Detects active tasks from .tasks.json (in-progress/pending)
+  - Finds active plans in docs/superpowers/plans/
+  - Detects HANDOFF.md for session continuity
+  - Includes branch context for feature work
+  - Adds verification reminder (IDENTIFY → RUN → READ → VERIFY → CLAIM)
+  - Saves richer recovery snapshots
+
+- **model-router** — Smart complexity analysis replacing simple keyword matching:
+  - Structural complexity signals (multi-file scope, multi-step descriptions)
+  - Security/audit language detection
+  - Prompt length as complexity proxy (>300 chars)
+  - Signal weighting (opus signals override haiku keywords)
+  - Better false-positive prevention
+
+- **subagent-tracker** — Forensics capabilities added:
+  - Duration tracking per agent (warns on >5 min)
+  - Thrashing detection (same type 3+ spawns in 2 min)
+  - Failure pattern logging (error detection in results)
+  - Peak concurrency tracking
+  - Session forensics log file for post-mortem analysis
+  - Per-type spawn frequency counting
+
+- **skill-rules.json** — CSO-optimized triggers:
+  - Added /handoff and /freshness-check rules
+  - Better exclusion patterns to prevent false matches
+  - Additional trigger keywords per skill (18 total rules)
+
+**Test Suite Expansion:**
+- 39 tests total (was 24), added 15 new tests for enhanced hooks:
+  - 4-level quality gate: 10 tests (L1-L4 reject + allow paths)
+  - Model router: 2 tests
+  - Subagent tracker: 3 tests (start, stop, non-event)
+
+**Freshness Opportunity Implementations (10 of 14):**
+- Astro v6 checklist: Added V6-PERF-04 (Sharp codec defaults), V6-PERF-05 (SmartyPants), V6-NEW-05 (i18n fallback) — 31 checks total (was 28)
+- deploy-check: Added DEPLOY-07 (EU AI Act compliance) and DEPLOY-08 (DSA platform obligations) as conditional checks
+- claude-code-referenz: Updated to v2.1.86 with Session-ID header, Jujutsu/Sapling, VS Code plan view, MCP dialog, Opus 4.6 default
+- CI template (ci-node.yml): Added timezone-aware cron schedule documentation (March 2026 GH Actions feature)
+- audit-runner: Added Verbose/Headless Streaming section for `--verbose` real-time monitoring
+
+### Freshness Check Results (2026-03-28)
+
+| Package | Version |
+|---------|---------|
+| Claude Code | 2.1.86 |
+| Astro | 6.1.1 |
+| SvelteKit | 2.55.0 |
+| Svelte | 5.55.0 |
+| Tailwind CSS | 4.2.2 |
+| Vite | 8.0.3 |
+| Drizzle ORM | 0.45.2 |
+| Drizzle Kit | 0.31.10 |
+| bcryptjs | 3.0.3 |
+| Next.js | 16.2.1 |
+| Zod | 4.3.6 |
+| Node.js | 25.8.1 |
+| Playwright | 1.58.2 |
+| Lighthouse | 13.0.3 |
+| @anthropic-ai/sdk | 0.80.0 |
+
+---
+
 ## [1.1.1] — 2026-03-26
 
 ### Changed

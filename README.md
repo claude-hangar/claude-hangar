@@ -25,8 +25,8 @@ Most Claude Code configs are personal dotfiles — useful to read, hard to reuse
 - **Multi-project orchestration** — manage configs for multiple repos from one place
 - **Modular stacks** — pick only what you need (Astro, SvelteKit, Next.js, Database, Auth)
 - **Battle-tested hooks** that prevent real incidents (secret leaks, destructive commands, context overflow)
-- **17 skills** from project scanning to deployment readiness checks
-- **13 lifecycle hooks** covering 14 Claude Code events including TaskCompleted quality gates
+- **18 skills** from project scanning to deployment readiness checks
+- **13 lifecycle hooks** with 4-level quality gates, forensics, and smart context preservation
 - **Cross-platform** — Linux, macOS, and Windows (Git Bash)
 
 ## Quick Start
@@ -80,15 +80,15 @@ cd ~/.claude-hangar && bash setup.sh
 | `token-warning` | PostToolUse | Alerts at 70% and 80% context utilization |
 | `session-start` | SessionStart | Loads STATUS.md, tasks, and memory on session start |
 | `session-stop` | Stop | Cleans temp files, logs session cost |
-| `post-compact` | PostCompact | Resets token tracking + reminds to re-read CLAUDE.md |
+| `post-compact` | PostCompact | Smart context preservation — detects tasks, plans, branch, HANDOFF.md |
 | `config-change-guard` | ConfigChange | Warns on critical settings changes |
 | `skill-suggest` | UserPromptSubmit | Suggests matching skills based on your prompts |
-| `model-router` | UserPromptSubmit | Suggests optimal model tier (haiku/opus) based on task complexity |
-| `task-completed-gate` | TaskCompleted | Quality gate — rejects tasks with errors or empty results |
-| `subagent-tracker` | SubagentStart/Stop | Tracks subagent lifecycle for observability |
+| `model-router` | UserPromptSubmit | Smart complexity analysis — structural signals, scope detection |
+| `task-completed-gate` | TaskCompleted | 4-level quality gate (existence, errors, evidence, substance) |
+| `subagent-tracker` | SubagentStart/Stop | Lifecycle tracking + forensics (duration, thrashing, failures) |
 | `stop-failure` | StopFailure | Logs errors on session failures |
 
-### Agents (5) — Specialized AI Workers
+### Agents (6) — Specialized AI Workers
 
 | Agent | Model | Purpose |
 |-------|-------|---------|
@@ -96,9 +96,10 @@ cd ~/.claude-hangar && bash setup.sh
 | `explorer-deep` | Opus | Deep architecture analysis with worktree isolation |
 | `security-reviewer` | Opus | OWASP Top 10 + Agentic Top 10 security audit |
 | `commit-reviewer` | Sonnet | Pre-commit review for staged changes |
+| `plan-reviewer` | Sonnet | Spec/plan compliance — verifies nothing more, nothing less |
 | `dependency-checker` | Sonnet | npm audit + outdated packages + CVE research |
 
-### Skills (17) — Slash Commands for Real Work
+### Skills (18) — Slash Commands for Real Work
 
 | Skill | Description |
 |-------|-------------|
@@ -119,6 +120,7 @@ cd ~/.claude-hangar && bash setup.sh
 | `/lesson-learned` | Extract and persist learnings |
 | `/audit-orchestrator` | Multi-audit coordination |
 | `/audit-runner` | Autonomous batch audit execution |
+| `/handoff` | Structured session handoff for seamless context continuity |
 
 ### Stacks (5) — Framework Extensions
 

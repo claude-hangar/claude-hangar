@@ -1,6 +1,6 @@
 # Astro 6 Stable — Best Practices Checklist
 
-28 checkpoints in 10 areas. For projects already running on Astro 6.x stable.
+31 checkpoints in 10 areas. For projects already running on Astro 6.x stable.
 Focus: Best practices, optimizations, adopting new features.
 Finding prefix: `MIG-NN` (consistent with v5-stable and v6-beta)
 
@@ -57,11 +57,29 @@ This checklist is for projects already successfully running on 6.x.
 
 ---
 
-## PERF — Performance (3 Checks)
+## PERF — Performance (5 Checks)
 
 - [ ] **V6-PERF-01** [HIGH] Image optimization with `astro:assets`
   - `<Image>` component instead of raw `<img>` tags
   - Responsive images with `widths` and `sizes`
+- [ ] **V6-PERF-04** [MEDIUM] Sharp codec-specific defaults configured (v6.1.0+)
+  - `image.service.config` in `astro.config.mjs` for codec-level optimization:
+    ```js
+    image: {
+      service: {
+        config: {
+          jpeg: { mozjpeg: true },
+          webp: { effort: 6, alphaQuality: 80 },
+          avif: { effort: 4, chromaSubsampling: '4:2:0' },
+          png: { compressionLevel: 9 }
+        }
+      }
+    }
+    ```
+  - Reduces image sizes 10-30% without visible quality loss
+- [ ] **V6-PERF-05** [LOW] SmartyPants Markdown typography configured (v6.1.0+)
+  - `markdown.smartypants` in astro.config for localized typographic quotes
+  - Relevant for i18n projects with non-English typographic conventions
 - [ ] **V6-PERF-02** [MEDIUM] Prefetch strategy configured
   - `prefetch: { defaultStrategy: 'viewport' }`
 - [ ] **V6-PERF-03** [LOW] Build output analyzed
@@ -122,7 +140,9 @@ This checklist is for projects already successfully running on 6.x.
   - Vite Environment API, better HMR, faster reloads
 - [ ] **V6-NEW-04** [LOW] Check View Transition API updates
   - `<ClientRouter>` with improved features
+- [ ] **V6-NEW-05** [LOW] Evaluate i18n fallback route improvements (v6.1.0+)
+  - Improved fallback routing for multilingual content
 
 ---
 
-As of: 2026-03-26 (updated for Astro 6.0.8, Vite 8.0.3, Zod 4.3.6)
+As of: 2026-03-28 (updated for Astro 6.1.1, Vite 8.0.3, Zod 4.3.6)

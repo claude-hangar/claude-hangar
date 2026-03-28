@@ -263,6 +263,20 @@ bash audit-runner.sh /path --batch --dry-run
 
 ---
 
+## Verbose/Headless Streaming
+
+When running in headless mode (`claude -p`), session output can be enhanced
+with `--verbose` to stream full model text and thinking output to stderr.
+This is useful for real-time monitoring of long-running audit sessions:
+
+```bash
+claude -p "/$AUDIT auto" --verbose 2>session-output.log
+```
+
+Without `--verbose`, only tool calls and final output are visible.
+With `--verbose`, full `[text]` and `[thinking]` blocks stream to stderr —
+no truncation, full model output visible for debugging and monitoring.
+
 ## Rules
 
 - **Runner is external** — runs in a separate terminal, NOT within a Claude session

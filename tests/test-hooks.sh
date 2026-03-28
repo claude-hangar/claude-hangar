@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Test Suite: Core Hooks
-# Tests the 10 core hooks by simulating JSON input and checking exit codes.
+# Tests the core hooks by simulating JSON input and checking exit codes.
 # Usage: bash tests/test-hooks.sh
 #
 # Note: Test inputs that simulate secrets are constructed at runtime
@@ -306,6 +306,127 @@ test \
   0 \
   "post-compact.sh" \
   '{"used_percentage":45}'
+
+# ============================================================
+# 11. task-completed-gate.sh — 4-Level Quality Gate
+# ============================================================
+
+echo ""
+echo "--- task-completed-gate (4-level) ---"
+
+# Level 1: Empty result
+test \
+  "L1: should reject empty task result" \
+  2 \
+  "task-completed-gate.sh" \
+  '{"task_id":"1","task_subject":"Fix bug","task_description":"Fix the login bug","task_result":""}'
+
+# Level 1: Error marker
+test \
+  "L1: should reject error-only marker" \
+  2 \
+  "task-completed-gate.sh" \
+  '{"task_id":"2","task_subject":"Deploy","task_description":"Deploy to prod","task_result":"FAILED"}'
+
+# Level 1: Placeholder marker
+test \
+  "L1: should reject TBD placeholder" \
+  2 \
+  "task-completed-gate.sh" \
+  '{"task_id":"3","task_subject":"Setup","task_description":"Setup env","task_result":"TBD"}'
+
+# Level 2: Unresolved errors
+test \
+  "L2: should reject result with unresolved errors" \
+  2 \
+  "task-completed-gate.sh" \
+  '{"task_id":"4","task_subject":"Build app","task_description":"Build the app","task_result":"Build output: ERROR in src/index.ts TypeError: Cannot read property"}'
+
+# Level 2: Resolved errors should pass
+test \
+  "L2: should allow result with resolved errors" \
+  0 \
+  "task-completed-gate.sh" \
+  '{"task_id":"5","task_subject":"Fix build","task_description":"Fix build errors","task_result":"Build had ERROR in module resolution but was fixed by updating the import path. All builds passing now."}'
+
+# Level 3: Test task without evidence
+test \
+  "L3: should reject test task without test output" \
+  2 \
+  "task-completed-gate.sh" \
+  '{"task_id":"6","task_subject":"Run unit tests","task_description":"Execute the test suite","task_result":"Tests were executed successfully"}'
+
+# Level 3: Test task with evidence should pass
+test \
+  "L3: should allow test task with pass/fail evidence" \
+  0 \
+  "task-completed-gate.sh" \
+  '{"task_id":"7","task_subject":"Run unit tests","task_description":"Execute the test suite","task_result":"47 tests passed, 0 failed, 2 skipped. Coverage: 89%"}'
+
+# Level 4: Vague result
+test \
+  "L4: should reject vague one-word result" \
+  2 \
+  "task-completed-gate.sh" \
+  '{"task_id":"8","task_subject":"Implement auth","task_description":"Add authentication to the API","task_result":"Done."}'
+
+# Level 4: Substantive result should pass
+test \
+  "L4: should allow substantive result" \
+  0 \
+  "task-completed-gate.sh" \
+  '{"task_id":"9","task_subject":"Add login","task_description":"Add login endpoint","task_result":"Added POST /api/login endpoint in src/routes/auth.ts with bcrypt password verification and JWT token generation."}'
+
+# Level 4: Brief result for complex task
+test \
+  "L4: should reject thin result for complex task" \
+  2 \
+  "task-completed-gate.sh" \
+  '{"task_id":"10","task_subject":"Refactor auth","task_description":"Refactor the entire authentication system to use sessions instead of JWT tokens. This includes updating the login endpoint, adding session storage, modifying all protected routes, and updating the middleware.","task_result":"Refactored auth to sessions"}'
+
+# ============================================================
+# 12. model-router.sh
+# ============================================================
+
+echo ""
+echo "--- model-router ---"
+
+test \
+  "should exit 0 on empty prompt" \
+  0 \
+  "model-router.sh" \
+  '{"user_prompt":""}'
+
+test \
+  "should exit 0 on normal prompt (sonnet tier)" \
+  0 \
+  "model-router.sh" \
+  '{"user_prompt":"add a new button to the form"}'
+
+# ============================================================
+# 13. subagent-tracker.sh
+# ============================================================
+
+echo ""
+echo "--- subagent-tracker ---"
+
+test \
+  "should exit 0 on subagent start" \
+  0 \
+  "subagent-tracker.sh" \
+  '{"hook_event_name":"SubagentStart","agent_name":"test-agent","agent_id":"test-001"}'
+
+test \
+  "should exit 0 on subagent stop" \
+  0 \
+  "subagent-tracker.sh" \
+  '{"hook_event_name":"SubagentStop","agent_name":"test-agent","agent_id":"test-001"}'
+
+test \
+  "should exit 0 on non-subagent event" \
+  0 \
+  "subagent-tracker.sh" \
+  '{"hook_event_name":"SessionStart"}'
 
 # ============================================================
 # Summary
