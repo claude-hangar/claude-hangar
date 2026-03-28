@@ -1,0 +1,56 @@
+{
+  "version": "1.0.0",
+  "description": "Claude Hangar MCP Server Registry — catalog of all supported MCP servers",
+  "servers": {
+    "sequential-thinking": {
+      "name": "Sequential Thinking",
+      "category": "core",
+      "description": "Structured step-by-step reasoning for complex problems",
+      "source": "https://github.com/modelcontextprotocol/servers",
+      "package": "@modelcontextprotocol/server-sequential-thinking",
+      "required": true
+    },
+    "context7": {
+      "name": "Context7",
+      "category": "core",
+      "description": "Live documentation lookup for any library or framework",
+      "source": "https://github.com/upstash/context7",
+      "package": "@upstash/context7-mcp",
+      "required": true
+    },
+    "github": {
+      "name": "GitHub",
+      "category": "stack",
+      "stack": "github",
+      "description": "GitHub repos, PRs, issues, code search",
+      "source": "https://github.com/github/github-mcp-server",
+      "package": "@modelcontextprotocol/server-github",
+      "credentials": ["GITHUB_TOKEN"]
+    },
+    "playwright": {
+      "name": "Playwright",
+      "category": "stack",
+      "stack": "web",
+      "description": "Browser automation and UI verification",
+      "source": "https://github.com/microsoft/playwright-mcp",
+      "package": "@playwright/mcp"
+    },
+    "postgres": {
+      "name": "PostgreSQL Pro",
+      "category": "stack",
+      "stack": "database",
+      "description": "Database schema inspection, queries, performance analysis",
+      "source": "https://github.com/crystaldba/postgres-mcp",
+      "package": "@crystaldba/postgres-mcp",
+      "credentials": ["POSTGRES_URL"]
+    },
+    "snyk": {
+      "name": "Snyk",
+      "category": "stack",
+      "stack": "security",
+      "description": "Security scanning for dependencies, code, IaC, and containers",
+      "source": "https://docs.snyk.io/integrations/snyk-studio-agentic-integrations",
+      "package": "snyk"
+    }
+  }
+}
