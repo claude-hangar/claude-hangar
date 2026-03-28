@@ -149,20 +149,21 @@ progress_bar() {
 }
 
 # Read JSON value (Node instead of jq — cross-platform)
+# Uses dot-path access (e.g., "audits", "timeout") — no eval.
 json_get() {
   local file="$1"
-  local expr="$2"
+  local key="$2"
   local normalized
   normalized="$(to_node_path "$file")"
-  JSON_FILE="$normalized" JSON_EXPR="$expr" node -e "
+  JSON_FILE="$normalized" JSON_KEY="$key" node -e "
     try {
       const d = JSON.parse(require('fs').readFileSync(process.env.JSON_FILE,'utf8'));
-      // Safe accessor: only property access and array methods allowed
-      // No generic eval — controlled evaluation instead
-      const expr = process.env.JSON_EXPR;
-      const fn = new Function('d', 'return ' + expr);
-      const r = fn(d);
-      console.log(typeof r === 'object' ? JSON.stringify(r) : String(r));
+      const key = process.env.JSON_KEY;
+      const val = key.split('.').reduce((o, k) => o && o[k], d);
+      if (val === undefined || val === null) { console.log('NONE'); }
+      else if (Array.isArray(val)) { console.log(val.join(',')); }
+      else if (typeof val === 'object') { console.log(JSON.stringify(val)); }
+      else { console.log(String(val)); }
     } catch(e) { console.log('ERROR'); }
   "
 }
@@ -368,28 +369,28 @@ read_config() {
   log "Config found: $config_file"
 
   local cfg_audits
-  cfg_audits=$(json_get "$config_file" "d.audits ? d.audits.join(',') : 'NONE'")
+  cfg_audits=$(json_get "$config_file" "audits")
   if [ "$cfg_audits" != "NONE" ] && [ "$cfg_audits" != "ERROR" ]; then
     AUDITS="$cfg_audits"
     log "  Audits from config: $AUDITS"
   fi
 
   local cfg_timeout
-  cfg_timeout=$(json_get "$config_file" "d.timeout || 'NONE'")
+  cfg_timeout=$(json_get "$config_file" "timeout")
   if [ "$cfg_timeout" != "NONE" ] && [ "$cfg_timeout" != "ERROR" ]; then
     TIMEOUT="$cfg_timeout"
     log "  Timeout from config: $TIMEOUT"
   fi
 
   local cfg_retries
-  cfg_retries=$(json_get "$config_file" "d.maxRetries || 'NONE'")
+  cfg_retries=$(json_get "$config_file" "maxRetries")
   if [ "$cfg_retries" != "NONE" ] && [ "$cfg_retries" != "ERROR" ]; then
     MAX_RETRIES="$cfg_retries"
     log "  Max retries from config: $MAX_RETRIES"
   fi
 
   local cfg_skip_orch
-  cfg_skip_orch=$(json_get "$config_file" "d.skipOrchestrator === true ? 'true' : 'NONE'")
+  cfg_skip_orch=$(json_get "$config_file" "skipOrchestrator")
   if [ "$cfg_skip_orch" = "true" ]; then
     SKIP_ORCHESTRATOR=true
     log "  Orchestrator skipped (config)"

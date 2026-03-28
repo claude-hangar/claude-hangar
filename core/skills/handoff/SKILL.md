@@ -1,3 +1,9 @@
+---
+name: handoff
+description: Structured session handoff — preserves context for seamless continuation across sessions.
+user_invocable: true
+---
+
 # /handoff — Structured Session Handoff
 
 Use when ending a session, switching context, or handing work to another

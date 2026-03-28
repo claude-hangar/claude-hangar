@@ -1,4 +1,5 @@
 ---
+name: consult
 description: Interactive project consultant. Scans your project, asks targeted questions, and creates a structured improvement plan.
 user_invocable: true
 ---

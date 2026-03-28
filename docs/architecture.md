@@ -10,8 +10,8 @@ System architecture of Claude Hangar.
 claude-hangar/
 ├── core/                          # Global config → deployed to ~/.claude/
 │   ├── hooks/                     #   13 lifecycle hooks (.sh)
-│   ├── agents/                    #   5 agent definitions (.md)
-│   ├── skills/                    #   17 skill workflows (SKILL.md per dir)
+│   ├── agents/                    #   6 agent definitions (.md)
+│   ├── skills/                    #   18 skill workflows (SKILL.md per dir)
 │   ├── lib/common.sh              #   Shared shell functions
 │   ├── statusline-command.sh      #   Statusline script
 │   ├── settings.json.template     #   Settings template (hooks, env, effort)
@@ -21,7 +21,10 @@ claude-hangar/
 │   ├── sveltekit/
 │   ├── nextjs/
 │   ├── database/
-│   └── auth/
+│   ├── auth/
+│   ├── github/                    #   GitHub MCP server config
+│   ├── security/                  #   Security tools MCP config
+│   └── web/                       #   Web tools (Playwright) MCP config
 ├── templates/                     # Scaffolding (used on demand, not auto-deployed)
 │   ├── ci/                        #   GitHub Actions workflows
 │   └── project/                   #   CLAUDE.md templates (minimal, web, fullstack, management)

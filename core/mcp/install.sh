@@ -74,13 +74,10 @@ merge_mcp_configs() {
 
     # Merge using Node.js (cross-platform, no jq dependency)
     local result
-    result=$(node -e "
+    result=$(SETTINGS_PATH="$node_settings" MCP_PATH="$node_mcp" node -e "
       const fs = require('fs');
-      const settingsPath = '$node_settings';
-      const mcpPath = '$node_mcp';
-
-      const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
-      const stackMcp = JSON.parse(fs.readFileSync(mcpPath, 'utf8'));
+      const settings = JSON.parse(fs.readFileSync(process.env.SETTINGS_PATH, 'utf8'));
+      const stackMcp = JSON.parse(fs.readFileSync(process.env.MCP_PATH, 'utf8'));
 
       if (!settings.mcpServers) settings.mcpServers = {};
 
@@ -92,7 +89,7 @@ merge_mcp_configs() {
         }
       }
 
-      fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2) + '\n');
+      fs.writeFileSync(process.env.SETTINGS_PATH, JSON.stringify(settings, null, 2) + '\n');
       console.log(added);
     " 2>&1)
 
@@ -106,9 +103,13 @@ merge_mcp_configs() {
 
   # Check for unresolved placeholders
   local placeholders
-  placeholders=$(node -e "
+  local node_settings_final="$settings_path"
+  if command -v cygpath &>/dev/null; then
+    node_settings_final="$(cygpath -m "$settings_path")"
+  fi
+  placeholders=$(SETTINGS_PATH="$node_settings_final" node -e "
     const fs = require('fs');
-    const s = JSON.parse(fs.readFileSync('$node_settings', 'utf8'));
+    const s = JSON.parse(fs.readFileSync(process.env.SETTINGS_PATH, 'utf8'));
     const json = JSON.stringify(s.mcpServers || {});
     const re = /\{\{([A-Z][A-Z0-9_]*)\}\}/g;
     const found = [];

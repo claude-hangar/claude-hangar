@@ -5,6 +5,56 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.1] — 2026-03-28
+
+### Fixed
+
+**Bug Fixes (4):**
+- **secret-leak-check** — `grep` misinterpreted patterns starting with `-----` as options, causing private key detection to silently fail. Fixed with `grep -- "$PATTERN"`.
+- **registry.schema.json** — Schema rejected its own example because `$schema` was not declared as an allowed root property. Added `$schema` to schema properties.
+- **audit-runner.sh** — Replaced `new Function()` eval (security risk) with safe dot-path property accessor for JSON config reading.
+- **statusline-command.sh** — `stat -c %Y` (GNU syntax) failed silently on macOS. Added fallback to `stat -f %m` for cross-platform file mtime.
+
+**Security Hardening (2):**
+- **CI secret-scan** — Was excluding `--exclude-dir=core --exclude-dir=hooks --exclude-dir=stacks` etc., effectively scanning only ~5% of the repo. Removed overly broad exclusions, now scans all code files. Added allowlists for known documentation patterns.
+- **mcp/install.sh** — Fixed path injection risk where file paths were interpolated directly into Node.js `eval` strings. Paths are now passed via `process.env` environment variables.
+
+### Changed
+
+**CI/CD Improvements:**
+- **Test execution in CI** — Added new `tests` job to ci.yml that runs `test-hooks.sh` and `test-setup.sh`. Previously, CI only ran static analysis (ShellCheck, JSON, markdown lint, secret scan) but never executed the test suites.
+- **release.yml** — Updated `actions/checkout` from v4 SHA to v6 SHA (consistent with ci.yml).
+- **All 5 CI templates** — Added `timeout-minutes` and `concurrency` blocks. Updated `actions/checkout` and `actions/setup-node` from v4 to v6 SHAs.
+
+**Shell Script Optimization:**
+- **common.sh** — Fixed logging functions (`$1` → `$*`) to preserve multi-argument messages. Removed dead `jq` prerequisite from `check_prereqs()` (project philosophy: no jq dependency). Added `file_mtime()` cross-platform helper.
+- **statusline-command.sh** — Changed shebang from `#!/bin/bash` to `#!/usr/bin/env bash` for consistency.
+
+**Consistency & Completeness:**
+- **skill-rules.json** — Added 4 missing stack audit skills (`/astro`, `/sveltekit`, `/database`, `/auth`) with trigger keywords. These were previously absent and would never be auto-suggested.
+- **Skill frontmatter** — Added missing `name` field to `/consult` and `/scan` SKILL.md. Added complete frontmatter block to `/handoff` SKILL.md (was missing entirely).
+- **MCP configs** — Standardized `@latest` tag usage: removed from `@playwright/mcp`, `snyk`, and `@upstash/context7-mcp` (redundant with `npx -y` default behavior).
+- **docs/architecture.md** — Fixed agent count (5 → 6), skill count (17 → 18), added missing stacks (github, security, web) to directory tree.
+
+**Test Suite Expansion (121 tests, was 39):**
+- **test-hooks.sh** (56 tests, was 35):
+  - bash-guard: +12 tests covering all 15 blocking patterns (chmod 777, git push --force, git reset --hard, npm publish, DROP TABLE, rm -rf ~, rm -rf ., mkfs, dd)
+  - secret-leak-check: +6 tests (AWS keys, private keys, database URLs, Slack tokens, Stripe keys, .env files)
+- **test-setup.sh** (65 tests, was 16):
+  - +18 skill frontmatter validation tests (verifies all 18 skills have proper frontmatter)
+  - +6 agent frontmatter validation tests (verifies all 6 agents have model field)
+  - +22 skill-rules cross-reference tests (verifies every rule points to an existing skill directory)
+  - +3 registry validation tests (schema exists, example exists, example is valid JSON)
+
+**Documentation Updates:**
+- README.md — Fixed setup output (Agents: 5 → 6, Skills: 17 → 18)
+- docs/getting-started.md — Fixed agent count (5 → 6), skill count (14+ → 18), added plan-reviewer to agent listing
+- docs/architecture.md — Added github/security/web stacks to directory tree
+- docs/awesome-claude-code-submission.md — Updated component counts in description and verification script
+- docs/tutorials/setup-und-scripts.md — Updated summary counts
+
+---
+
 ## [1.2.0] — 2026-03-28
 
 ### Added

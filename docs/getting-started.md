@@ -9,8 +9,8 @@ Install and configure Claude Hangar — configuration management for [Claude Cod
 One repo, one script, a production-grade Claude Code environment:
 
 - **13 hooks** — secret leak detection, bash command guard, token warnings, model routing, quality gates, and more
-- **5 agents** — codebase explorer, security reviewer, commit reviewer, dependency checker
-- **14+ skills** — audit, deploy-check, polish, scan, consult, and more
+- **6 agents** — codebase explorer, explorer-deep, security reviewer, commit reviewer, plan reviewer, dependency checker
+- **18 skills** — audit, deploy-check, polish, scan, consult, handoff, and more
 - **Statusline** — model, context bar, rate limits, cost, session duration
 - **Multi-project registry** — manage configs across many repos from one place
 
@@ -78,13 +78,14 @@ Setup copies files from the repo into `~/.claude/`:
     task-completed-gate.sh #   TaskCompleted — quality gate for task completion
     subagent-tracker.sh    #   SubagentStart/Stop — subagent observability
     stop-failure.sh        #   StopFailure — logs errors on session failure
-  agents/                  # 5 agent definitions
+  agents/                  # 6 agent definitions
     explorer.md            #   Quick codebase search (Sonnet, read-only)
     explorer-deep.md       #   Deep analysis (Opus, worktree isolation)
     security-reviewer.md   #   Security review (Opus, OWASP Top 10)
     commit-reviewer.md     #   Pre-commit review (Sonnet, read-only)
+    plan-reviewer.md       #   Spec/plan compliance (Sonnet, read-only)
     dependency-checker.md  #   npm audit + outdated (Sonnet, read-only)
-  skills/                  # 14+ skill definitions (audit, scan, consult, ...)
+  skills/                  # 18 skill definitions (audit, scan, consult, handoff, ...)
   lib/common.sh            # Shared shell functions (colors, logging, OS detection)
   statusline-command.sh    # Statusline script
   settings.json            # Hook registration, env vars, effort level

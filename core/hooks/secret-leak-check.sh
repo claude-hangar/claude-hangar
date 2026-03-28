@@ -92,7 +92,7 @@ PATTERNS=(
 
 WARNINGS=""
 for PATTERN in "${PATTERNS[@]}"; do
-  if echo "$CONTENT" | grep -qiE "$PATTERN" 2>/dev/null; then
+  if echo "$CONTENT" | grep -qiE -- "$PATTERN" 2>/dev/null; then
     WARNINGS="${WARNINGS}Pattern found: ${PATTERN}\n"
   fi
 done

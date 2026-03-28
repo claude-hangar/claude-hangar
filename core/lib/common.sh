@@ -35,10 +35,10 @@ NC='\033[0m'
 
 # ─── Standard logging ──────────────────────────────────────────────────
 
-info()    { echo -e "${CYAN}[i]${NC} $1"; }
-success() { echo -e "${GREEN}[+]${NC} $1"; }
-warn()    { echo -e "${YELLOW}[!]${NC} $1"; }
-error()   { echo -e "${RED}[x]${NC} $1"; }
+info()    { echo -e "${CYAN}[i]${NC} $*"; }
+success() { echo -e "${GREEN}[+]${NC} $*"; }
+warn()    { echo -e "${YELLOW}[!]${NC} $*"; }
+error()   { echo -e "${RED}[x]${NC} $*"; }
 
 # ─── OS detection ──────────────────────────────────────────────────────
 
@@ -64,12 +64,12 @@ to_node_path() {
 }
 
 # ─── Prerequisite check ───────────────────────────────────────────────
+# Note: jq is NOT required — hooks use node -e for cross-platform JSON.
 
 check_prereqs() {
   local missing=()
   command -v git &>/dev/null || missing+=("git")
   command -v node &>/dev/null || missing+=("node")
-  command -v jq &>/dev/null || missing+=("jq")
 
   if [ ${#missing[@]} -gt 0 ]; then
     error "Missing prerequisites: ${missing[*]}"
@@ -77,4 +77,10 @@ check_prereqs() {
     return 1
   fi
   return 0
+}
+
+# ─── Cross-platform stat (file mtime as epoch) ───────────────────────
+
+file_mtime() {
+  stat -c %Y "$1" 2>/dev/null || stat -f %m "$1" 2>/dev/null || echo "0"
 }

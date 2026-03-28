@@ -72,16 +72,17 @@ jobs:
           found=0
           for pattern in "${PATTERNS[@]}"; do
             if grep -rniE "$pattern" \
-              --include='*.json' --include='*.md' --include='*.sh' --include='*.env' \
-              --exclude-dir=.git --exclude-dir=tutorials --exclude-dir=phases \
-              --exclude-dir=hooks --exclude-dir=templates --exclude-dir=stacks \
-              --exclude-dir=agents --exclude-dir=docs --exclude-dir=concepts \
-              --exclude-dir=core . 2>/dev/null \
+              --include='*.json' --include='*.sh' --include='*.env' --include='*.yml' \
+              --exclude-dir=.git --exclude-dir=node_modules . 2>/dev/null \
               | grep -v '.gitignore' \
               | grep -v 'SKILL.md' \
               | grep -v 'fix-templates' \
               | grep -v 'CONTRIBUTING' \
-              | grep -v 'SECURITY'; then
+              | grep -v 'SECURITY' \
+              | grep -v 'secret-leak-check' \
+              | grep -v 'test-hooks' \
+              | grep -v 'writing-hooks' \
+              | grep -v '\.md:'; then
               echo "WARNING: Potentially sensitive content found (pattern: $pattern)"
               found=1
             fi
@@ -95,6 +96,20 @@ jobs:
             echo "(False positives in documentation are OK — add pattern exclude)"
             exit 1
           fi
+
+  tests:
+    name: Hook & Setup Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+        with:
+          node-version: 'lts/*'
+      - name: Run hook tests
+        run: bash tests/test-hooks.sh
+      - name: Run setup tests
+        run: bash tests/test-setup.sh
 
   markdown-lint:
     name: Markdown Lint

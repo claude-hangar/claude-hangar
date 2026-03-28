@@ -56,8 +56,8 @@ cd ~/.claude-hangar && bash setup.sh
 [+] Structure validation passed
 [i] Deploying to /home/user/.claude/...
 [+] Deployed: Hooks (13 scripts)
-[+] Deployed: Agents (5 definitions)
-[+] Deployed: Skills (17 commands)
+[+] Deployed: Agents (6 definitions)
+[+] Deployed: Skills (18 commands)
 [+] Deployed: Shared lib
 [+] Deployed: Statusline
 [+] Deployed: settings.json (from template)

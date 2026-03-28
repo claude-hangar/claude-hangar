@@ -5,6 +5,10 @@
   "type": "object",
   "required": ["projects"],
   "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference (standard, ignored by validators)."
+    },
     "projects": {
       "type": "array",
       "description": "List of managed projects.",

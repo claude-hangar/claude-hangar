@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Single line: Model | session | dir@branch | vim | bar tokens% | effort | 5h | 7d | extra | $cost | rate/min | duration
 # Optimized for Windows (Git Bash / MINGW) — GNU coreutils only
 
@@ -202,7 +202,7 @@ needs_refresh=true
 usage_data=""
 
 if [ -f "$cache_file" ]; then
-    cache_mtime=$(stat -c %Y "$cache_file" 2>/dev/null)
+    cache_mtime=$(stat -c %Y "$cache_file" 2>/dev/null || stat -f %m "$cache_file" 2>/dev/null)
     if [ -n "$cache_mtime" ]; then
         cache_age=$(( now - cache_mtime ))
         if [ "$cache_age" -lt "$cache_max_age" ]; then

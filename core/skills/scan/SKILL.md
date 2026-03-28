@@ -1,4 +1,5 @@
 ---
+name: scan
 description: Scans a project to detect tech stack, architecture, and quality indicators. Can auto-generate CLAUDE.md.
 user_invocable: true
 ---

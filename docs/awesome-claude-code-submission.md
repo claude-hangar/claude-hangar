@@ -63,7 +63,7 @@ MIT
 ### Description
 
 ```
-Production-grade configuration management for Claude Code. Ships 13 hooks (secret leak detection, bash command guard, git checkpoints, token warnings, model routing, task quality gates, subagent tracking, session lifecycle), 5 agents (codebase explorer, security reviewer, commit reviewer, dependency checker), and 17 skills (project scanning, three-layer audits, deployment checks, and more). All hooks are cross-platform shell scripts that use Node.js for JSON parsing — no jq or platform-specific dependencies. Includes a multi-project registry for managing Claude Code configs across multiple repositories from one source, stack-specific extensions (Astro, SvelteKit, Next.js, Database, Auth), and a setup wizard that deploys everything to ~/.claude/ with automatic backup and rollback.
+Production-grade configuration management for Claude Code. Ships 13 hooks (secret leak detection, bash command guard, git checkpoints, token warnings, model routing, task quality gates, subagent tracking, session lifecycle), 6 agents (codebase explorer, explorer-deep, security reviewer, commit reviewer, plan reviewer, dependency checker), and 18 skills (project scanning, three-layer audits, deployment checks, session handoff, and more). All hooks are cross-platform shell scripts that use Node.js for JSON parsing — no jq or platform-specific dependencies. Includes a multi-project registry for managing Claude Code configs across multiple repositories from one source, stack-specific extensions (Astro, SvelteKit, Next.js, Database, Auth), and a setup wizard that deploys everything to ~/.claude/ with automatic backup and rollback.
 ```
 
 ### Validate Claims
@@ -85,7 +85,7 @@ Production-grade configuration management for Claude Code. Ships 13 hooks (secre
    echo "Agents: $(find core/agents -name '*.md' | wc -l)"
    echo "Skills: $(find core/skills -maxdepth 1 -mindepth 1 -type d | grep -v _shared | wc -l)"
    ```
-   Expected: Hooks: 10, Agents: 5, Skills: 17
+   Expected: Hooks: 13, Agents: 6, Skills: 18
 
 3. Verify hooks are functional (read any hook):
    ```bash

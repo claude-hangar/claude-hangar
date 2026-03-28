@@ -2,6 +2,6 @@
   "snyk": {
     "type": "stdio",
     "command": "npx",
-    "args": ["-y", "snyk@latest", "mcp"]
+    "args": ["-y", "snyk", "mcp"]
   }
 }

@@ -91,6 +91,26 @@
       "skill": "/freshness-check",
       "triggers": ["freshness", "version check", "check versions", "outdated", "update check", "is everything current", "dependency versions"],
       "exclude": ["npm update", "npm install"]
+    },
+    {
+      "skill": "/astro",
+      "triggers": ["astro audit", "astro check", "astro migration", "astro upgrade", "astro version", "check astro"],
+      "exclude": ["website audit", "project audit"]
+    },
+    {
+      "skill": "/sveltekit",
+      "triggers": ["sveltekit audit", "svelte audit", "svelte check", "svelte migration", "svelte 5", "sveltekit check", "svelte upgrade"],
+      "exclude": ["website audit", "project audit"]
+    },
+    {
+      "skill": "/database",
+      "triggers": ["database audit", "db audit", "drizzle check", "schema audit", "migration check", "postgresql audit", "db check"],
+      "exclude": ["website audit", "project audit"]
+    },
+    {
+      "skill": "/auth",
+      "triggers": ["auth audit", "auth check", "auth security", "login audit", "session audit", "password audit", "authentication check"],
+      "exclude": ["website audit", "project audit"]
     }
   ]
 }

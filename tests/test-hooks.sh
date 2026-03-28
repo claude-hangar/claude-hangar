@@ -124,6 +124,56 @@ test \
   "secret-leak-check.sh" \
   '{"tool_input":{"file_path":".env.example","content":"API_KEY=your-key-here"}}'
 
+# Build additional fake secrets at runtime to avoid triggering the hook on this file
+FAKE_AWS_KEY=$(node -e "const c='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';let s='AKIA';for(let i=0;i<16;i++)s+=c[Math.floor(Math.random()*c.length)];console.log(s)")
+FAKE_SLACK_TOKEN=$(node -e "const c='abcdefghijklmnopqrstuvwxyz0123456789';let s='xoxb-';for(let i=0;i<24;i++)s+=c[Math.floor(Math.random()*c.length)];console.log(s)")
+FAKE_STRIPE_KEY=$(node -e "const c='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';let s='sk_live_';for(let i=0;i<24;i++)s+=c[Math.floor(Math.random()*c.length)];console.log(s)")
+FAKE_DB_URL=$(node -e "console.log('post' + 'gres://admin:secret123@db.example.com:5432/mydb')")
+test \
+  "should block AWS access key" \
+  2 \
+  "secret-leak-check.sh" \
+  "{\"tool_input\":{\"file_path\":\"config.ts\",\"content\":\"const key = \\\"${FAKE_AWS_KEY}\\\"\"}}"
+
+# Private key test: pipe node-generated JSON directly to avoid shell escaping issues
+TOTAL=$((TOTAL + 1))
+PRIVKEY_EXIT=0
+node -e "
+  const h = '-----BEGIN RSA PRIV' + 'ATE KEY-----';
+  process.stdout.write(JSON.stringify({tool_input:{file_path:'key.pem',content:h}}));
+" | bash "$HOOKS_DIR/secret-leak-check.sh" >/dev/null 2>&1 || PRIVKEY_EXIT=$?
+if [ "$PRIVKEY_EXIT" -eq 2 ]; then
+  echo "  PASS  should block private key header"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  should block private key header (expected exit 2, got $PRIVKEY_EXIT)"
+  FAIL=$((FAIL + 1))
+fi
+
+test \
+  "should block database URL with credentials" \
+  2 \
+  "secret-leak-check.sh" \
+  "{\"tool_input\":{\"file_path\":\"config.ts\",\"content\":\"const db = \\\"${FAKE_DB_URL}\\\"\"}}"
+
+test \
+  "should block Slack token" \
+  2 \
+  "secret-leak-check.sh" \
+  "{\"tool_input\":{\"file_path\":\"slack.ts\",\"content\":\"const token = \\\"${FAKE_SLACK_TOKEN}\\\"\"}}"
+
+test \
+  "should block Stripe live key" \
+  2 \
+  "secret-leak-check.sh" \
+  "{\"tool_input\":{\"file_path\":\"payment.ts\",\"content\":\"const key = \\\"${FAKE_STRIPE_KEY}\\\"\"}}"
+
+test \
+  "should block .env file write" \
+  2 \
+  "secret-leak-check.sh" \
+  '{"tool_input":{"file_path":".env","content":"DB_HOST=localhost"}}'
+
 # ============================================================
 # 2. bash-guard.sh
 # ============================================================
@@ -184,6 +234,72 @@ test \
   2 \
   "bash-guard.sh" \
   '{"tool_input":{"command":"git commit --no-verify -m \"chore: skip hooks\""}}'
+
+test \
+  "should block chmod 777" \
+  2 \
+  "bash-guard.sh" \
+  '{"tool_input":{"command":"chmod 777 /var/www/html"}}'
+
+test \
+  "should block git push --force" \
+  2 \
+  "bash-guard.sh" \
+  '{"tool_input":{"command":"git push --force origin main"}}'
+
+test \
+  "should block git push -f" \
+  2 \
+  "bash-guard.sh" \
+  '{"tool_input":{"command":"git push -f origin main"}}'
+
+test \
+  "should block git reset --hard origin" \
+  2 \
+  "bash-guard.sh" \
+  '{"tool_input":{"command":"git reset --hard origin/main"}}'
+
+test \
+  "should block npm publish without --dry-run" \
+  2 \
+  "bash-guard.sh" \
+  '{"tool_input":{"command":"npm publish"}}'
+
+test \
+  "should allow npm publish --dry-run" \
+  0 \
+  "bash-guard.sh" \
+  '{"tool_input":{"command":"npm publish --dry-run"}}'
+
+test \
+  "should block DROP TABLE" \
+  2 \
+  "bash-guard.sh" \
+  '{"tool_input":{"command":"psql -c \"DROP TABLE users\""}}'
+
+test \
+  "should block rm -rf home directory" \
+  2 \
+  "bash-guard.sh" \
+  '{"tool_input":{"command":"rm -rf ~"}}'
+
+test \
+  "should block rm -rf current directory" \
+  2 \
+  "bash-guard.sh" \
+  '{"tool_input":{"command":"rm -rf ."}}'
+
+test \
+  "should block mkfs" \
+  2 \
+  "bash-guard.sh" \
+  '{"tool_input":{"command":"mkfs.ext4 /dev/sda1"}}'
+
+test \
+  "should block dd to /dev/" \
+  2 \
+  "bash-guard.sh" \
+  '{"tool_input":{"command":"dd if=/dev/zero of=/dev/sda bs=1M"}}'
 
 # ============================================================
 # 3. checkpoint.sh

@@ -84,7 +84,7 @@ Plattform: windows (MINGW64_NT-10.0-22635)
 ...
 
 --- Zusammenfassung ---
-Global: 17 Skill(s), 5 Agent(s), 10 Hook(s)
+Global: 18 Skill(s), 6 Agent(s), 13 Hook(s)
 
 Fertig!
 ```
