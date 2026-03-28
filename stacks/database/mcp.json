@@ -1,0 +1,10 @@
+{
+  "postgres": {
+    "type": "stdio",
+    "command": "npx",
+    "args": ["-y", "@crystaldba/postgres-mcp"],
+    "env": {
+      "DATABASE_URL": "{{POSTGRES_URL}}"
+    }
+  }
+}

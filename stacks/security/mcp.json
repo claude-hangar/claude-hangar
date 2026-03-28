@@ -1,0 +1,7 @@
+{
+  "snyk": {
+    "type": "stdio",
+    "command": "npx",
+    "args": ["-y", "snyk@latest", "mcp"]
+  }
+}
