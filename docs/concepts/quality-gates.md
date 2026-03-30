@@ -125,6 +125,19 @@ When things go wrong, the subagent tracker captures forensic data:
 
 This data helps identify systemic issues rather than just fixing symptoms.
 
+## Safety-by-Default
+
+Safety mechanisms should be enabled by default, not opt-in:
+
+| Mechanism | Default State | Purpose |
+|-----------|--------------|---------|
+| **Pre-merge checks** | Enabled | Verify build + tests before any merge |
+| **State snapshots** | Enabled | Snapshot state before destructive operations |
+| **Concurrent write guards** | Enabled | Prevent state corruption from parallel workers |
+| **Stall detection** | Enabled (5 min) | Detect workers with no progress and auto-restart once |
+
+**Principle:** Users should have to opt OUT of safety, not opt IN.
+
 ## Integration Points
 
 | Component | Quality Gate |

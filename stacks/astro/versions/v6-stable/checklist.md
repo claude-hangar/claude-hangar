@@ -52,6 +52,7 @@ This checklist is for projects already successfully running on 6.x.
   - `glob()`, `file()`, or custom loader in `content.config.ts`
 - [ ] **V6-COLL-02** [HIGH] Zod import via `astro:content` or `astro/zod`
   - Do not import directly from `zod` — Zod 4 is bundled
+  - Note: Requires Astro >= 6.1.2 for correct Zod v4 validation error formatting (human-readable messages instead of raw JSON)
 - [ ] **V6-COLL-03** [MEDIUM] Schemas documented and validated
   - Run `astro check` — schema errors will be reported
 
@@ -145,4 +146,4 @@ This checklist is for projects already successfully running on 6.x.
 
 ---
 
-As of: 2026-03-28 (updated for Astro 6.1.1, Vite 8.0.3, Zod 4.3.6)
+As of: 2026-03-30 (updated for Astro 6.1.2, Vite 8.0.3, Zod 4.3.6 — 6.1.2 fixes: preview allowedHosts, catch-all static asset routing, Zod v4 error formatting)

@@ -447,6 +447,6 @@ Runtime: 12 min
 - **Pre-audit by orchestrator** — freshness check + GitHub/VPS checks done by orchestrator itself, not by teammate
 - **Beta/RC always first** — migration audit before quality audit for unstable versions
 - **Static filter active** — automatically skip SSR-specific checks for `output: "static"`
-- **Crash not fatal** — teammate crash does not end the overall audit, state survives, manual fallback possible
+- **Crash not fatal + self-healing** — teammate crash does not end the overall audit, state survives, manual fallback possible. In team mode: detect stalled workers (no state update > 5 min), restart once automatically before falling back to manual. Guard concurrent state file writes to prevent corruption (inspired by GSD v2 parallel worker patterns)
 - **Combined report** via `/audit-orchestrator report` — summarizes all audit reports
 - **Regulatory standards** — explicitly check applicable privacy, accessibility, and compliance regulations — separate section in combined report

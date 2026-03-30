@@ -1,6 +1,10 @@
 # Claude Code CLI – Vollstaendige Referenz
 
-## Stand: v2.1.86 (27. Maerz 2026)
+## Stand: v2.1.87 (29. Maerz 2026)
+
+### Aenderungen v2.1.87
+
+- Fix: Cowork Dispatch — Nachrichten werden jetzt zuverlaessig zugestellt
 
 ### Aenderungen v2.1.86
 
