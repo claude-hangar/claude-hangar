@@ -88,6 +88,24 @@ If `.freshness-state.json` exists, read `opportunities[]` array:
 
 Infra findings are documented with prefix `INFRA-` (VPS) or `SEC-` / `GIT-` (GitHub) — in the respective audit state files, not in the orchestrator state.
 
+### Step 1c — Security Pre-Scan (Claude Code Projects)
+
+When `.claude/` directory is detected in the project:
+
+| Check | Action |
+|-------|--------|
+| `.claude/settings.json` exists | Recommend `/security-scan mcp` before audit |
+| `.claude/hooks/` has custom hooks | Recommend `/security-scan hooks` before audit |
+| Both present | Recommend `/security-scan` (full) as Pre-Audit step |
+
+**Rationale:** Compromised hooks or MCP servers could manipulate audit results.
+Verify the Claude Code environment is clean before trusting audit output.
+
+**Integration:** Security scan findings feed into the audit plan:
+- CRITICAL security-scan findings → address before starting audit
+- MCP permission issues → note in audit report context
+- Hook safety issues → fix before running automated audit modes
+
 ### Step 2 — Determine Audit Combination
 
 | Project Type | Recommended Audits | Reason |
@@ -105,6 +123,13 @@ Infra findings are documented with prefix `INFRA-` (VPS) or `SEC-` / `GIT-` (Git
 | CLI Tool / Library | `/project-audit` | Code/Git/CI/CD only |
 | Management Repo | `/project-audit` | Structure/docs/scripts only |
 | Monorepo | `/project-audit` + per sub-project | Each package individually |
+
+**Always add when detected:**
+
+| Condition | Additional Audit | Reason |
+|-----------|-----------------|--------|
+| `.claude/` directory present | `/security-scan` (pre-audit) | Verify Claude Code environment before audit |
+| Phase 09 content findings expected | `/design-system` reference | Use curated palette/typography/UX databases for content checks |
 
 ### Step 2b — Static Site Filter (Astro)
 
@@ -200,8 +225,9 @@ Server: {{SERVER_LIST}}
 Related Projects: {{RELATED_NAME}} ({{RELATED_STACK}})
 Recommendation: Pre-audit infra → Framework migration → Web quality → Code/CI
 
-Pre-Audit: Freshness + Infrastructure (1 session)
+Pre-Audit: Freshness + Security + Infrastructure (1 session)
   /freshness-check        ← Pipeline knowledge current? Versions, standards, regulations
+  /security-scan           ← Claude Code environment: MCP permissions, hook safety, secrets
   GitHub Org Settings     ← 2FA, base permissions, third-party access
   GitHub Repo Settings    ← Branch protection, secret scanning, CodeQL
   VPS Quick Check         ← Ports, users, SSH, fail2ban, services
@@ -244,9 +270,9 @@ Shall I start?
 **Scenario B: Framework Stable + SSR (without VPS access)**
 ```
 ...
-Recommendation: GitHub check → Web quality → Framework best practices
+Recommendation: Security scan → GitHub check → Web quality → Framework best practices
 
-Pre-Audit: GitHub settings (in session 1)
+Pre-Audit: /security-scan + GitHub settings (in session 1)
 Audit 1: /audit (8 phases) ← FIRST
 Audit 2: /{{FRAMEWORK}}-audit (all sections incl. ADPT)
 Audit 3: /project-audit (10 phases, with GitHub supplement)
@@ -313,7 +339,7 @@ The order adapts to the project. Variants:
 
 | Session | Recommendation |
 |---------|---------------|
-| 1 | `/audit-orchestrator` → Plan + **`/freshness-check` + Pre-Audit: GitHub + VPS** |
+| 1 | `/audit-orchestrator` → Plan + **`/freshness-check` + `/security-scan` + Pre-Audit: GitHub + VPS** |
 | 2 | `/{{FRAMEWORK}}-audit start` (2 sections — CRITICAL first) |
 | 3 | `/{{FRAMEWORK}}-audit continue` (2 sections) |
 | 4 | `/{{FRAMEWORK}}-audit continue` (remaining sections) |
@@ -329,7 +355,7 @@ The order adapts to the project. Variants:
 
 | Session | Recommendation |
 |---------|---------------|
-| 1 | `/audit-orchestrator` → Plan + **Pre-Audit: GitHub Settings** |
+| 1 | `/audit-orchestrator` → Plan + **`/security-scan` + Pre-Audit: GitHub Settings** |
 | 2 | `/audit start` (2 phases) |
 | 3 | `/audit continue` (2 phases) |
 | 4 | `/audit continue` (remaining phases) + `/{{FRAMEWORK}}-audit start` |
@@ -341,7 +367,7 @@ The order adapts to the project. Variants:
 
 | Session | Recommendation |
 |---------|---------------|
-| 1 | `/audit-orchestrator` → Plan + **Pre-Audit: GitHub + optionally VPS** |
+| 1 | `/audit-orchestrator` → Plan + **`/security-scan` + Pre-Audit: GitHub + optionally VPS** |
 | 2 | `/project-audit start` (2 phases, with GitHub supplement) |
 | 3+ | Continue as needed |
 
@@ -349,7 +375,7 @@ The order adapts to the project. Variants:
 
 | Session | Recommendation |
 |---------|---------------|
-| 1 | `/audit-orchestrator` → Plan + **`/freshness-check` + Pre-Audit: GitHub + VPS** |
+| 1 | `/audit-orchestrator` → Plan + **`/freshness-check` + `/security-scan` + Pre-Audit: GitHub + VPS** |
 | 2 | `/db-audit start` (2 sections — schema + security first) |
 | 3 | `/db-audit continue` (remaining sections) |
 | 4 | `/auth-audit start` (2 sections — hashing + sessions first) |
@@ -396,6 +422,22 @@ When findings are fixed, check if the fix is also relevant in another audit:
 - Docker fix (e.g., Compose V2) → mark as fixed in BOTH audits (infra + deployment)
 - Container signing in `/project-audit` → also relevant in `/audit` infrastructure
 - Framework migration fix (e.g., Node 22) → also relevant in `/audit` status analysis + `/project-audit` dependencies
+- `/security-scan` findings (MCP, hooks) → relevant for `/audit` Phase 02 (security) and `/project-audit` Phase 08 (security)
+- `/audit` Phase 09 content/design findings → feed into `/polish scan` + `/design-system` for resolution
+
+---
+
+## Post-Audit Recommendations
+
+After all audits complete, the orchestrator recommends follow-up actions:
+
+| Condition | Recommendation | Reason |
+|-----------|---------------|--------|
+| Content/Design findings in Phase 09 | `/polish scan` → `/design-system` | Use curated design databases for improvements |
+| `/security-scan` not run as pre-audit | `/security-scan` | Claude Code environment should be verified |
+| Security findings across audits | `/security-scan` + `/adversarial-review` | Cross-check security posture |
+| All audits clean, deployment target exists | `/deploy-check` | Verify deployment readiness |
+| Significant learnings from audit | `/lesson-learned session` | Persist audit insights |
 
 ---
 
@@ -406,6 +448,11 @@ Audit Orchestrator: {{PROJECT_NAME}}
 Mode: {Team|Manual|Runner}
 Order: {Reason} → {Audit 1} → {Audit 2} → {Audit 3}
 
+Pre-Audit:
+/security-scan:       ██████████ Grade: B (1 HIGH, 2 MEDIUM)
+/freshness-check:     ██████████ done (2 opportunities)
+
+Audits:
 /{{FRAMEWORK}}-audit: ████████░░ 5/13 sections (8 findings, 1 skipped)
 /audit:               ████████░░ 5/8 phases (12 findings)
 /project-audit:       ████░░░░░░ 4/10 phases (5 findings)

@@ -426,6 +426,7 @@ After completing the project audit, recommend suitable follow-up skills to user:
 | Condition | Recommendation | Justification |
 |-----------|---------------|---------------|
 | >3 HIGH/CRITICAL findings | `/adversarial-review audit` | Check report for completeness |
+| Claude Code project (.claude/ present) | `/security-scan` | MCP permissions, hook safety, secret detection |
 | Audit completed | `/lesson-learned session` | Extract learnings from audit process |
 | Web project detected AND no .audit-state.json | `/audit start` | Check website quality (SEO, A11y, privacy) |
 | Astro project detected AND no .astro-audit-state.json | `/astro-audit start` | Astro-specific checks |

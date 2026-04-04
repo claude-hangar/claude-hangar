@@ -431,6 +431,8 @@ After completing the audit (report generated or all phases done), recommend suit
 | Custom auth detected (bcryptjs etc.) | `/auth-audit` | Auth security, session management, OWASP ASVS |
 | >3 HIGH/CRITICAL findings | `/adversarial-review audit` | Check report for completeness |
 | Phase 09 (Content) findings >0 | `/polish scan` | Design improvements based on findings |
+| Phase 09 (Content) findings >0 | `/design-system` | Check palette, typography, UX rules against curated databases |
+| Claude Code project (.claude/ present) | `/security-scan` | MCP permissions, hook safety, secret detection |
 | Audit completed | `/lesson-learned session` | Extract learnings from audit process |
 | No /project-audit state present | `/project-audit start` | Check code/CI/CD quality |
 
