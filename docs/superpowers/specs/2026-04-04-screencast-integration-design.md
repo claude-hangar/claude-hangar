@@ -161,7 +161,7 @@ Loads cookies, localStorage, indexedDB from the JSON file before capturing. User
 node scripts/capture-pdf.mjs --auth-login https://example.com/login
 ```
 1. Opens login page in a visible browser (`headless: false`)
-2. Binds browser: `browser.bind('capture-auth')` 
+2. Binds browser: `browser.bind('capture-auth')`
 3. Prints: `Log in manually, then press Enter in this terminal...`
 4. User logs in (handles 2FA, captcha, etc.)
 5. On Enter: saves storage state to `prints/auth-state.json`
