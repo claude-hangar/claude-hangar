@@ -72,6 +72,8 @@ Claude Hangar registers hooks via `settings.json`:
 | `SubagentStart` | `subagent-tracker.sh` | Track subagent lifecycle for observability |
 | `SubagentStop` | `subagent-tracker.sh` | Track subagent lifecycle for observability |
 | `PermissionDenied` | `permission-denied-retry.sh` | Auto-retry safe tool calls denied by classifier (2.1.89+) |
+| `TaskCreated` | `task-created-init.sh` | Track task creation, warn on scope explosion (>8 tasks) |
+| `WorktreeCreate` | `worktree-init.sh` | Log worktree creation for observability |
 
 ## Hook Chain
 

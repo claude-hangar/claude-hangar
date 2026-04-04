@@ -545,6 +545,75 @@ test \
   '{"hook_event_name":"SessionStart"}'
 
 # ============================================================
+# permission-denied-retry
+# ============================================================
+
+echo ""
+echo "--- permission-denied-retry ---"
+
+test \
+  "should retry safe tool calls (Read)" \
+  0 \
+  "permission-denied-retry.sh" \
+  '{"tool_name":"Read","tool_input":{"file_path":"/test/file.ts"}}'
+
+test \
+  "should retry safe tool calls (Grep)" \
+  0 \
+  "permission-denied-retry.sh" \
+  '{"tool_name":"Grep","tool_input":{"pattern":"test"}}'
+
+test \
+  "should not retry Agent tool calls" \
+  0 \
+  "permission-denied-retry.sh" \
+  '{"tool_name":"Agent","tool_input":{"prompt":"do something"}}'
+
+test \
+  "should not retry destructive Bash (git push)" \
+  0 \
+  "permission-denied-retry.sh" \
+  '{"tool_name":"Bash","tool_input":{"command":"git push origin main"}}'
+
+test \
+  "should retry non-destructive Bash" \
+  0 \
+  "permission-denied-retry.sh" \
+  '{"tool_name":"Bash","tool_input":{"command":"ls -la"}}'
+
+# ============================================================
+# task-created-init
+# ============================================================
+
+echo ""
+echo "--- task-created-init ---"
+
+test \
+  "should exit 0 on task creation" \
+  0 \
+  "task-created-init.sh" \
+  '{"task_id":"1","task_subject":"Test task"}'
+
+# ============================================================
+# worktree-init
+# ============================================================
+
+echo ""
+echo "--- worktree-init ---"
+
+test \
+  "should exit 0 on worktree creation" \
+  0 \
+  "worktree-init.sh" \
+  '{"worktree_path":"/tmp/test-worktree","branch":"feature/test"}'
+
+test \
+  "should exit 0 on empty input" \
+  0 \
+  "worktree-init.sh" \
+  '{}'
+
+# ============================================================
 # Summary
 # ============================================================
 

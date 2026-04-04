@@ -10,8 +10,8 @@
         ".claude/settings.json"
       ],
       "skills": [
-        "seo-audit.md",
-        "performance-check.md"
+        "audit",
+        "astro"
       ],
       "hooks": [
         "secret-leak-check.sh",
@@ -37,9 +37,10 @@
         ".claude/settings.json"
       ],
       "skills": [
-        "db-audit.md",
-        "auth-audit.md",
-        "api-review.md"
+        "audit",
+        "sveltekit",
+        "database",
+        "auth"
       ],
       "hooks": [
         "secret-leak-check.sh",

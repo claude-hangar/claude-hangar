@@ -101,9 +101,12 @@ jobs:
           fi
 
   tests:
-    name: Hook & Setup Tests
-    runs-on: ubuntu-latest
+    name: Hook & Setup Tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 10
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
@@ -111,6 +114,8 @@ jobs:
           node-version: 'lts/*'
       - name: Run hook tests
         run: bash tests/test-hooks.sh
+      - name: Run MCP tests
+        run: bash tests/test-mcp.sh
       - name: Run setup tests
         run: bash tests/test-setup.sh
 

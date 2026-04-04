@@ -1,0 +1,53 @@
+name: Deploy (Docker Compose)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  SERVER_HOST: ${{ secrets.SERVER_HOST }}
+  SERVER_USER: ${{ secrets.SERVER_USER }}
+  DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+
+jobs:
+  deploy:
+    name: Deploy to VPS
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: production
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@029f5b4aeeeb58fdfe1410a5d17f967dacf36262 # v1.2.0
+        with:
+          host: ${{ env.SERVER_HOST }}
+          username: ${{ env.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ${{ env.DEPLOY_PATH }}
+            docker compose pull
+            docker compose up -d --remove-orphans
+            docker image prune -f
+            echo "Deployed at $(date)"
+
+      - name: Health Check
+        run: |
+          echo "Waiting 15s for containers to start..."
+          sleep 15
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://${{ secrets.DOMAIN }}" || echo "000")
+          if [ "$STATUS" -eq 200 ] || [ "$STATUS" -eq 301 ] || [ "$STATUS" -eq 302 ]; then
+            echo "Health check passed (HTTP $STATUS)"
+          else
+            echo "Health check failed (HTTP $STATUS)"
+            exit 1
+          fi
