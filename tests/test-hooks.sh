@@ -245,13 +245,13 @@ test \
   "should block Windows del /s /q" \
   2 \
   "bash-guard.sh" \
-  '{"tool_input":{"command":"del /s /q C:\\Users"}}'
+  '{"tool_input":{"command":"del /s /q C:\\\\Users"}}'
 
 test \
   "should block Windows rd /s /q" \
   2 \
   "bash-guard.sh" \
-  '{"tool_input":{"command":"rd /s /q C:\\projects"}}'
+  '{"tool_input":{"command":"rd /s /q C:\\\\projects"}}'
 
 test \
   "should block non-conventional commit message" \
