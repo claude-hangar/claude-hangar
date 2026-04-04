@@ -1,0 +1,11 @@
+{
+  "name": "capture-pdf",
+  "version": "1.0.0",
+  "description": "Website-to-PDF capture (all pages + interactive states).",
+  "category": "workflow",
+  "risk": "moderate",
+  "triggers": ["capture", "pdf", "print", "screenshot", "capture pages"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

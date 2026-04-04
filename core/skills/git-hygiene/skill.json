@@ -1,0 +1,11 @@
+{
+  "name": "git-hygiene",
+  "version": "1.0.0",
+  "description": "Git repository hygiene check. Stale branches, large files, commit conventions.",
+  "category": "git",
+  "risk": "safe",
+  "triggers": ["git cleanup", "git hygiene", "clean up branches", "git-hygiene", "stale branches"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

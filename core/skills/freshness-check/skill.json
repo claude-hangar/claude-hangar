@@ -1,0 +1,11 @@
+{
+  "name": "freshness-check",
+  "version": "1.0.0",
+  "description": "Pipeline source freshness check (frameworks, tools, standards).",
+  "category": "devops",
+  "risk": "moderate",
+  "triggers": ["freshness", "update check", "is everything current", "check versions"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

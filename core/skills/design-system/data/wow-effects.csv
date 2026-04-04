@@ -1,0 +1,26 @@
+id,name,category,description,tailwind_css,perf_impact,complexity,best_for
+gradient-text,Gradient Text,typography,Gradient color flowing through headline text,"bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent",none,low,headlines;ctas;hero-text
+gradient-border,Gradient Border,visual,Animated gradient border around cards or sections,"bg-gradient-to-r from-primary via-accent to-secondary p-[1px] rounded-2xl [&>*]:bg-background [&>*]:rounded-2xl",none,low,cards;feature-boxes;pricing
+glassmorphism-card,Glassmorphism Card,visual,Frosted glass card with backdrop blur,"bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-lg",low,low,cards;modals;overlays
+hover-scale,Hover Scale,animation,Subtle scale-up on hover for interactive elements,"transition-transform duration-300 hover:scale-105",none,low,cards;images;buttons
+hover-lift,Hover Lift,animation,Card lifts with enhanced shadow on hover,"transition-all duration-300 hover:-translate-y-1 hover:shadow-xl",none,low,cards;product-items;features
+scroll-reveal,Scroll Reveal,animation,Elements fade in and slide up as they enter viewport,"@keyframes fadeInUp { from { opacity:0; transform:translateY(20px) } to { opacity:1; transform:translateY(0) } } + IntersectionObserver",low,medium,sections;cards;testimonials
+stagger-animation,Staggered Animation,animation,Sequential delay on grid items for cascade effect,"[&>*:nth-child(1)]:delay-0 [&>*:nth-child(2)]:delay-75 [&>*:nth-child(3)]:delay-150 [&>*:nth-child(4)]:delay-200",low,low,card-grids;feature-lists;nav-items
+backdrop-blur-nav,Backdrop Blur Nav,visual,Semi-transparent navigation with blur effect,"bg-background/80 backdrop-blur-lg border-b border-border/50 sticky top-0 z-50",low,low,navigation;headers
+accent-line,Accent Line,visual,Colored border accent on left or top of elements,"border-l-4 border-primary pl-4 py-2",none,low,blockquotes;features;testimonials
+overline-label,Overline Label,typography,Small uppercase label above headings for context,"text-xs uppercase tracking-wider font-medium text-primary mb-2",none,low,section-intros;card-categories
+text-reveal,Text Reveal,animation,Text characters or words appear sequentially,"@keyframes reveal { from { opacity:0; filter:blur(4px) } to { opacity:1; filter:blur(0) } } per-word delay",low,high,hero-headlines;landing-pages
+parallax-subtle,Parallax Subtle,animation,Background moves at different speed than content on scroll,"bg-fixed bg-cover bg-center (CSS only) or transform:translateY(calc(var(--scroll)*0.3))",low,medium,hero-backgrounds;section-dividers
+magnetic-cursor,Magnetic Cursor,interaction,Elements subtly attract toward cursor on hover,"JS: element.style.transform on mousemove within threshold",low,high,buttons;logos;nav-items
+morphing-shape,Morphing Shape,animation,SVG blob that continuously changes shape,"SVG animate or CSS @keyframes with border-radius transitions",low,medium,hero-backgrounds;decorative
+counter-animate,Counter Animate,animation,Numbers count up when scrolled into view,"IntersectionObserver + requestAnimationFrame counter",low,medium,stats-sections;achievements;metrics
+typewriter,Typewriter Effect,typography,Text appears character by character like typing,"CSS steps() animation or JS interval with cursor blink",low,medium,hero-headlines;terminal-style
+marquee,Marquee Scroll,animation,Continuous horizontal scrolling text or logos,"@keyframes scroll { from { transform:translateX(0) } to { transform:translateX(-50%) } } overflow-hidden",low,medium,logo-bars;testimonials;announcements
+image-reveal,Image Reveal,animation,Image revealed with sliding mask on scroll,"overflow-hidden [&>img]:transition-transform [&>img]:duration-700 + clip-path animation",low,medium,portfolio;gallery;case-studies
+glow-effect,Glow Effect,visual,Subtle color glow behind elements,"shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 transition-shadow",none,low,cta-buttons;feature-cards;pricing
+noise-texture,Noise Texture,visual,Subtle grain overlay for depth and character,"before:content-[''] before:absolute before:inset-0 before:bg-[url('/noise.svg')] before:opacity-[0.03] before:pointer-events-none",none,low,hero-backgrounds;sections;cards
+color-shift,Color Shift,animation,Background gradient that slowly animates colors,"bg-gradient-to-r animate-gradient bg-[length:200%_200%] @keyframes gradient { 0%{bg-position:0% 50%} 50%{bg-position:100% 50%} 100%{bg-position:0% 50%} }",low,low,hero-sections;cta-backgrounds
+skeleton-loading,Skeleton Loading,interaction,Content placeholder shapes that pulse while loading,"animate-pulse bg-gray-200 rounded h-4 w-full",none,low,loading-states;async-content
+smooth-scroll-snap,Scroll Snap,interaction,Sections snap into place during scroll,"snap-y snap-mandatory [&>section]:snap-start [&>section]:h-screen",none,low,full-page-sections;galleries;stories
+floating-element,Floating Element,animation,Element gently bobs up and down continuously,"@keyframes float { 0%{transform:translateY(0)} 50%{transform:translateY(-10px)} 100%{transform:translateY(0)} } animate-float duration-3000",low,low,illustrations;icons;decorative
+cursor-trail,Cursor Trail,interaction,Visual trail following cursor movement,"JS: spawn particles/dots on mousemove with opacity fade",medium,high,creative-sites;portfolios;experimental

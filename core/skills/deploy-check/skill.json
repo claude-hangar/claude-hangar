@@ -1,0 +1,11 @@
+{
+  "name": "deploy-check",
+  "version": "1.0.0",
+  "description": "Deployment readiness check for Docker/Traefik projects.",
+  "category": "security",
+  "risk": "safe",
+  "triggers": ["deploy check", "deployment check", "ready for deployment", "deploy-check", "before deploy", "production ready"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

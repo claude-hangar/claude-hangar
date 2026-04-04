@@ -1,0 +1,11 @@
+{
+  "name": "consult",
+  "version": "1.0.0",
+  "description": "Interactive project consultant. Scans your project, asks targeted questions, and creates a structured improvement plan.",
+  "category": "workflow",
+  "risk": "safe",
+  "triggers": ["consult", "consultant", "improvement plan", "project advice"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": ["scan"],
+  "dataFiles": []
+}

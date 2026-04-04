@@ -1,0 +1,11 @@
+{
+  "name": "project-audit",
+  "version": "1.0.0",
+  "description": "Repository audit for non-website projects (CLI, libs, backend, monorepo).",
+  "category": "audit",
+  "risk": "safe",
+  "triggers": ["project-audit", "project audit", "repo audit", "code audit"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

@@ -1,24 +1,59 @@
 ---
 name: design-system
 description: >
-  Tailwind v4 design reference (spacing, typography, colors, components, palettes).
-  Use when: "design", "colors", "typography", "component", "card", "button", "hero", "ui", "palette", "tailwind pattern".
+  Context-aware design intelligence with curated databases for styles, palettes, typography, UX rules, and wow effects.
+  Use when: "design", "colors", "typography", "component", "card", "button", "hero", "ui", "palette", "tailwind pattern", "style", "wow", "font".
 ---
 
 <!-- AI-QUICK-REF
 ## /design-system — Quick Reference
-- **Not a workflow** — pure reference, always available
-- **6 areas:** Spacing, Typography, Colors, Components, Industry Palettes, Principles
+- **Two tiers:** Inline tables (80% case) + CSV deep layer (20% case)
+- **6 areas:** Spacing, Typography, Colors, Components, Industry Palettes, Wow Effects
+- **Deep data:** data/styles.csv (~50), data/palettes.csv (~80), data/typography.csv (~35), data/ux-rules.csv (~70), data/wow-effects.csv (~25)
 - **Activation:** Automatically during UI work, or manually via /design-system
 - **Tailwind v4:** All patterns for current Tailwind version
-- **Industries:** 12 palettes for client projects
 - **Persistence:** Optional design-system/MASTER.md per project
+- **Stack-agnostic:** Provides design decisions, not code — stacks provide code patterns
 -->
 
-# Design System Reference
+# Design System — Tiered Design Intelligence
 
-Consistent design decisions for all projects.
-Don't improvise — look it up here.
+Two tiers of design knowledge. Use Tier 1 for common decisions. Dive into Tier 2 CSVs only when you need more options or unusual combinations.
+
+---
+
+## Context Detection (ALWAYS do this first)
+
+Before making any design decision, detect the project context:
+
+```
+1. Read package.json → Stack (Astro, SvelteKit, Next.js)
+2. Read src/config/site.ts or equivalent → Industry, brand mood
+3. Check design-system/MASTER.md → Project-specific overrides (HIGHEST PRIORITY)
+4. Check tailwind.config or app.css → Current design tokens
+```
+
+**If `design-system/MASTER.md` exists, its values ALWAYS override recommendations.**
+The CSV data helps CREATE the initial MASTER.md — it does not overrule an existing one.
+
+---
+
+## Decision Tree — When to Use Tier 2 (CSVs)
+
+```
+QUESTION                                          ACTION
+─────────────────────────────────────────────────────────────
+Standard industry palette?                     → Tier 1 inline table (Section 5)
+Unusual mood/industry combo?                   → Read data/palettes.csv
+One of the 10 standard font pairings?          → Tier 1 inline table (Section 3)
+Need more font options or specific mood?       → Read data/typography.csv
+Looking for a specific UI style?               → Read data/styles.csv
+Need UX best practice guidance?                → Read data/ux-rules.csv
+Searching for a wow effect?                    → Read data/wow-effects.csv
+Standard spacing or component pattern?         → Tier 1 inline table (Section 2/6)
+```
+
+**Rule:** Try Tier 1 first. Only read CSVs when inline tables don't cover the need.
 
 ---
 
@@ -63,7 +98,9 @@ Consistent spacing prevents "random padding". Always choose from this scale:
 
 ## 3. Typography
 
-### Font Pairings (Google Fonts, self-hosted for GDPR compliance)
+### Font Pairings (Quick Reference — 10 most common)
+
+For 25+ more options: `Read data/typography.csv`
 
 | Combination | Heading | Body | Style | Good for |
 |-------------|---------|------|-------|----------|
@@ -122,9 +159,9 @@ Consistent spacing prevents "random padding". Always choose from this scale:
 
 ---
 
-## 5. Industry Palettes
+## 5. Industry Palettes (Quick Reference — 12 most common)
 
-Matching color palettes by industry for client projects:
+For 70+ more palettes (multiple moods per industry, dark variants, mood-based): `Read data/palettes.csv`
 
 | Industry | Primary | Secondary | CTA | Background | Mood |
 |----------|---------|-----------|-----|------------|------|
@@ -143,8 +180,8 @@ Matching color palettes by industry for client projects:
 
 **Usage in projects:**
 1. Identify the client's industry
-2. Choose matching palette from table
-3. Define as CSS custom properties in `tailwind.config`
+2. Choose matching palette from table (or `data/palettes.csv` for more options)
+3. Define as CSS custom properties in `tailwind.config` or `app.css`
 4. Use consistently — no deviations without reason
 
 ---
@@ -265,9 +302,9 @@ Matching color palettes by industry for client projects:
 
 ---
 
-## 7. Wow Factor Techniques
+## 7. Wow Factor Techniques (Quick Reference — 9 most common)
 
-Every project needs at least one visual highlight:
+For 15+ more effects with performance ratings: `Read data/wow-effects.csv`
 
 | Technique | CSS/Tailwind | When |
 |-----------|-------------|------|
@@ -325,3 +362,6 @@ Page-specific overrides: `design-system/pages/{pagename}.md`.
 5. **Mobile First** — Desktop layout is the extension, not the other way around
 6. **Self-hosted fonts** — GDPR. Always.
 7. **Performance** — No heavy animations at the cost of LCP
+8. **MASTER.md overrides all** — If it exists, follow it. CSVs inform, MASTER.md decides.
+9. **Stack-agnostic design** — This skill provides design decisions. Code patterns come from the stack skills (Astro, SvelteKit, etc.).
+10. **Tier 1 first** — Check inline tables before reading CSVs. Save tokens.

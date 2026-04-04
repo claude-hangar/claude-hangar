@@ -1,0 +1,11 @@
+{
+  "name": "meta-tags",
+  "version": "1.0.0",
+  "description": "OG/Twitter/Structured Data meta tag check.",
+  "category": "documentation",
+  "risk": "safe",
+  "triggers": ["meta tags", "open graph", "og tags", "twitter card", "structured data", "seo meta"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

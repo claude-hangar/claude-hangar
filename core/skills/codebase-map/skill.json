@@ -1,0 +1,11 @@
+{
+  "name": "codebase-map",
+  "version": "1.0.0",
+  "description": "Generate a structural overview of the codebase for context recovery.",
+  "category": "workflow",
+  "risk": "safe",
+  "triggers": ["map", "codebase map", "overview", "orient", "what is this project"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

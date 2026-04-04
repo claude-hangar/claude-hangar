@@ -1,0 +1,11 @@
+{
+  "name": "lighthouse-quick",
+  "version": "1.0.0",
+  "description": "Core Web Vitals performance check (LCP, CLS, INP).",
+  "category": "performance",
+  "risk": "safe",
+  "triggers": ["lighthouse", "pagespeed", "performance", "core web vitals", "speed"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

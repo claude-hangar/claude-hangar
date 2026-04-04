@@ -1,0 +1,36 @@
+id,name,heading,body,style,mood,best_for,weights,gdpr_note
+classic-elegant,Classic Elegant,Playfair Display,Source Sans 3,serif-sans,elegant;luxury;timeless,restaurants;hotels;luxury;wedding,"400;600;700",must self-host
+modern-clean,Modern Clean,Inter,Inter,geometric,modern;neutral;professional,saas;tech;startups;documentation,"400;500;600;700",must self-host
+warm-professional,Warm Professional,DM Serif Display,DM Sans,warm-serif-sans,warm;professional;approachable,doctors;law;consulting;finance,"400;500;700",must self-host
+craft-honest,Craft Honest,Outfit,Outfit,friendly-sans,friendly;approachable;honest,trades;local-business;bakery;crafts,"400;500;600;700",must self-host
+editorial,Editorial,Fraunces,Libre Franklin,variable-serif,literary;cultured;sophisticated,magazines;blogs;portfolios;editorial,"300;400;600;700",must self-host
+minimal-swiss,Minimal Swiss,Manrope,Manrope,geometric,precise;clean;structured,design-agency;architecture;tech;corporate,"400;500;600;700;800",must self-host
+soft-rounded,Soft Rounded,Nunito,Nunito Sans,rounded,gentle;friendly;warm,childcare;nursing;social;education,"400;600;700",must self-host
+bold-statement,Bold Statement,Space Grotesk,Work Sans,grotesk,bold;creative;energetic,creative;music;events;gaming,"400;500;600;700",must self-host
+corporate-solid,Corporate Solid,Plus Jakarta Sans,Plus Jakarta Sans,modern-corporate,professional;reliable;modern,corporations;b2b;consulting;enterprise,"400;500;600;700;800",must self-host
+warm-organic,Warm Organic,Lora,Karla,oldstyle-grotesque,warm;organic;natural,wellness;organic;sustainability;spa,"400;500;600;700",must self-host
+tech-mono,Tech Mono,JetBrains Mono,Inter,mono-sans,technical;developer;precise,dev-tools;terminal;documentation;code,"400;500;600;700",must self-host
+luxury-serif,Luxury Serif,Cormorant Garamond,Montserrat,high-serif-sans,luxurious;refined;exclusive,fashion;jewelry;fine-dining;art,"300;400;500;600;700",must self-host
+playful-geometric,Playful Geometric,Poppins,Poppins,rounded-geometric,playful;modern;approachable,apps;children;social;startups,"400;500;600;700",must self-host
+display-impact,Display Impact,Sora,DM Sans,display-sans,impactful;modern;confident,landing-pages;saas;agency;marketing,"400;500;600;700;800",must self-host
+humanist-warm,Humanist Warm,Source Serif 4,Source Sans 3,humanist,warm;readable;trustworthy,news;government;nonprofit;education,"400;600;700",must self-host
+condensed-urban,Condensed Urban,Barlow Condensed,Barlow,condensed,urban;industrial;dense,real-estate;sports;events;newspapers,"400;500;600;700",must self-host
+art-deco-display,Art Deco Display,Poiret One,Raleway,decorative-sans,glamorous;vintage;dramatic,luxury-events;cocktail-bars;hotels;fashion,"400;500;600;700",must self-host
+nordic-clean,Nordic Clean,Albert Sans,Albert Sans,neo-grotesque,scandinavian;clean;modern,furniture;interior;lifestyle;architecture,"400;500;600;700",must self-host
+retro-slab,Retro Slab,Roboto Slab,Roboto,slab-sans,retro;sturdy;characterful,breweries;cafes;barbershops;vintage,"300;400;500;700",must self-host
+elegant-transitional,Elegant Transitional,Libre Baskerville,Open Sans,transitional-sans,elegant;readable;classic,law;publishing;academia;government,"400;700",must self-host
+startup-fresh,Startup Fresh,General Sans,General Sans,neo-grotesque,fresh;modern;startup,saas;fintech;health-tech;apps,"400;500;600;700",must self-host — available on fontsource
+grotesk-bold,Grotesk Bold,Cabinet Grotesk,Satoshi,grotesk,bold;confident;modern,agency;brand;creative;portfolio,"400;500;700;800;900",must self-host — available on fontsource
+medical-clarity,Medical Clarity,Atkinson Hyperlegible,Atkinson Hyperlegible,hyperlegible,clear;accessible;professional,medical;seniors;a11y-focused;government,"400;700",must self-host — designed for readability
+handwritten-accent,Handwritten Accent,Caveat,Inter,handwritten-sans,personal;casual;creative,personal-blogs;crafts;greeting;children,"400;500;600;700",must self-host — use heading sparingly
+geometric-sharp,Geometric Sharp,Clash Display,General Sans,display-geometric,sharp;modern;tech,tech;crypto;gaming;creative-agency,"400;500;600;700",must self-host — available on fontsource
+slab-modern,Slab Modern,Zilla Slab,Fira Sans,slab-sans,sturdy;technical;modern,developer;open-source;documentation;engineering,"400;500;600;700",must self-host
+round-friendly,Round Friendly,Quicksand,Quicksand,rounded-geometric,friendly;light;approachable,wellness;kids;lifestyle;social,"400;500;600;700",must self-host
+tall-narrow,Tall Narrow,Oswald,Lato,condensed-sans,impactful;athletic;bold,sports;fitness;events;headlines-only,"400;500;600;700",must self-host — heading only
+calligraphy-accent,Calligraphy Accent,Tangerine,Montserrat,script-sans,romantic;elegant;decorative,wedding;florist;luxury;invitations,"400;700",must self-host — use heading sparingly
+contemporary-serif,Contemporary Serif,Merriweather,Merriweather Sans,transitional-match,balanced;readable;professional,content-sites;blogs;news;education,"300;400;700",must self-host
+wide-modern,Wide Modern,Epilogue,Epilogue,wide-sans,open;modern;spacious,architecture;gallery;portfolio;minimal,"400;500;600;700;800",must self-host
+tech-sans,Tech Sans,Fira Code,Fira Sans,mono-sans,technical;precise;developer,dev-tools;terminals;code-blogs;tech,"400;500;600;700",must self-host
+sharp-contrast,Sharp Contrast,Bebas Neue,Open Sans,display-sans,dramatic;impactful;athletic,events;sports;promotions;posters,"400",must self-host — heading only single weight
+neutral-versatile,Neutral Versatile,Noto Sans,Noto Sans,universal,neutral;i18n;versatile,multi-language;global;government;accessible,"400;500;600;700",must self-host — best i18n support
+compressed-editorial,Compressed Editorial,Big Shoulders Display,Karla,display-grotesque,editorial;urban;bold,magazines;street-culture;art;events,"400;500;600;700;800",must self-host

@@ -1,0 +1,11 @@
+{
+  "name": "adversarial-review",
+  "version": "1.0.0",
+  "description": "Critical review (min. 5 findings). Modes: code, audit, plan.",
+  "category": "quality",
+  "risk": "safe",
+  "triggers": ["review", "critical review", "code review", "plan review", "audit review"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

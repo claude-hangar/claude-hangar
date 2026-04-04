@@ -1,0 +1,11 @@
+{
+  "name": "error-analyzer",
+  "version": "1.0.0",
+  "description": "Systematic root-cause analysis for build failures, test errors, and runtime issues.",
+  "category": "documentation",
+  "risk": "safe",
+  "triggers": ["error", "failed", "broken", "debug", "why did this fail", "root cause"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

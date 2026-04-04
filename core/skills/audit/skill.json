@@ -1,0 +1,11 @@
+{
+  "name": "audit",
+  "version": "1.0.0",
+  "description": "Systematic website audit (stack detection, 9 phases).",
+  "category": "audit",
+  "risk": "safe",
+  "triggers": ["audit", "website audit", "site audit", "check website"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

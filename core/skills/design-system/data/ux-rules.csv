@@ -1,0 +1,72 @@
+id,category,rule,priority,description,applies_to,check_method
+nav-01,navigation,Max 7 primary navigation items,9,Cognitive load: Miller's 7 plus/minus 2 rule. More items cause decision paralysis.,all,Count top-level nav items
+nav-02,navigation,Logo links to homepage,10,Universal web convention. Users expect it. Not having it causes confusion.,all,Click logo and verify redirect
+nav-03,navigation,Current page indicator in nav,8,Users must know where they are. Active state gives orientation.,multi-page,Check active/current class on nav item
+nav-04,navigation,Mobile hamburger menu with clear close action,9,Hamburger is accepted on mobile. Must have obvious X to close.,responsive,Test on 375px viewport
+nav-05,navigation,Sticky navigation on scroll,6,Reduces scroll-to-navigate effort. Especially important on long pages.,long-pages,Scroll and verify nav stays visible
+nav-06,navigation,Search accessible within 2 clicks,7,Content-heavy sites need fast search access.,content-heavy;e-commerce,Navigate to search from any page
+cta-01,conversion,One primary CTA per viewport,10,Multiple competing CTAs reduce conversion. One clear action per view.,landing;homepage,Visual scan each viewport height
+cta-02,conversion,CTA button text is action-oriented,9,Use verbs: 'Get Started' not 'Submit'. Describes outcome not action.,all,Read all CTA button labels
+cta-03,conversion,CTA contrasts with surrounding colors,9,Button must visually pop. Minimum 3:1 contrast with background.,all,Check CTA contrast ratio
+cta-04,conversion,CTA above the fold on landing pages,10,First viewport must contain primary action. Users may not scroll.,landing,Check hero section for CTA
+cta-05,conversion,Contact info visible without scrolling,8,Phone/email/form should be immediately accessible.,business;local,Check header or hero for contact
+cta-06,conversion,Social proof near CTA,7,Testimonials or trust badges near action buttons increase conversion.,landing;e-commerce,Look for reviews/badges near CTAs
+form-01,forms,Max 5 visible fields per form step,8,Fewer fields = higher completion rate. Multi-step for complex forms.,all-forms,Count visible fields
+form-02,forms,Labels above inputs not inside,8,Placeholder-only labels disappear on focus causing confusion.,all-forms,Check if labels persist on focus
+form-03,forms,Inline validation with clear error messages,9,Errors shown at field level immediately. No page-reload validation.,all-forms,Enter invalid data and check response
+form-04,forms,Required fields clearly marked,7,Use asterisk or explicit text. Don't make users guess.,all-forms,Look for required indicators
+form-05,forms,Auto-focus first input field,6,Reduces click-to-type friction on dedicated form pages.,form-pages,Tab into page and check focus
+form-06,forms,Submit button disabled until valid,7,Prevents error submissions. Combined with inline validation.,complex-forms,Fill partial form and check button state
+form-07,forms,Success confirmation after submission,9,Users need to know their action worked. Show clear confirmation.,all-forms,Submit form and verify feedback
+content-01,content,Headings follow hierarchy H1-H6,9,SEO and accessibility requirement. Never skip heading levels.,all,Inspect heading structure
+content-02,content,Maximum 75 characters per text line,8,Optimal reading line length. Too wide = hard to track. Use max-w-prose.,text-heavy,Measure character count per line
+content-03,content,Scannable text with subheadings every 300 words,7,Users scan not read. Break walls of text with clear subheadings.,content-heavy,Count words between headings
+content-04,content,Alt text on all images,10,Accessibility and SEO requirement. Descriptive not decorative.,all,Check img elements for alt attributes
+content-05,content,No lorem ipsum in production,10,Placeholder text in production is unprofessional and damages trust.,all,Search for 'lorem ipsum' in rendered page
+content-06,content,Consistent voice and tone,7,Mixed formal/casual tone confuses brand perception.,all,Read key pages for tone consistency
+a11y-01,accessibility,Color contrast minimum 4.5:1 for text,10,WCAG AA requirement. Non-negotiable for body text.,all,Run contrast checker on all text
+a11y-02,accessibility,Color contrast minimum 3:1 for large text and UI,9,WCAG AA for text 24px+ and UI components like buttons.,all,Check large text and button contrast
+a11y-03,accessibility,All interactive elements keyboard accessible,10,Tab through entire page. Every button/link/input must be reachable.,all,Tab through page without mouse
+a11y-04,accessibility,Focus indicators visible on all interactive elements,9,Focus ring must be visible. Never use outline-none without replacement.,all,Tab and check focus visibility
+a11y-05,accessibility,Skip to main content link,7,Screen reader users need to bypass navigation on every page.,multi-page,Tab first element and check for skip link
+a11y-06,accessibility,ARIA labels on icon-only buttons,9,Buttons with only icons need aria-label for screen readers.,all,Check icon buttons for aria-label
+a11y-07,accessibility,Reduced motion media query for animations,8,Users with motion sensitivity need animations disabled.,animated-sites,Check for prefers-reduced-motion
+mobile-01,mobile,Touch targets minimum 44x44 pixels,9,Apple/Google guideline. Smaller targets cause tap errors.,responsive,Measure button/link touch areas
+mobile-02,mobile,No horizontal scroll on mobile,10,Horizontal overflow breaks mobile layouts completely.,responsive,Test on 375px for overflow
+mobile-03,mobile,Font size minimum 16px on mobile inputs,8,iOS zooms in on inputs below 16px which breaks layout.,responsive,Check input font-size on mobile
+mobile-04,mobile,Thumb-friendly placement of key actions,7,Bottom of screen is easiest to reach. Primary actions should be there.,mobile-first,Check CTA positions for thumb reach
+mobile-05,mobile,No hover-only interactions,9,Mobile has no hover. All hover-triggered content needs tap alternative.,responsive,Test all hover interactions on touch
+mobile-06,mobile,Responsive images with appropriate sizes,8,Serve right image size per viewport. No 2000px images on mobile.,responsive,Check image dimensions vs viewport
+trust-01,trust,Physical address and legal info visible,8,Legal requirement in many countries. Imprint/privacy in footer.,business,Check footer for legal links
+trust-02,trust,SSL/HTTPS indicator,10,No excuse for non-HTTPS in 2026. Browsers warn on HTTP.,all,Check URL bar for lock icon
+trust-03,trust,Professional error pages (404/500),7,Custom error pages maintain trust. Default server errors look broken.,all,Visit non-existent URL
+trust-04,trust,Consistent branding across all pages,8,Same colors/fonts/logo placement everywhere. Inconsistency = unprofessional.,multi-page,Navigate 5+ pages checking brand consistency
+trust-05,trust,Loading states for async operations,8,Users need feedback that something is happening. No frozen UI.,dynamic,Trigger async action and check for spinner/skeleton
+trust-06,trust,No broken links or images,9,Broken resources destroy credibility instantly.,all,Run link checker or manual scan
+perf-01,performance,LCP under 2.5 seconds,10,Core Web Vital. Google ranking factor. User patience threshold.,all,Run Lighthouse or PageSpeed Insights
+perf-02,performance,CLS under 0.1,9,Core Web Vital. Layout shifts frustrate users and hurt rankings.,all,Run Lighthouse and check CLS
+perf-03,performance,Images use modern formats (WebP/AVIF),8,30-50% smaller than JPEG/PNG. No reason not to in 2026.,all,Check image Content-Type headers
+perf-04,performance,Fonts preloaded for critical text,7,Prevent FOUT (flash of unstyled text) on first paint.,all,Check link preload for font files
+perf-05,performance,No render-blocking resources above fold,8,Defer non-critical JS/CSS. Critical CSS inline if needed.,all,Check network waterfall for blocking resources
+perf-06,performance,Lazy loading for below-fold images,8,Only load images when approaching viewport. Save bandwidth.,image-heavy,Check img loading=lazy attribute
+layout-01,layout,Visual hierarchy guides eye flow,9,Most important content biggest/boldest. Guide user attention.,all,Squint test: what stands out first?
+layout-02,layout,Consistent spacing from design system scale,8,No arbitrary padding/margin values. Use spacing scale.,all,Inspect spacing values for consistency
+layout-03,layout,Maximum content width with centered layout,8,Text blocks max 65-75ch width. Full-width text is unreadable.,text-content,Check max-width on content containers
+layout-04,layout,Whitespace between sections is generous,7,Breathing room between sections. Cramped = cheap looking.,all,Check section padding values
+layout-05,layout,Grid alignment is consistent,8,Elements should align to invisible grid. Random offsets look amateur.,all,Check element alignment across sections
+interaction-01,interaction,Hover states on all clickable elements,8,Cursor change + visual feedback. Users must know what is clickable.,desktop,Hover over links/buttons/cards
+interaction-02,interaction,Transition duration 150-300ms for micro-interactions,7,Too fast = jarring. Too slow = sluggish. Sweet spot is 200ms.,animated,Check transition-duration values
+interaction-03,interaction,Scroll behavior is smooth,6,smooth-scroll for anchor links. Not for general page scroll.,anchor-links,Click anchor links and check scroll
+interaction-04,interaction,No auto-playing media with sound,10,Extremely annoying. Browsers block it anyway. Never do this.,media-sites,Check for autoplay with audio
+interaction-05,interaction,Feedback on user actions within 100ms,9,Every click/tap needs immediate visual response. No dead clicks.,interactive,Click buttons and measure response time
+trust-07,trust,Testimonials with real names and photos,7,Anonymous reviews feel fake. Real attribution builds credibility.,business;landing,Check testimonials for names and images
+trust-08,trust,Clear pricing without hidden costs,8,Unexpected costs at checkout cause abandonment. Be transparent.,e-commerce;saas,Check pricing page for clarity
+mobile-07,mobile,Bottom sheet menus for mobile actions,6,Bottom sheets are more thumb-friendly than dropdown menus on mobile.,mobile-apps,Check action menus on mobile viewport
+content-07,content,Meaningful link text not click here,8,Screen readers and SEO need descriptive link text.,all,Search for generic link text patterns
+content-08,content,Error messages explain how to fix the problem,9,Not just what went wrong but what to do about it.,all-forms;apps,Trigger errors and read messages
+a11y-08,accessibility,Language attribute on HTML element,8,Screen readers need lang attribute to pronounce correctly.,all,Check html element for lang attribute
+a11y-09,accessibility,Form inputs have associated labels,10,Every input needs a label element or aria-label. Click label to focus.,all-forms,Click labels and check focus behavior
+perf-07,performance,Total page weight under 1.5MB on initial load,8,Heavy pages lose mobile users. Optimize assets aggressively.,all,Check total transfer size in DevTools
+layout-06,layout,Z-index values follow a defined scale,7,Random z-index leads to stacking bugs. Use a scale: 10 20 30 40 50.,complex-layouts,Check z-index values for consistency
+conversion-07,conversion,Exit intent or scroll-depth engagement,5,Capture leaving users with relevant offer. Not intrusive popups.,landing;e-commerce,Scroll 75% or move to close tab
+interaction-06,interaction,Disabled states are visually distinct,8,Disabled elements must look different from active ones. opacity-50 + cursor-not-allowed.,forms;apps,Check disabled button appearance

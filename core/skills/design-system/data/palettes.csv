@@ -1,0 +1,77 @@
+id,name,industry,mood,primary,secondary,accent,cta,background,surface,text,muted
+hair-elegant,Hair & Beauty Elegant,hair-beauty,elegant;feminine,#8B5E83,#D4A574,#C7456B,#C7456B,#FFF8F5,#FFFFFF,#2D2028,#9B8A92
+hair-modern,Hair & Beauty Modern,hair-beauty,modern;chic,#1A1A2E,#E8B4B8,#D4956B,#D4956B,#FDF6F4,#FFFFFF,#1A1A2E,#8B7B85
+restaurant-warm,Restaurant Warm,restaurant,warm;appetizing,#2D3436,#B8860B,#E17055,#E17055,#FEFEFE,#FFF9F5,#2D3436,#636E72
+restaurant-modern,Restaurant Modern,restaurant,modern;clean,#1B1B1B,#C9A96E,#FF6B35,#FF6B35,#FFFDF9,#FFFFFF,#1B1B1B,#6B6B6B
+restaurant-rustic,Restaurant Rustic,restaurant,rustic;cozy,#3E2723,#8D6E63,#FF8F00,#FF8F00,#FFF8E7,#FFFBF0,#3E2723,#795548
+trades-trust,Trades & Construction Trust,trades,trustworthy;solid,#2C3E50,#E67E22,#27AE60,#27AE60,#F8F9FA,#FFFFFF,#2C3E50,#7F8C8D
+trades-bold,Trades & Construction Bold,trades,bold;energetic,#1A237E,#FF6F00,#00C853,#FF6F00,#F5F5F5,#FFFFFF,#1A237E,#757575
+medical-calm,Healthcare Calm,healthcare,calm;professional,#1A5276,#2ECC71,#3498DB,#3498DB,#F0F8FF,#FFFFFF,#1A1A2E,#85929E
+medical-modern,Healthcare Modern,healthcare,modern;clean,#0D4F6B,#00B4D8,#48CAE4,#FF6B35,#F8FDFF,#FFFFFF,#0A1628,#6B7280
+medical-warm,Healthcare Warm,healthcare,warm;caring,#2E5D4B,#7DCEA0,#F39C12,#F39C12,#F0FFF4,#FFFFFF,#1A3C34,#6B8F7B
+legal-authority,Law & Legal Authority,legal,authoritative;serious,#1B2631,#85929E,#C0392B,#C0392B,#FAFAFA,#FFFFFF,#1B2631,#5D6D7E
+legal-modern,Law & Legal Modern,legal,modern;approachable,#0F2B46,#4A90D9,#E74C3C,#4A90D9,#F8FAFC,#FFFFFF,#0F2B46,#64748B
+fitness-energy,Fitness & Sports Energy,fitness,energetic;dynamic,#1E1E2E,#00B894,#FF6B35,#FF6B35,#F5F5F5,#FFFFFF,#1E1E2E,#636E72
+fitness-dark,Fitness & Sports Dark,fitness,dark;intense,#0A0A0A,#00E676,#FF1744,#FF1744,#121212,#1E1E1E,#FAFAFA,#9E9E9E
+fitness-wellness,Fitness Wellness,fitness,calm;wellness,#1B5E4B,#A8E6CF,#FFD93D,#FFD93D,#F0FFF4,#FFFFFF,#1B5E4B,#6B8F7B
+realestate-pro,Real Estate Professional,real-estate,professional;modern,#2C3E50,#1ABC9C,#E74C3C,#E74C3C,#FFFFFF,#F8F9FA,#2C3E50,#7F8C8D
+realestate-luxury,Real Estate Luxury,real-estate,luxurious;premium,#1A1A2E,#C9A96E,#E8E8E8,#C9A96E,#FAFAFA,#FFFFFF,#1A1A2E,#6B6B6B
+care-warm,Care & Social Warm,care,warm;trustworthy,#5B8C5A,#E8D5B7,#D4956B,#D4956B,#FFF9F0,#FFFFFF,#3D5C3B,#8B9E8A
+care-gentle,Care & Social Gentle,care,gentle;calming,#4A7C6F,#B8D8D0,#E8B4B8,#E8B4B8,#F5FAFA,#FFFFFF,#2D4F47,#7B9E95
+tech-slate,IT & Tech Slate,tech,modern;technical,#0F172A,#6366F1,#22D3EE,#6366F1,#F8FAFC,#FFFFFF,#0F172A,#64748B
+tech-dark,IT & Tech Dark,tech,dark;premium,#09090B,#8B5CF6,#06B6D4,#8B5CF6,#0A0A0B,#18181B,#FAFAFA,#71717A
+tech-gradient,IT & Tech Gradient,tech,modern;vibrant,#1E1B4B,#7C3AED,#EC4899,#7C3AED,#F5F3FF,#FFFFFF,#1E1B4B,#6B7280
+photo-minimal,Photography Minimal,photography,minimalist;focused,#111111,#F5F5F5,#E63946,#E63946,#FFFFFF,#FAFAFA,#111111,#666666
+photo-dark,Photography Dark,photography,dark;dramatic,#0A0A0A,#333333,#FFFFFF,#E63946,#0A0A0A,#1A1A1A,#F5F5F5,#888888
+florist-natural,Florist Natural,florist,natural;fresh,#4A7C59,#E8B4B8,#D4956B,#D4956B,#FDF8F4,#FFFFFF,#2D4B36,#7B9E84
+florist-romantic,Florist Romantic,florist,romantic;elegant,#6B4C5A,#F2D7D9,#E8B4B8,#E8B4B8,#FFF5F7,#FFFFFF,#4A2E3C,#9E8690
+auto-robust,Auto & Workshop Robust,auto,robust;professional,#1A1A2E,#C0C0C0,#E94560,#E94560,#F2F2F2,#FFFFFF,#1A1A2E,#6B6B6B
+auto-premium,Auto & Workshop Premium,auto,premium;sleek,#0D0D0D,#B0B0B0,#FF3131,#FF3131,#F5F5F5,#FFFFFF,#0D0D0D,#757575
+education-trust,Education Trust,education,trustworthy;professional,#1A365D,#3182CE,#38A169,#3182CE,#F7FAFC,#FFFFFF,#1A365D,#718096
+education-playful,Education Playful,education,playful;approachable,#2B4C7E,#FF6B6B,#FFD93D,#FF6B6B,#FFFDF7,#FFFFFF,#2B4C7E,#6B8CAE
+finance-trust,Finance & Banking Trust,finance,trustworthy;stable,#003366,#336699,#FF8C00,#FF8C00,#F5F7FA,#FFFFFF,#003366,#6B7B8D
+finance-modern,Finance Modern,finance,modern;fintech,#0B1929,#00D4AA,#3B82F6,#00D4AA,#F0FDF9,#FFFFFF,#0B1929,#64748B
+hotel-luxury,Hotel & Hospitality Luxury,hospitality,luxurious;elegant,#1A1A1A,#C8A96E,#8B6F47,#C8A96E,#FFFDF5,#FFFFFF,#1A1A1A,#8B8B8B
+hotel-boutique,Hotel Boutique,hospitality,boutique;charming,#2D3436,#DFB88C,#A0522D,#DFB88C,#FFF9F0,#FFFFFF,#2D3436,#7B7B7B
+hotel-modern,Hotel Modern,hospitality,modern;clean,#1B2A4A,#4ECDC4,#FF6B6B,#4ECDC4,#F8FFFE,#FFFFFF,#1B2A4A,#64748B
+agency-creative,Creative Agency Bold,agency,bold;creative,#FF006E,#3A86FF,#FFBE0B,#FF006E,#FFFFFF,#F8F9FA,#1A1A1A,#6B7280
+agency-minimal,Creative Agency Minimal,agency,minimal;sophisticated,#1A1A1A,#E5E5E5,#FF4444,#FF4444,#FFFFFF,#FAFAFA,#1A1A1A,#999999
+agency-dark,Creative Agency Dark,agency,dark;premium,#0A0A0A,#FF6B6B,#4ECDC4,#FF6B6B,#0F0F0F,#1A1A1A,#F0F0F0,#888888
+consulting-pro,Consulting Professional,consulting,professional;confident,#1A3A5C,#4A8FBC,#E67E22,#E67E22,#F8FAFC,#FFFFFF,#1A3A5C,#6B7C8D
+consulting-warm,Consulting Warm,consulting,warm;approachable,#2D3E50,#E8C170,#D4956B,#E8C170,#FFFBF5,#FFFFFF,#2D3E50,#7B8A96
+ecommerce-conversion,E-Commerce Conversion,e-commerce,conversion;trust,#1A1A2E,#FF6B35,#00B894,#FF6B35,#FFFFFF,#F8F9FA,#1A1A2E,#6B7280
+ecommerce-lifestyle,E-Commerce Lifestyle,e-commerce,lifestyle;aspirational,#2D2D2D,#C8A96E,#E8E8E8,#C8A96E,#FFFFFF,#FAFAFA,#2D2D2D,#8B8B8B
+food-organic,Food & Organic Natural,food,natural;organic;honest,#2D5016,#8BC34A,#FF8F00,#FF8F00,#F5FFF0,#FFFFFF,#2D5016,#6B8C52
+food-gourmet,Food Gourmet,food,premium;artisan,#1A1A1A,#C8A96E,#E63946,#E63946,#FFFDF5,#FFFFFF,#1A1A1A,#6B6B6B
+bakery-sweet,Bakery & Patisserie Sweet,bakery,sweet;warm;inviting,#6B4226,#E8C9A0,#FF6B6B,#FF6B6B,#FFF5EB,#FFFFFF,#6B4226,#A0845C
+yoga-zen,Yoga & Meditation Zen,wellness,serene;balanced;spiritual,#4A6741,#C8A96E,#E8B4B8,#C8A96E,#F5F0EB,#FFFFFF,#3D4F36,#8B9E84
+spa-luxury,Spa & Wellness Luxury,wellness,luxurious;relaxing,#2D3E3A,#B8A88A,#7DCEA0,#B8A88A,#F5F0EB,#FFFFFF,#2D3E3A,#7B8B85
+music-dark,Music & Events Dark,entertainment,dark;vibrant;energetic,#0A0A0A,#FF006E,#00D4FF,#FF006E,#0F0F0F,#1A1A1A,#F5F5F5,#888888
+music-festival,Music Festival,entertainment,colorful;energetic,#1A0A2E,#FF6B6B,#FFD93D,#FF6B6B,#F5F0FF,#FFFFFF,#1A0A2E,#6B5B7B
+wedding-classic,Wedding Classic,wedding,romantic;elegant;timeless,#4A3F35,#D4A574,#E8B4B8,#E8B4B8,#FFFBF7,#FFFFFF,#4A3F35,#8B7D6B
+wedding-modern,Wedding Modern,wedding,modern;fresh;romantic,#2D3436,#95C4B5,#E8B4B8,#E8B4B8,#F8FFFC,#FFFFFF,#2D3436,#7B8B85
+nonprofit-trust,Nonprofit Trust,nonprofit,trustworthy;compassionate,#1A365D,#38A169,#E53E3E,#38A169,#F7FAF5,#FFFFFF,#1A365D,#718096
+nonprofit-warm,Nonprofit Warm,nonprofit,warm;hopeful,#2D5016,#FFB347,#E53E3E,#FFB347,#FFFBF0,#FFFFFF,#2D5016,#6B8C52
+gaming-neon,Gaming Neon,gaming,neon;intense;futuristic,#0A0A0A,#00FF88,#FF00FF,#00FF88,#0D0D0D,#1A1A1A,#F0F0F0,#666666
+gaming-esports,Gaming Esports,gaming,competitive;bold,#0B1622,#00D4FF,#FF4655,#FF4655,#0F1923,#1A2634,#ECE8E1,#768A9E
+crypto-dark,Crypto & Web3 Dark,crypto,futuristic;trust;tech,#0B0E11,#F0B90B,#00C9A7,#F0B90B,#0B0E11,#1E2329,#EAECEF,#848E9C
+startup-saas,SaaS Startup,saas,modern;professional;scalable,#0F172A,#6366F1,#10B981,#6366F1,#F8FAFC,#FFFFFF,#0F172A,#64748B
+startup-fun,SaaS Startup Fun,saas,playful;modern;approachable,#1A1A2E,#FF6B6B,#4ECDC4,#FF6B6B,#FFFFFF,#F8F9FA,#1A1A2E,#6B7280
+developer-tools,Developer Tools,developer,technical;focused;dark,#0D1117,#58A6FF,#3FB950,#58A6FF,#0D1117,#161B22,#C9D1D9,#8B949E
+developer-light,Developer Tools Light,developer,clean;technical,#1A1A2E,#2563EB,#16A34A,#2563EB,#FAFBFC,#FFFFFF,#1A1A2E,#6B7280
+earth-warm,Earth Warm,universal,warm;grounded;natural,#5D4037,#8D6E63,#FF8F00,#FF8F00,#FFF8E1,#FFFFFF,#3E2723,#795548
+forest-green,Forest Green,universal,natural;calming;growth,#1B5E20,#4CAF50,#81C784,#4CAF50,#F1F8E9,#FFFFFF,#1B5E20,#689F63
+ocean-blue,Ocean Blue,universal,calm;deep;professional,#0D47A1,#1976D2,#29B6F6,#1976D2,#E3F2FD,#FFFFFF,#0D47A1,#64B5F6
+sunset-gradient,Sunset Gradient,universal,warm;dynamic;inspiring,#BF360C,#FF6E40,#FFD740,#FF6E40,#FFF3E0,#FFFFFF,#BF360C,#FF8A65
+midnight-blue,Midnight Blue,universal,premium;deep;sophisticated,#0A1929,#1E3A5F,#4FC3F7,#4FC3F7,#0A1929,#132F4C,#E3F2FD,#5090D3
+monochrome-warm,Monochrome Warm,universal,warm;elegant;simple,#3E2723,#5D4037,#8D6E63,#8D6E63,#EFEBE9,#FFFFFF,#3E2723,#A1887F
+monochrome-cool,Monochrome Cool,universal,cool;professional;clean,#263238,#37474F,#607D8B,#607D8B,#ECEFF1,#FFFFFF,#263238,#90A4AE
+pastel-spring,Pastel Spring,universal,fresh;gentle;optimistic,#5C6BC0,#81C784,#FFB74D,#FFB74D,#FAFFF5,#FFFFFF,#37474F,#90A4AE
+pastel-ocean,Pastel Ocean,universal,calm;dreamy;soft,#5C6BC0,#80DEEA,#B39DDB,#5C6BC0,#F0F4FF,#FFFFFF,#37474F,#90A4AE
+nordic-palette,Nordic Palette,universal,clean;calm;scandinavian,#2D3436,#636E72,#DFE6E9,#2D3436,#FAFAFA,#FFFFFF,#2D3436,#B2BEC3
+neon-accent,Neon Accent,universal,vibrant;modern;electric,#0A0A0A,#39FF14,#FF00FF,#39FF14,#0A0A0A,#1A1A1A,#F0F0F0,#666666
+bold-contrast,Bold Contrast,universal,bold;impactful;confident,#000000,#FFFFFF,#FF0000,#FF0000,#FFFFFF,#F5F5F5,#000000,#666666
+warm-editorial,Warm Editorial,universal,literary;warm;cultured,#2D2D2D,#C8A96E,#E8E8E8,#C8A96E,#FFF9F0,#FFFFFF,#2D2D2D,#8B8B8B
+neutral-clean,Neutral Clean,universal,clean;professional;versatile,#1F2937,#6B7280,#3B82F6,#3B82F6,#F9FAFB,#FFFFFF,#1F2937,#9CA3AF
+soft-neutral,Soft Neutral,universal,soft;calm;modern,#374151,#9CA3AF,#6366F1,#6366F1,#F3F4F6,#FFFFFF,#374151,#D1D5DB
+champagne,Champagne,universal,luxurious;warm;celebratory,#1A1A1A,#C8A96E,#E8D5B7,#C8A96E,#FFFDF5,#FFFFFF,#1A1A1A,#8B8B8B

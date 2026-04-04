@@ -1,0 +1,11 @@
+{
+  "name": "polish",
+  "version": "1.0.0",
+  "description": "Frontend quick wins to wow effects (6 dimensions).",
+  "category": "design",
+  "risk": "moderate",
+  "triggers": ["polish", "beautify", "improve", "wow", "improve design", "enhance", "quick wins"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": ["design-system"],
+  "dataFiles": []
+}

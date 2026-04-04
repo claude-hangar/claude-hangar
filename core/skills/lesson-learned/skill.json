@@ -1,0 +1,11 @@
+{
+  "name": "lesson-learned",
+  "version": "1.0.0",
+  "description": "Extract learnings and save as memory files (file-based memory system).",
+  "category": "workflow",
+  "risk": "safe",
+  "triggers": ["lesson learned", "what did we learn", "learning", "remember"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

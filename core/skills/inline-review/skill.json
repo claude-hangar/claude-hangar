@@ -1,0 +1,11 @@
+{
+  "name": "inline-review",
+  "version": "1.0.0",
+  "description": "Quick self-review checklist after code changes. Lightweight alternative to adversarial-review.",
+  "category": "quality",
+  "risk": "safe",
+  "triggers": ["review my changes", "self-review", "quick review", "check my work"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

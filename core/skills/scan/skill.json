@@ -1,0 +1,11 @@
+{
+  "name": "scan",
+  "version": "1.0.0",
+  "description": "Scans a project to detect tech stack, architecture, and quality indicators. Can auto-generate CLAUDE.md.",
+  "category": "workflow",
+  "risk": "safe",
+  "triggers": ["scan", "detect stack", "project scan", "tech stack", "what framework"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

@@ -1,0 +1,11 @@
+{
+  "name": "favicon-check",
+  "version": "1.0.0",
+  "description": "Favicon/app icon completeness check.",
+  "category": "documentation",
+  "risk": "safe",
+  "triggers": ["favicon", "icon check", "app icon", "icons"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

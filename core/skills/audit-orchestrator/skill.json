@@ -1,0 +1,11 @@
+{
+  "name": "audit-orchestrator",
+  "version": "1.0.0",
+  "description": "Orchestrates /audit + /project-audit + /astro-audit + /sveltekit-audit + /db-audit + /auth-audit combinations.",
+  "category": "audit",
+  "risk": "safe",
+  "triggers": ["full audit", "audit everything", "complete audit"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": ["audit", "project-audit"],
+  "dataFiles": []
+}

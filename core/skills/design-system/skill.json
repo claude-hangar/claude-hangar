@@ -1,0 +1,11 @@
+{
+  "name": "design-system",
+  "version": "1.0.0",
+  "description": "Context-aware design intelligence with curated databases for styles, palettes, typography, UX rules, and wow effects.",
+  "category": "design",
+  "risk": "safe",
+  "triggers": ["design", "colors", "typography", "component", "card", "button", "hero", "ui", "palette", "tailwind pattern", "style", "wow", "font"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": ["data/styles.csv", "data/palettes.csv", "data/typography.csv", "data/ux-rules.csv", "data/wow-effects.csv"]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "audit-runner",
+  "version": "1.0.0",
+  "description": "Autonomous audit runner (separate sessions, no context limit).",
+  "category": "audit",
+  "risk": "moderate",
+  "triggers": ["audit-runner", "autonomous audit", "audit automatically"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": ["audit", "project-audit", "audit-orchestrator"],
+  "dataFiles": []
+}

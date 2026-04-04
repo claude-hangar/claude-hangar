@@ -1,0 +1,194 @@
+{
+  "version": "1.0",
+  "generated": "2026-04-04",
+  "skillCount": 21,
+  "categories": {
+    "design": ["design-system", "polish"],
+    "quality": ["adversarial-review", "inline-review"],
+    "audit": ["audit", "audit-orchestrator", "audit-runner", "project-audit"],
+    "performance": ["lighthouse-quick"],
+    "security": ["deploy-check"],
+    "workflow": ["capture-pdf", "codebase-map", "consult", "handoff", "lesson-learned", "scan"],
+    "documentation": ["doctor", "error-analyzer", "meta-tags", "favicon-check"],
+    "git": ["git-hygiene"],
+    "devops": ["freshness-check"]
+  },
+  "skills": [
+    {
+      "id": "adversarial-review",
+      "path": "core/skills/adversarial-review",
+      "category": "quality",
+      "risk": "safe",
+      "description": "Critical review (min. 5 findings). Modes: code, audit, plan.",
+      "triggers": ["review", "critical review", "code review", "plan review", "audit review"]
+    },
+    {
+      "id": "audit",
+      "path": "core/skills/audit",
+      "category": "audit",
+      "risk": "safe",
+      "description": "Systematic website audit (stack detection, 9 phases).",
+      "triggers": ["audit", "website audit", "site audit", "check website"]
+    },
+    {
+      "id": "audit-orchestrator",
+      "path": "core/skills/audit-orchestrator",
+      "category": "audit",
+      "risk": "safe",
+      "description": "Orchestrates /audit + /project-audit + /astro-audit + /sveltekit-audit + /db-audit + /auth-audit combinations.",
+      "triggers": ["full audit", "audit everything", "complete audit"]
+    },
+    {
+      "id": "audit-runner",
+      "path": "core/skills/audit-runner",
+      "category": "audit",
+      "risk": "safe",
+      "description": "Autonomous audit runner (separate sessions, no context limit).",
+      "triggers": ["run audit", "autonomous audit"]
+    },
+    {
+      "id": "capture-pdf",
+      "path": "core/skills/capture-pdf",
+      "category": "workflow",
+      "risk": "safe",
+      "description": "Website-to-PDF capture (all pages + interactive states).",
+      "triggers": ["capture", "pdf", "print", "screenshot", "capture pages"]
+    },
+    {
+      "id": "codebase-map",
+      "path": "core/skills/codebase-map",
+      "category": "workflow",
+      "risk": "safe",
+      "description": "Generate a structural overview of the codebase for context recovery.",
+      "triggers": ["codebase map", "project structure", "code overview"]
+    },
+    {
+      "id": "consult",
+      "path": "core/skills/consult",
+      "category": "workflow",
+      "risk": "safe",
+      "description": "Interactive project consultant. Scans your project, asks targeted questions, and creates a structured improvement plan.",
+      "triggers": ["consult", "consultant", "improvement plan", "project review"]
+    },
+    {
+      "id": "deploy-check",
+      "path": "core/skills/deploy-check",
+      "category": "security",
+      "risk": "safe",
+      "description": "Deployment readiness check for Docker/Traefik projects.",
+      "triggers": ["deploy check", "deployment check", "ready for deployment", "production ready"]
+    },
+    {
+      "id": "design-system",
+      "path": "core/skills/design-system",
+      "category": "design",
+      "risk": "safe",
+      "description": "Context-aware design intelligence with curated databases for styles, palettes, typography, UX rules, and wow effects.",
+      "triggers": ["design", "colors", "typography", "palette", "ui", "component", "style", "wow", "font"]
+    },
+    {
+      "id": "doctor",
+      "path": "core/skills/doctor",
+      "category": "documentation",
+      "risk": "safe",
+      "description": "Project health check meta-skill. Runs git-hygiene, deploy-check, and freshness-check in sequence.",
+      "triggers": ["doctor", "health check", "project health"]
+    },
+    {
+      "id": "error-analyzer",
+      "path": "core/skills/error-analyzer",
+      "category": "documentation",
+      "risk": "safe",
+      "description": "Systematic root-cause analysis for build failures, test errors, and runtime issues.",
+      "triggers": ["error", "build failure", "test error", "runtime error", "debug"]
+    },
+    {
+      "id": "favicon-check",
+      "path": "core/skills/favicon-check",
+      "category": "documentation",
+      "risk": "safe",
+      "description": "Favicon/app icon completeness check.",
+      "triggers": ["favicon", "icon check", "app icon", "icons"]
+    },
+    {
+      "id": "freshness-check",
+      "path": "core/skills/freshness-check",
+      "category": "devops",
+      "risk": "safe",
+      "description": "Pipeline source freshness check (frameworks, tools, standards).",
+      "triggers": ["freshness", "update check", "is everything current", "check versions"]
+    },
+    {
+      "id": "git-hygiene",
+      "path": "core/skills/git-hygiene",
+      "category": "git",
+      "risk": "safe",
+      "description": "Git repository hygiene check. Stale branches, large files, commit conventions.",
+      "triggers": ["git cleanup", "git hygiene", "clean up branches", "stale branches"]
+    },
+    {
+      "id": "handoff",
+      "path": "core/skills/handoff",
+      "category": "workflow",
+      "risk": "safe",
+      "description": "Structured session handoff — preserves context for seamless continuation across sessions.",
+      "triggers": ["handoff", "session handoff", "continue later", "save context"]
+    },
+    {
+      "id": "inline-review",
+      "path": "core/skills/inline-review",
+      "category": "quality",
+      "risk": "safe",
+      "description": "Quick self-review checklist after code changes. Lightweight alternative to adversarial-review.",
+      "triggers": ["quick review", "self review", "inline review", "check my changes"]
+    },
+    {
+      "id": "lesson-learned",
+      "path": "core/skills/lesson-learned",
+      "category": "workflow",
+      "risk": "safe",
+      "description": "Extract learnings and save as memory files (file-based memory system).",
+      "triggers": ["lesson learned", "what did we learn", "learning", "remember"]
+    },
+    {
+      "id": "lighthouse-quick",
+      "path": "core/skills/lighthouse-quick",
+      "category": "performance",
+      "risk": "safe",
+      "description": "Core Web Vitals performance check (LCP, CLS, INP).",
+      "triggers": ["lighthouse", "pagespeed", "performance", "core web vitals", "speed"]
+    },
+    {
+      "id": "meta-tags",
+      "path": "core/skills/meta-tags",
+      "category": "documentation",
+      "risk": "safe",
+      "description": "OG/Twitter/Structured Data meta tag check.",
+      "triggers": ["meta tags", "open graph", "og tags", "twitter card", "structured data", "seo meta"]
+    },
+    {
+      "id": "polish",
+      "path": "core/skills/polish",
+      "category": "design",
+      "risk": "safe",
+      "description": "Frontend quick wins to wow effects (6 dimensions).",
+      "triggers": ["polish", "beautify", "improve", "wow", "improve design", "enhance", "quick wins"]
+    },
+    {
+      "id": "project-audit",
+      "path": "core/skills/project-audit",
+      "category": "audit",
+      "risk": "safe",
+      "description": "Repository audit for non-website projects (CLI, libs, backend, monorepo).",
+      "triggers": ["project audit", "repo audit", "code audit"]
+    },
+    {
+      "id": "scan",
+      "path": "core/skills/scan",
+      "category": "workflow",
+      "risk": "safe",
+      "description": "Scans a project to detect tech stack, architecture, and quality indicators. Can auto-generate CLAUDE.md.",
+      "triggers": ["scan", "detect stack", "tech stack", "generate claude.md"]
+    }
+  ]
+}
