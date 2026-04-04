@@ -281,7 +281,11 @@ After completing the Astro audit, recommend relevant follow-up skills:
 | No .audit-state.json present | `/audit start` | Check website quality (SEO, a11y, performance, privacy) |
 | No .project-audit-state.json present | `/project-audit start` | Check code/CI/CD quality |
 | Migration findings fixed | `/lighthouse-quick` | Verify performance after migration |
+| UI/Design work needed | `/design-system` | Curated palettes, fonts, styles, UX rules (CSV databases) |
+| Frontend polish desired | `/polish scan` | Rate 6 design dimensions, then improve |
 | All areas done | `/lesson-learned session` | Extract learnings from migration |
+
+**Design Integration:** When building or modifying UI components in Astro projects, always consult `/design-system` first. It provides industry-matched palettes, font pairings, UX rules, and wow effects from curated CSV databases. The design-system is stack-agnostic — it provides design decisions, Astro provides the code patterns.
 
 **Output after last area:** "Next steps:" + 2-3 most relevant recommendations.
 

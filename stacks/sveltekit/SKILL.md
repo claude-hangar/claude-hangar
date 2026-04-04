@@ -289,7 +289,11 @@ After completing the SvelteKit audit, recommend relevant follow-up skills:
 | DB area with findings | `/db-audit start` | Deep-dive into Drizzle schema + migration |
 | AUTH area with findings | `/auth-audit start` | Deep-dive into auth patterns + security |
 | Migration findings fixed | `/lighthouse-quick` | Verify performance after migration |
+| UI/Design work needed | `/design-system` | Curated palettes, fonts, styles, UX rules (CSV databases) |
+| Frontend polish desired | `/polish scan` | Rate 6 design dimensions, then improve |
 | All areas done | `/lesson-learned session` | Extract learnings from audit |
+
+**Design Integration:** When building or modifying UI components in SvelteKit projects, always consult `/design-system` first. It provides industry-matched palettes, font pairings, UX rules, and wow effects from curated CSV databases. The design-system is stack-agnostic — it provides design decisions, SvelteKit provides the code patterns.
 
 **Output after last area:** "Next steps:" + 2-3 most relevant recommendations.
 

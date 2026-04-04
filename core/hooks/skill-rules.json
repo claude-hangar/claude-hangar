@@ -39,8 +39,18 @@
     },
     {
       "skill": "/design-system",
-      "triggers": ["design system", "colors", "color palette", "typography", "font pairing", "spacing", "build component", "build landing page", "which colors", "ui components"],
-      "exclude": []
+      "triggers": ["design system", "colors", "color palette", "typography", "font pairing", "spacing",
+        "build component", "build landing page", "which colors", "ui components",
+        "hero section", "hero", "navbar", "navigation", "footer", "card component",
+        "pricing page", "pricing", "feature grid", "feature section", "testimonial",
+        "contact form", "contact page", "about page", "landing page",
+        "build page", "create page", "new page", "design page",
+        "button style", "form design", "layout", "section",
+        "color scheme", "dark mode", "light mode", "theme",
+        "style guide", "brand colors", "industry palette",
+        "glassmorphism", "gradient", "animation", "hover effect",
+        "responsive design", "mobile design", "component library"],
+      "exclude": ["audit", "lighthouse"]
     },
     {
       "skill": "/favicon-check",

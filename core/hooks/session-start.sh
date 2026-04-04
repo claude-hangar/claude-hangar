@@ -100,6 +100,39 @@ if [ -n "$MEMORY_HYGIENE" ]; then
   CONTEXT+="$MEMORY_HYGIENE\n"
 fi
 
+# Frontend project detection — remind about design-system
+FRONTEND_HINT=$(node -e "
+  const fs = require('fs');
+  const path = require('path');
+  const cwd = process.argv[1] || '';
+  const pkgPath = path.join(cwd, 'package.json');
+  try {
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+    const deps = { ...pkg.dependencies, ...pkg.devDependencies };
+    const stack = [];
+    if (deps['astro']) stack.push('Astro');
+    if (deps['@sveltejs/kit']) stack.push('SvelteKit');
+    if (deps['next']) stack.push('Next.js');
+    if (deps['tailwindcss']) stack.push('Tailwind');
+    if (stack.length > 0) {
+      // Check if design-system/MASTER.md exists
+      const masterPath = path.join(cwd, 'design-system', 'MASTER.md');
+      const hasMaster = fs.existsSync(masterPath);
+      let hint = 'DESIGN: ' + stack.join('+') + ' project detected.';
+      hint += ' /design-system available (48 styles, 75 palettes, 34 fonts, 70 UX rules).';
+      if (hasMaster) {
+        hint += ' MASTER.md found — project design tokens active.';
+      } else {
+        hint += ' No MASTER.md — consider /design-system for initial design setup.';
+      }
+      console.log(hint);
+    }
+  } catch(e) {}
+" "$CWD" 2>/dev/null) || true
+if [ -n "$FRONTEND_HINT" ]; then
+  CONTEXT+="$FRONTEND_HINT\n"
+fi
+
 # Reset token tracking file (new session)
 SESSION_ID="${CLAUDE_SESSION_ID:-$$}"
 TRACK_FILE="${TEMP:-/tmp}/claude-token-track-${SESSION_ID}"
