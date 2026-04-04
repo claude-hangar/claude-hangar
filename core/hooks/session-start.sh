@@ -107,9 +107,12 @@ if [ -f "$TRACK_FILE" ]; then
   rm -f "$TRACK_FILE"
 fi
 
-# Return context (additionalContext for the model)
+# Return context as JSON (consistent with other hooks)
 if [ -n "$CONTEXT" ]; then
-  echo -e "$CONTEXT"
+  node -e "
+    const ctx = process.argv[1].replace(/\\\\n/g, '\n').trim();
+    if (ctx) console.log(JSON.stringify({ additionalContext: ctx }));
+  " "$CONTEXT" 2>/dev/null || true
 fi
 
 exit 0

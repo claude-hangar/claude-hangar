@@ -10,6 +10,7 @@
 #   bash setup.sh --verify     # Verify existing installation
 #   bash setup.sh --rollback   # Restore from backup
 #   bash setup.sh --update     # git pull + sync
+#   bash setup.sh --uninstall  # Remove Hangar-managed files (keeps user data)
 # ─────────────────────────────────────────────────────────────────────────
 
 set -euo pipefail
@@ -200,8 +201,15 @@ deploy_all() {
     info "settings.json exists — skipping (manual merge recommended)"
   fi
 
+  # Write version info
+  local version_hash
+  version_hash=$(git -C "$SCRIPT_DIR" rev-parse --short HEAD 2>/dev/null || echo "unknown")
+  local version_date
+  version_date=$(date '+%Y-%m-%d')
+  echo "{\"hash\":\"$version_hash\",\"date\":\"$version_date\",\"source\":\"$SCRIPT_DIR\"}" > "$CLAUDE_DIR/.hangar-version"
+
   echo ""
-  success "Deployment complete!"
+  success "Deployment complete! (version: $version_hash)"
   info "Open Claude Code in any project to start using your new setup."
 }
 
@@ -228,12 +236,23 @@ main() {
         exit 1
       fi
       local verified=0 total=0
+      # Check version info
+      if [ -f "$CLAUDE_DIR/.hangar-version" ]; then
+        local ver
+        ver=$(node -e "const d=JSON.parse(require('fs').readFileSync('$CLAUDE_DIR/.hangar-version','utf8'));console.log(d.hash+' ('+d.date+')')" 2>/dev/null || echo "unknown")
+        info "Installed version: $ver"
+      else
+        warn "No version info found (.hangar-version missing)"
+      fi
       for item in hooks/secret-leak-check.sh hooks/bash-guard.sh hooks/checkpoint.sh \
                   hooks/token-warning.sh hooks/session-start.sh hooks/session-stop.sh \
                   hooks/post-compact.sh hooks/config-change-guard.sh hooks/skill-suggest.sh \
                   hooks/model-router.sh hooks/task-completed-gate.sh hooks/subagent-tracker.sh \
-                  hooks/stop-failure.sh agents/explorer.md agents/explorer-deep.md \
+                  hooks/stop-failure.sh hooks/permission-denied-retry.sh \
+                  hooks/task-created-init.sh hooks/worktree-init.sh \
+                  agents/explorer.md agents/explorer-deep.md \
                   agents/security-reviewer.md agents/commit-reviewer.md agents/dependency-checker.md \
+                  agents/plan-reviewer.md agents/refactor-agent.md agents/test-writer.md \
                   statusline-command.sh lib/common.sh settings.json; do
         total=$((total + 1))
         if [ -f "$CLAUDE_DIR/$item" ]; then
@@ -326,6 +345,37 @@ main() {
       deploy_all
       ;;
 
+    --uninstall)
+      info "Uninstalling Claude Hangar..."
+      if [ ! -d "$CLAUDE_DIR" ]; then
+        error "\$HOME/.claude/ not found — nothing to uninstall"
+        exit 1
+      fi
+      warn "This will remove Hangar-managed hooks, agents, skills, and lib."
+      warn "User data (settings.json, CLAUDE.md, projects/, memory/) is preserved."
+      echo ""
+      read -rp "Continue? [y/N] " confirm
+      if [[ ! "$confirm" =~ ^[yY]$ ]]; then
+        info "Cancelled."
+        exit 0
+      fi
+      # Remove Hangar-managed directories
+      rm -rf "$CLAUDE_DIR/hooks" "$CLAUDE_DIR/agents" "$CLAUDE_DIR/lib"
+      rm -f "$CLAUDE_DIR/statusline-command.sh"
+      rm -f "$CLAUDE_DIR/.hangar-version"
+      # Remove Hangar-deployed skills (keep user-created ones)
+      if [ -d "$CLAUDE_DIR/skills" ]; then
+        for skill_dir in "$CLAUDE_DIR/skills"/*/; do
+          [ -d "$skill_dir" ] || continue
+          if [ -f "$skill_dir/SKILL.md" ]; then
+            rm -rf "$skill_dir"
+          fi
+        done
+      fi
+      success "Claude Hangar uninstalled. User data preserved."
+      info "To fully remove: rm -rf ~/.claude/"
+      ;;
+
     --help|-h)
       echo "Usage: bash setup.sh [MODE]"
       echo ""
@@ -336,6 +386,7 @@ main() {
       echo "  --sync       Remove orphaned files + redeploy"
       echo "  --rollback   Restore from backup"
       echo "  --update     git pull + redeploy"
+      echo "  --uninstall  Remove Hangar files (preserves user data)"
       echo "  --help       Show this help"
       ;;
 

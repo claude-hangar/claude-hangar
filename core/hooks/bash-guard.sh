@@ -96,6 +96,18 @@ if echo "$COMMAND" | grep -qE ':\(\)\s*\{.*\|'; then
   BLOCKED+="Fork bomb detected\n"
 fi
 
+# --- 4b. Windows-specific destructive commands ---
+
+# del /s /q (recursive delete on Windows)
+if echo "$COMMAND" | grep -qiE '\bdel\s+/[a-zA-Z]*s[a-zA-Z]*/[a-zA-Z]*q'; then
+  BLOCKED+="del /s /q (Windows recursive delete)\n"
+fi
+
+# rd /s /q (remove directory on Windows)
+if echo "$COMMAND" | grep -qiE '\brd\s+/[a-zA-Z]*s[a-zA-Z]*/[a-zA-Z]*q'; then
+  BLOCKED+="rd /s /q (Windows recursive directory removal)\n"
+fi
+
 # --- 5. Git protection ---
 
 # git push --force / -f

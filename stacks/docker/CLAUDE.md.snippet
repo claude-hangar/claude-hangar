@@ -1,0 +1,45 @@
+## Docker & Traefik
+
+### Stack
+
+- **Containerization:** Docker with Docker Compose V2
+- **Reverse Proxy:** Traefik v3 with automatic Let's Encrypt
+- **Registry:** GHCR (GitHub Container Registry) or self-hosted
+
+### Dockerfile Standards
+
+- Multi-stage builds: `deps` → `build` → `runner`
+- Minimal base image: `node:22-alpine` (or `python:3.12-slim`)
+- Non-root user: `USER appuser` (never run as root)
+- Health checks: `HEALTHCHECK CMD curl -f http://localhost:3000/health || exit 1`
+- `.dockerignore` present (exclude `.git`, `node_modules`, `.env`)
+- No secrets in Dockerfile (`ARG`, `ENV`, or `COPY .env` → use runtime injection)
+
+### Docker Compose
+
+- `docker-compose.yml` (V2 format, not V1)
+- Environment variables via `.env` file or Docker secrets
+- Volumes for persistent data (DB, uploads)
+- Networks: Separate frontend/backend networks
+- Restart policy: `restart: unless-stopped`
+- Resource limits: `deploy.resources.limits` for memory/CPU
+
+### Traefik Labels
+
+```yaml
+labels:
+  - "traefik.enable=true"
+  - "traefik.http.routers.app.rule=Host(`example.com`)"
+  - "traefik.http.routers.app.tls.certresolver=letsencrypt"
+  - "traefik.http.services.app.loadbalancer.server.port=3000"
+```
+
+### Commands
+
+```bash
+docker compose up -d       # Start all services
+docker compose pull        # Pull latest images
+docker compose logs -f     # Follow logs
+docker compose down        # Stop all services
+docker system prune -f     # Clean unused images/containers
+```

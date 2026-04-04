@@ -218,6 +218,42 @@ test \
   '{"tool_input":{"command":"npm install express"}}'
 
 test \
+  "should block git push --force" \
+  2 \
+  "bash-guard.sh" \
+  '{"tool_input":{"command":"git push --force origin main"}}'
+
+test \
+  "should block --no-verify" \
+  2 \
+  "bash-guard.sh" \
+  '{"tool_input":{"command":"git commit -m \"fix\" --no-verify"}}'
+
+test \
+  "should block npm publish without --dry-run" \
+  2 \
+  "bash-guard.sh" \
+  '{"tool_input":{"command":"npm publish"}}'
+
+test \
+  "should allow npm publish --dry-run" \
+  0 \
+  "bash-guard.sh" \
+  '{"tool_input":{"command":"npm publish --dry-run"}}'
+
+test \
+  "should block Windows del /s /q" \
+  2 \
+  "bash-guard.sh" \
+  '{"tool_input":{"command":"del /s /q C:\\Users"}}'
+
+test \
+  "should block Windows rd /s /q" \
+  2 \
+  "bash-guard.sh" \
+  '{"tool_input":{"command":"rd /s /q C:\\projects"}}'
+
+test \
   "should block non-conventional commit message" \
   2 \
   "bash-guard.sh" \
@@ -327,6 +363,12 @@ test \
   "token-warning.sh" \
   '{"tool_name":"Read","tool_input":{}}'
 
+test \
+  "should exit 0 with used_percentage input" \
+  0 \
+  "token-warning.sh" \
+  '{"tool_name":"Read","tool_input":{},"used_percentage":45}'
+
 # ============================================================
 # 5. session-start.sh
 # ============================================================
@@ -390,6 +432,12 @@ test \
   0 \
   "skill-suggest.sh" \
   '{"user_prompt":"/commit"}'
+
+test \
+  "should exit 0 on generic prompt" \
+  0 \
+  "skill-suggest.sh" \
+  '{"user_prompt":"fix the bug in the login page"}'
 
 # ============================================================
 # 9. stop-failure.sh

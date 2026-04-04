@@ -76,29 +76,15 @@ if (usedPct !== null && typeof usedPct === 'number') {
     data.warned70 = true;
   }
 } else {
-  // Fallback: Own heuristic (byte-based + call-based)
-  // ~1M token context window (Opus 4.6 / Sonnet 4.6)
-  // ~4 chars per token, plus system prompt (~40k tokens)
-  // Available: ~960k tokens = ~3,840k chars
-  const AVAILABLE_CHARS = 3840000;
-  const pct = Math.round((data.bytes / AVAILABLE_CHARS) * 100);
-
-  if (pct >= 80 && !data.warned80) {
-    warning = 'CONTEXT WARNING: ~' + pct + '% context utilization (heuristic, ' + data.calls + ' calls). Running /compact now is recommended.';
+  // No used_percentage available — use conservative call-count-only heuristic
+  // Byte-based estimation removed (too fragile with 1M context windows)
+  // Tool call count is a weak signal but better than false precision
+  if (data.calls >= 400 && !data.warned80) {
+    warning = 'CONTEXT NOTICE: ' + data.calls + ' tool calls in this session. Consider running /compact if context feels slow.';
     data.warned80 = true;
     data.warned70 = true;
-  } else if (pct >= 70 && !data.warned70) {
-    warning = 'CONTEXT NOTICE: ~' + pct + '% context utilization (heuristic, ' + data.calls + ' calls). Will need /compact soon.';
-    data.warned70 = true;
-  }
-
-  // Alternative: Tool call based warning (fallback for 1M context)
-  if (!warning && data.calls >= 400 && !data.warned80) {
-    warning = 'CONTEXT WARNING: ' + data.calls + ' tool calls in this session. Running /compact now is recommended.';
-    data.warned80 = true;
-    data.warned70 = true;
-  } else if (!warning && data.calls >= 300 && !data.warned70) {
-    warning = 'CONTEXT NOTICE: ' + data.calls + ' tool calls in this session. Will need /compact soon.';
+  } else if (data.calls >= 300 && !data.warned70) {
+    warning = 'CONTEXT NOTICE: ' + data.calls + ' tool calls in this session. Monitor context utilization.';
     data.warned70 = true;
   }
 }

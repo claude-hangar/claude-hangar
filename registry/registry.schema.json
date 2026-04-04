@@ -68,6 +68,33 @@
             },
             "default": []
           },
+          "servers": {
+            "type": "array",
+            "description": "Servers that host this project (for deployment and audit context).",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Server identifier (e.g., 'vps-1', 'production')."
+                },
+                "host": {
+                  "type": "string",
+                  "description": "SSH host or IP address."
+                },
+                "user": {
+                  "type": "string",
+                  "description": "SSH username."
+                },
+                "deployPath": {
+                  "type": "string",
+                  "description": "Deployment path on the server."
+                }
+              },
+              "required": ["name", "host"]
+            },
+            "default": []
+          },
           "description": {
             "type": "string",
             "description": "Short description of the project."
