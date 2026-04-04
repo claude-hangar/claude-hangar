@@ -360,7 +360,7 @@ main() {
         exit 0
       fi
       # Remove Hangar-managed directories
-      rm -rf "$CLAUDE_DIR/hooks" "$CLAUDE_DIR/agents" "$CLAUDE_DIR/lib"
+      rm -rf "${CLAUDE_DIR:?}/hooks" "${CLAUDE_DIR:?}/agents" "${CLAUDE_DIR:?}/lib"
       rm -f "$CLAUDE_DIR/statusline-command.sh"
       rm -f "$CLAUDE_DIR/.hangar-version"
       # Remove Hangar-deployed skills (keep user-created ones)
