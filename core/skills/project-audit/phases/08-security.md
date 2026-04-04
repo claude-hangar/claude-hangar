@@ -24,7 +24,7 @@ Finding-Prefix: `SEC`
 - [ ] Dokumentiert: Welche Secrets braucht das Projekt? Wo bekommt man sie?
 - [ ] Vault/Secrets-Manager: Genutzt fuer sensitive Config?
 
-### 3. Supply-Chain Security
+### 3. Supply-Chain Security (OWASP 2026: A03 Software Supply Chain Failures)
 
 - [ ] Lock-File committet? Integritaets-Hashes?
 - [ ] Dependabot / Renovate konfiguriert?
@@ -32,6 +32,8 @@ Finding-Prefix: `SEC`
 - [ ] Typosquatting: Paket-Namen korrekt geschrieben?
 - [ ] Registry-Scoping: Interne Pakete aus privatem Registry?
 - [ ] SBOM generierbar?
+- [ ] Build-Pipeline-Integritaet: CI/CD gegen Supply-Chain-Angriffe geschuetzt?
+- [ ] Distribution: Package-Publishing-Prozess abgesichert? (2FA, Publish-from-CI-only)
 
 ### 4. Container-Security (falls Docker vorhanden)
 

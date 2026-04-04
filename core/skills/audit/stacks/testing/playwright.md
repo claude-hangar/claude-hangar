@@ -103,9 +103,35 @@ const context = await browser.newContext({
 - [ ] Keine `page.waitForTimeout()`! → `page.waitForSelector()` oder `expect().toBeVisible()`
 - [ ] Screenshots: Werden bei Fehlern automatisch gespeichert? (`screenshot: 'only-on-failure'`)
 
+## §Agentic (Playwright 1.59+)
+
+- [ ] **Screencast API** genutzt fuer visuelle Test-Dokumentation?
+  - `page.screencast.start()` / `.stop()` fuer Video-Recording
+  - `page.screencast.showActions()` fuer Action-Annotations im Video
+  - `page.screencast.showChapter()` fuer Kapitel-Titel und Kontext
+  - Ideal fuer Audit-Dokumentation: Video-Receipts der geprueften Seiten
+- [ ] **browser.bind()** fuer MCP/Agent-Interoperabilitaet?
+  - Browser an Named Session binden: `await browser.bind('session-name')`
+  - Andere Clients koennen sich verbinden: `playwright-cli attach`, `@playwright/mcp`
+  - `playwright-cli show` Dashboard fuer Session-Uebersicht
+- [ ] **CLI Debugging fuer Agents** evaluiert?
+  - `npx playwright test --debug=cli` — Agents koennen Tests debuggen
+  - `npx playwright trace` — Trace-Analyse ueber CLI (kein UI noetig)
+- [ ] **`await using`** fuer automatisches Cleanup?
+  - Pages, Routes, Scripts als async disposables
+  - Automatische Bereinigung am Block-Ende
+- [ ] **Snapshot-Verbesserungen** genutzt?
+  - `page.ariaSnapshot()` — ARIA-Snapshot der ganzen Seite
+  - `locator.normalize()` — Konvertiert Locator zu Best Practices (Test-IDs, ARIA Roles)
+  - `page.pickLocator()` — Interaktiver Locator-Picker
+- [ ] **Breaking Check:** `@playwright/experimental-ct-svelte` entfernt (1.59.0)
+  - Falls genutzt: Migration noetig
+- [ ] Browser-Versionen aktuell? Chromium 147, Firefox 148, WebKit 26.4
+
 ## §Infrastruktur
 
 - [ ] CI-Integration: Playwright Tests in GitHub Actions/CI Pipeline?
 - [ ] Docker: Playwright-Container fuer konsistente Test-Umgebung?
 - [ ] Fixtures: Test-Daten isoliert? Keine Abhaengigkeit von Prod-Daten?
 - [ ] Parallelisierung: Tests laufen parallel? (`workers` konfiguriert?)
+- [ ] Neue Trace-Modes evaluiert? `retain-on-failure-and-retries` fuer Flaky-Test-Debugging

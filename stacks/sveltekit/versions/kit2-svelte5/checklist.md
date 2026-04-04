@@ -267,4 +267,29 @@ Finding prefix: `SKT-NN` (SvelteKit), `BP-NN` (Best Practice)
 
 ---
 
-As of: 2026-03-13 (updated for SvelteKit 2.55.0 — Type narrowing for route params with matchers, Vite 8.0 peer dependency support)
+## BREAK — SvelteKit 2.56.0 Breaking Changes (5 Checks, Top: HIGH)
+
+- [ ] **BREAK-01** [HIGH] [MUST] Client-driven refreshes reworked
+  - Server now controls refreshes via `requested(queryFn, maxLimit)` — only validated args executed
+  - Old: `.updates(query1(), query2())` — security risk (DoS vector)
+  - New: Import `requested()`, explicitly authorize queries
+  - `query.refresh()` no longer requests data when no cache entry exists
+  - Command-triggered query refresh failures now isolated per-query
+- [ ] **BREAK-02** [HIGH] [MUST] Remote function caching stabilized
+  - Object keys now sorted before cache key generation
+  - **Maps, Sets, Custom Objects als RF-Parameter nicht mehr erlaubt** — vorher serialisieren (`Object.fromEntries()`)
+  - Gleiche Key-Value-Paare = gleicher Cache-Key, unabhängig von Reihenfolge
+- [ ] **BREAK-03** [HIGH] [MUST] Queries require `run()` method
+  - Query-Daten nur in reaktivem Kontext (top-level Script, `$derived`, `$effect`)
+  - Für Event-Handler/Load-Functions: `await query().run()` statt `await query()`
+  - Queries now managed in their own `$effect.root`
+- [ ] **BREAK-04** [MEDIUM] [SHOULD] TypeScript 6.0 support utilized
+  - SvelteKit 2.56.0 adds official TypeScript 6.0 support
+  - Check `tsconfig.json` for TS 6.0 features
+- [ ] **BREAK-05** [LOW] [CAN] New `form` field default values
+  - `field.as(type, value)` for specifying default values
+  - Useful for form remote functions with sensible defaults
+
+---
+
+As of: 2026-04-04 (updated for SvelteKit 2.56.1 — 5 breaking changes in 2.56.0: reworked client-driven refreshes, stabilized remote function caching, run() method on queries, TypeScript 6.0 support, isolated command-triggered refresh failures)

@@ -1,7 +1,12 @@
 # Phase 02: Security
 
-Sicherheitspruefung nach OWASP Top 10 und Web-Security Best Practices.
+Sicherheitspruefung nach OWASP Top 10:2025 (8. Edition) und Web-Security Best Practices.
 Finding-Prefix: `SEC`
+
+> **OWASP Top 10:2025 (8. Edition)** — 2 neue Kategorien: A03 Software Supply Chain Failures
+> (erweitert aus "Vulnerable and Outdated Components") und A10 Mishandling of Exceptional Conditions.
+> 589 CWEs in 248 Kategorien analysiert (175.000 CVE Records).
+> A01 Broken Access Control bleibt #1, Security Misconfiguration stieg auf #2.
 
 ---
 
@@ -41,12 +46,14 @@ Finding-Prefix: `SEC`
 - [ ] Staging vs. Prod: Unterschiedliche Credentials?
 - [ ] Docker: Keine Secrets in Image-Layers? Multi-Stage Build?
 
-### 5. Dependencies & Supply Chain
+### 5. Dependencies & Supply Chain (OWASP 2026: A03 Software Supply Chain Failures)
 
 - [ ] `npm audit`: CRITICAL/HIGH Vulnerabilities?
 - [ ] Dependabot / Renovate konfiguriert?
 - [ ] Lock-File committet? (Supply-Chain-Angriffe verhindern)
 - [ ] Unbekannte oder kaum gewartete Dependencies?
+- [ ] Build-System-Integritaet: CI/CD Pipeline gegen Manipulation geschuetzt?
+- [ ] Distribution-Integritaet: Package-Publishing-Prozess abgesichert?
 
 ### 5b. AI Agent Security (wenn AI-Agenten eingesetzt)
 
@@ -86,4 +93,4 @@ AI-Agent ohne Berechtigungsgrenzen: HIGH. Agent-Datenexfiltration: CRITICAL.
 
 ---
 
-As of: 2026-03-27 (added OWASP Top 10 for Agentic Applications 2026 section)
+As of: 2026-04-04 (updated for OWASP Top 10:2025 8th edition — new A03 Software Supply Chain Failures, A10 Mishandling of Exceptional Conditions; A01 BAC #1, SecMisconfig #2)

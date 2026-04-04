@@ -1,6 +1,52 @@
 # Claude Code CLI – Vollstaendige Referenz
 
-## Stand: v2.1.87 (29. Maerz 2026)
+## Stand: v2.1.92 (4. April 2026)
+
+### Aenderungen v2.1.92
+
+- `forceRemoteSettingsRefresh` Policy-Setting: CLI blockiert Start bis Remote-Settings geladen, Exit bei Fehler (fail-closed)
+- Interaktiver Bedrock Setup-Wizard im Login-Screen (AWS Auth, Region, Credentials, Model-Pinning)
+- `/cost` zeigt jetzt per-Modell und Cache-Hit Aufschluesselung (Subscription-User)
+- `/release-notes` ist jetzt ein interaktiver Version-Picker
+- Remote Control Session-Namen nutzen Hostname als Default-Prefix (z.B. `myhost-graceful-unicorn`)
+- Pro-User sehen Footer-Hint bei Prompt-Cache-Expiry nach Session-Rueckkehr
+- Write-Tool Diff-Berechnung **60% schneller** bei grossen Dateien
+- **Entfernt:** `/tag` und `/vim` Commands (Vim-Mode jetzt via `/config` → Editor Mode)
+- Linux Sandbox: `apply-seccomp` Helper in npm und native Builds (Unix-Socket-Blocking)
+
+### Aenderungen v2.1.91
+
+- MCP Tool Result Persistence Override via `_meta["anthropic/maxResultSizeChars"]` (bis 500K) — grosse Ergebnisse wie DB-Schemas passieren ohne Truncation
+- `disableSkillShellExecution` Setting: Deaktiviert Shell-Ausfuehrung in Skills, Slash-Commands und Plugin-Commands
+- Multi-Line-Prompts in `claude-cli://open?q=` Deep Links (encoded Newlines `%0A`)
+- Plugins koennen Executables unter `bin/` shippen und als bare Commands aus dem Bash-Tool aufrufen
+- Fix: Transcript Chain Breaks bei `--resume` (async Write Failures)
+- Fix: `cmd+delete` funktioniert jetzt in iTerm2, kitty, WezTerm, Ghostty, Windows Terminal
+
+### Aenderungen v2.1.90
+
+- `/powerup` — interaktive Lessons mit animierten Demos fuer Claude Code Features
+- `CLAUDE_CODE_PLUGIN_KEEP_MARKETPLACE_ON_FAILURE` Env-Var fuer Offline-Umgebungen
+- `.husky` zu Protected Directories (acceptEdits Mode)
+- Auto Mode respektiert jetzt explizite User-Grenzen ("don't push", "wait for X before Y")
+- SSE-Transport verarbeitet grosse Frames in **linearer Zeit** (war quadratisch)
+- PowerShell: Security-Hardening (Background-Job-Bypass, Debugger-Hang, TOCTOU-Fixes)
+- Fix: Infinite Loop bei Rate-Limit-Options-Dialog
+- Fix: `--resume` Full Prompt-Cache-Miss bei deferred Tools/MCP/Custom Agents (Regression seit v2.1.69)
+- Fix: `Edit`/`Write` "File content has changed" bei PostToolUse Format-on-Save Hooks
+
+### Aenderungen v2.1.89
+
+- **`"defer"` Permission Decision in PreToolUse Hooks** — Headless Sessions pausieren bei Tool-Call, Resume mit `-p --resume`
+- `CLAUDE_CODE_NO_FLICKER=1` Env-Var fuer Flicker-Free Alt-Screen Rendering
+- **`PermissionDenied` Hook** — feuert nach Auto-Mode Classifier Denials, `{retry: true}` fuer Retry
+- Named Subagents in `@` Mention Typeahead
+- `MCP_CONNECTION_NONBLOCKING=true` fuer `-p` Mode (Skip MCP Connection Wait), 5s Bound statt unbounded
+- `showThinkingSummaries: true` Setting — Thinking-Summaries nicht mehr standardmaessig in interaktiven Sessions
+- Hook-Output ueber 50K Zeichen wird auf Disk gespeichert (Datei-Pfad + Preview statt direkte Context-Injection)
+- Edit-Tool funktioniert auf Dateien die via `Bash` mit `sed -n`/`cat` angesehen wurden (kein separater Read noetig)
+- Auto Mode: Denied Commands zeigen Notification, erscheinen in `/permissions` → Recent Tab
+- Fix: StructuredOutput Schema-Cache Bug (~50% Failure-Rate bei mehreren Schemas)
 
 ### Aenderungen v2.1.87
 
@@ -342,6 +388,7 @@ Automatische Aktionen die an bestimmten Punkten im Agentic Loop ausgeführt werd
 | TaskCreated | Task wird erstellt (TaskCreate) | Logging, Validierung, Task-Policies |
 | TaskCompleted | Task abgeschlossen | Naechsten Schritt triggern, Quality Gates |
 | WorktreeCreate | Worktree erstellt | Pfad-Kontrolle, Setup (auch HTTP-Hook) |
+| PermissionDenied | Auto-Mode Classifier lehnt ab | `{retry: true}` fuer Retry, Logging (v2.1.89+) |
 | TeammateIdle | Teammate wartet (Agent Teams) | Task-Zuweisung |
 
 ## 5.2 Hook-Typen
@@ -379,6 +426,11 @@ Automatische Aktionen die an bestimmten Punkten im Agentic Loop ausgeführt werd
 - **`if` (2.1.85+):** Bedingungsfeld mit Permission-Rule-Syntax (z.B. `Bash(git *)`) — Hook wird nur ausgefuehrt wenn der Tool-Call dem Pattern entspricht. Reduziert Prozess-Overhead erheblich
 - `PreToolUse`-Hooks koennen `additionalContext` im stdout zurueckgeben → wird an das Modell weitergereicht
 - **PreToolUse + AskUserQuestion (2.1.85+):** Hooks koennen `AskUserQuestion` beantworten indem sie `updatedInput` zusammen mit `permissionDecision: "allow"` zurueckgeben — ermoeglicht Headless-Integrationen mit eigener UI
+- **PreToolUse + `"defer"` Decision (2.1.89+):** Headless Sessions koennen bei einem Tool-Call pausieren, spaeter mit `-p --resume` fortsetzen und den Hook erneut evaluieren lassen
+- **PermissionDenied Hook (2.1.89+):** Feuert nach Auto-Mode Classifier Denials — `{retry: true}` im Output laesst das Modell den Versuch wiederholen
+- **MCP Result Persistence Override (2.1.91+):** `_meta["anthropic/maxResultSizeChars"]` in MCP-Responses (bis 500K) — grosse Ergebnisse wie DB-Schemas werden nicht truncated
+- **Plugin Binaries (2.1.91+):** Plugins koennen unter `bin/` Executables shippen — ausfuehrbar als bare Commands im Bash-Tool
+- **`disableSkillShellExecution` (2.1.91+):** Deaktiviert Shell-Ausfuehrung in Skills, Slash-Commands, Plugin-Commands
 
 ## 5.4 Hook-Input (KRITISCH)
 

@@ -146,4 +146,4 @@ This checklist is for projects already successfully running on 6.x.
 
 ---
 
-As of: 2026-03-30 (updated for Astro 6.1.2, Vite 8.0.3, Zod 4.3.6 — 6.1.2 fixes: preview allowedHosts, catch-all static asset routing, Zod v4 error formatting)
+As of: 2026-04-04 (updated for Astro 6.1.3, Vite 8.0.3, Zod 4.3.6 — 6.1.3 fixes: Cloudflare adapter dev rendering, skew protection query params for rolling deployments, HMR with Cloudflare prerenderEnvironment, MDX AstroContainer HTML escaping, cross-page CSS leak, SSR "No matching renderer" without src/pages/)
