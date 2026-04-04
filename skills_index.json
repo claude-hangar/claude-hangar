@@ -1,13 +1,13 @@
 {
   "version": "1.0",
   "generated": "2026-04-04",
-  "skillCount": 21,
+  "skillCount": 22,
   "categories": {
     "design": ["design-system", "polish"],
     "quality": ["adversarial-review", "inline-review"],
     "audit": ["audit", "audit-orchestrator", "audit-runner", "project-audit"],
     "performance": ["lighthouse-quick"],
-    "security": ["deploy-check"],
+    "security": ["deploy-check", "security-scan"],
     "workflow": ["capture-pdf", "codebase-map", "consult", "handoff", "lesson-learned", "scan"],
     "documentation": ["doctor", "error-analyzer", "meta-tags", "favicon-check"],
     "git": ["git-hygiene"],
@@ -189,6 +189,14 @@
       "risk": "safe",
       "description": "Scans a project to detect tech stack, architecture, and quality indicators. Can auto-generate CLAUDE.md.",
       "triggers": ["scan", "detect stack", "tech stack", "generate claude.md"]
+    },
+    {
+      "id": "security-scan",
+      "path": "core/skills/security-scan",
+      "category": "security",
+      "risk": "safe",
+      "description": "Security scan for Claude Code projects (secrets, MCP permissions, hook safety, dependencies).",
+      "triggers": ["security scan", "check security", "is this secure", "scan for secrets", "security audit"]
     }
   ]
 }

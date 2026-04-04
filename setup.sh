@@ -11,6 +11,9 @@
 #   bash setup.sh --rollback   # Restore from backup
 #   bash setup.sh --update     # git pull + sync
 #   bash setup.sh --uninstall  # Remove Hangar-managed files (keeps user data)
+#   bash setup.sh --skills design,security   # Install only specific skill categories
+#   bash setup.sh --minimal                  # Core only (hooks, agents, lib) — no skills
+#   bash setup.sh --list-categories          # List available skill categories
 # ─────────────────────────────────────────────────────────────────────────
 
 set -euo pipefail
@@ -155,6 +158,95 @@ deploy_mcp() {
   fi
 }
 
+# ─── Skill Filtering ──────────────────────────────────────────────────
+
+# List available skill categories from skills_index.json
+list_categories() {
+  local index_file="$SCRIPT_DIR/skills_index.json"
+  if [ ! -f "$index_file" ]; then
+    error "skills_index.json not found"
+    return 1
+  fi
+
+  # Convert path for Node.js on Windows
+  local node_file="$index_file"
+  if [ "$OS" = "windows" ] && command -v cygpath &>/dev/null; then
+    node_file="$(cygpath -m "$index_file")"
+  fi
+
+  echo ""
+  echo "Available skill categories:"
+  echo ""
+  node -e "
+    const idx = JSON.parse(require('fs').readFileSync('$node_file', 'utf8'));
+    const cats = idx.categories;
+    const maxLen = Math.max(...Object.keys(cats).map(k => k.length));
+    for (const [cat, skills] of Object.entries(cats)) {
+      const pad = ' '.repeat(maxLen - cat.length);
+      console.log('  ' + cat + pad + ' (' + skills.length + '):  ' + skills.join(', '));
+    }
+  "
+  echo ""
+}
+
+# Get skill IDs for given categories from skills_index.json
+# Outputs one skill ID per line
+get_skills_for_categories() {
+  local categories="$1"
+  local index_file="$SCRIPT_DIR/skills_index.json"
+
+  # Convert path for Node.js on Windows
+  local node_file="$index_file"
+  if [ "$OS" = "windows" ] && command -v cygpath &>/dev/null; then
+    node_file="$(cygpath -m "$index_file")"
+  fi
+
+  node -e "
+    const idx = JSON.parse(require('fs').readFileSync('$node_file', 'utf8'));
+    const requested = '$categories'.split(',').map(c => c.trim());
+    const invalid = requested.filter(c => !idx.categories[c]);
+    if (invalid.length > 0) {
+      process.stderr.write('Unknown categories: ' + invalid.join(', ') + '\\n');
+      process.stderr.write('Available: ' + Object.keys(idx.categories).join(', ') + '\\n');
+      process.exit(1);
+    }
+    const skills = new Set();
+    for (const cat of requested) {
+      for (const s of idx.categories[cat]) skills.add(s);
+    }
+    for (const s of skills) console.log(s);
+  "
+}
+
+# Deploy only selected skill directories (plus _shared)
+deploy_filtered_skills() {
+  local categories="$1"
+
+  # Get matching skill IDs
+  local skill_ids
+  skill_ids=$(get_skills_for_categories "$categories") || return 1
+
+  # Always deploy _shared
+  if [ -d "$SCRIPT_DIR/core/skills/_shared" ]; then
+    deploy_component "$SCRIPT_DIR/core/skills/_shared" "$CLAUDE_DIR/skills/_shared" "Skills: _shared (shared resources)"
+  fi
+
+  # Deploy each matching skill
+  local count=0
+  while IFS= read -r skill_id; do
+    [ -z "$skill_id" ] && continue
+    local skill_dir="$SCRIPT_DIR/core/skills/$skill_id"
+    if [ -d "$skill_dir" ]; then
+      deploy_component "$skill_dir" "$CLAUDE_DIR/skills/$skill_id" "Skill: $skill_id"
+      count=$((count + 1))
+    else
+      warn "Skill directory not found: core/skills/$skill_id"
+    fi
+  done <<< "$skill_ids"
+
+  success "Deployed $count skill(s) from categories: $categories"
+}
+
 deploy_all() {
   info "Deploying to $CLAUDE_DIR..."
 
@@ -174,7 +266,16 @@ deploy_all() {
   mkdir -p "$CLAUDE_DIR"
   deploy_component "$SCRIPT_DIR/core/hooks" "$CLAUDE_DIR/hooks" "Hooks ($(find "$SCRIPT_DIR/core/hooks" -name '*.sh' | wc -l) scripts)"
   deploy_component "$SCRIPT_DIR/core/agents" "$CLAUDE_DIR/agents" "Agents ($(find "$SCRIPT_DIR/core/agents" -name '*.md' | wc -l) definitions)"
-  deploy_component "$SCRIPT_DIR/core/skills" "$CLAUDE_DIR/skills" "Skills"
+
+  # Skills deployment: full, filtered, or skipped
+  if [ "${SKILL_MODE:-all}" = "none" ]; then
+    info "Skipping skills deployment (--minimal)"
+  elif [ "${SKILL_MODE:-all}" = "filtered" ]; then
+    deploy_filtered_skills "$SKILL_CATEGORIES"
+  else
+    deploy_component "$SCRIPT_DIR/core/skills" "$CLAUDE_DIR/skills" "Skills"
+  fi
+
   deploy_component "$SCRIPT_DIR/core/lib" "$CLAUDE_DIR/lib" "Shared lib"
   deploy_component "$SCRIPT_DIR/core/statusline-command.sh" "$CLAUDE_DIR/statusline-command.sh" "Statusline"
 
@@ -215,13 +316,62 @@ deploy_all() {
 
 # ─── Main ──────────────────────────────────────────────────────────────
 
+# Skill deployment mode: "all" (default), "filtered", or "none"
+SKILL_MODE="all"
+SKILL_CATEGORIES=""
+
 main() {
   echo ""
   echo "  Claude Hangar — Setup"
   echo "  ─────────────────────"
   echo ""
 
-  case "${1:-}" in
+  # Parse flags that can combine with modes
+  local mode=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --skills)
+        if [ -z "${2:-}" ]; then
+          error "--skills requires a comma-separated list of categories"
+          error "Use --list-categories to see available categories"
+          exit 1
+        fi
+        SKILL_MODE="filtered"
+        SKILL_CATEGORIES="$2"
+        shift 2
+        ;;
+      --skills=*)
+        SKILL_MODE="filtered"
+        SKILL_CATEGORIES="${1#--skills=}"
+        if [ -z "$SKILL_CATEGORIES" ]; then
+          error "--skills requires a comma-separated list of categories"
+          error "Use --list-categories to see available categories"
+          exit 1
+        fi
+        shift
+        ;;
+      --minimal)
+        SKILL_MODE="none"
+        shift
+        ;;
+      --list-categories)
+        mode="list-categories"
+        shift
+        ;;
+      *)
+        if [ -z "$mode" ]; then
+          mode="$1"
+        fi
+        shift
+        ;;
+    esac
+  done
+
+  case "${mode:-}" in
+    list-categories)
+      list_categories
+      ;;
+
     --check)
       info "Running dry-run validation..."
       check_prerequisites || exit 1
@@ -377,17 +527,28 @@ main() {
       ;;
 
     --help|-h)
-      echo "Usage: bash setup.sh [MODE]"
+      echo "Usage: bash setup.sh [MODE] [OPTIONS]"
       echo ""
       echo "Modes:"
-      echo "  (no args)    Interactive wizard (first run) or sync"
-      echo "  --check      Dry-run validation"
-      echo "  --verify     Verify existing installation"
-      echo "  --sync       Remove orphaned files + redeploy"
-      echo "  --rollback   Restore from backup"
-      echo "  --update     git pull + redeploy"
-      echo "  --uninstall  Remove Hangar files (preserves user data)"
-      echo "  --help       Show this help"
+      echo "  (no args)         Interactive wizard (first run) or sync"
+      echo "  --check           Dry-run validation"
+      echo "  --verify          Verify existing installation"
+      echo "  --sync            Remove orphaned files + redeploy"
+      echo "  --rollback        Restore from backup"
+      echo "  --update          git pull + redeploy"
+      echo "  --uninstall       Remove Hangar files (preserves user data)"
+      echo "  --list-categories List available skill categories with counts"
+      echo "  --help            Show this help"
+      echo ""
+      echo "Options:"
+      echo "  --skills CATS     Install only skills from given categories (comma-separated)"
+      echo "  --minimal         Install core only (hooks, agents, lib) — skip all skills"
+      echo ""
+      echo "Examples:"
+      echo "  bash setup.sh --skills design,security    # Only design + security skills"
+      echo "  bash setup.sh --minimal                   # Core without skills"
+      echo "  bash setup.sh --list-categories            # Show available categories"
+      echo "  bash setup.sh --update --skills audit      # Update + deploy audit skills only"
       ;;
 
     *)

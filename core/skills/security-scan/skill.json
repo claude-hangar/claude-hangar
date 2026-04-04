@@ -1,0 +1,11 @@
+{
+  "name": "security-scan",
+  "version": "1.0.0",
+  "description": "Security scan for Claude Code projects (secrets, MCP permissions, hook safety, dependencies).",
+  "category": "security",
+  "risk": "safe",
+  "triggers": ["security scan", "check security", "is this secure", "scan for secrets", "security audit", "before deploy security"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

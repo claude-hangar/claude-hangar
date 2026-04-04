@@ -78,6 +78,11 @@
       "exclude": ["secret scan", "security scan", "scan for"]
     },
     {
+      "skill": "/security-scan",
+      "triggers": ["security scan", "check security", "is this secure", "scan for secrets", "security audit", "before deploy security", "secret check", "mcp audit", "hook safety"],
+      "exclude": ["auth audit", "deploy check"]
+    },
+    {
       "skill": "/consult",
       "triggers": ["consult", "improve project", "what should I fix", "project help", "project consultation", "optimize project", "upgrade project", "rebuild", "refactor project", "how to improve"],
       "exclude": ["audit", "review"]

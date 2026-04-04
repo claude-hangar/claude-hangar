@@ -102,6 +102,19 @@ if [[ "$FILE_PATH" =~ \.env$ || ( "$FILE_PATH" =~ \.env\. && ! "$FILE_PATH" =~ \
   WARNINGS="${WARNINGS}.env file being written: ${FILE_PATH}\n"
 fi
 
+# Check for <private> tagged content being written to committed files
+# Memory files with <private> sections should not be committed
+if echo "$CONTENT" | grep -qE '<private>|privacy:\s*private' 2>/dev/null; then
+  # Allow in memory directories (those are local, not committed)
+  case "$NORM_PATH" in
+    */.claude/projects/*/memory/*|*/.claude/memory/*)
+      ;; # Memory files are local — private tags are fine
+    *)
+      WARNINGS="${WARNINGS}Private-tagged content being written to a potentially committed file\n"
+      ;;
+  esac
+fi
+
 if [ -n "$WARNINGS" ]; then
   REASON="SECRET-LEAK WARNING in ${FILE_PATH}: ${WARNINGS}Please check if secrets are present."
   node -e "console.log(JSON.stringify({decision:'block',reason:process.argv[1]}))" "$REASON"

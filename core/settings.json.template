@@ -33,6 +33,15 @@
             "command": "bash ~/.claude/hooks/token-warning.sh"
           }
         ]
+      },
+      {
+        "matcher": "Bash|Write|Edit|Skill|Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/instinct-capture.sh"
+          }
+        ]
       }
     ],
     "UserPromptSubmit": [
