@@ -9,7 +9,7 @@ description: >
 ## /freshness-check — Quick Reference
 - **Modes:** check (read-only) | update (auto-update) | full (+ WebSearch + Community + Opportunities)
 - **Arguments:** `/freshness-check $0` e.g. `/freshness-check full`
-- **6 Tiers:** npm packages (auto), security standards (semi-auto), laws (manual), ecosystem (situational), community (gh api), opportunity analysis (full only)
+- **7 Tiers:** npm packages (auto), CLI plugins (auto), security standards (semi-auto), laws (manual), ecosystem (situational), community (gh api), opportunity analysis (full only)
 - **Output:** Delta report with severity (HIGH/MED/LOW/OK/SKIP) + opportunity report
 - **State:** .freshness-state.json (for orchestrator integration)
 - **Recommended:** Before every audit, at least weekly
@@ -96,6 +96,21 @@ These go stale silently. Without regular checks, you audit against outdated stan
 | **EU AI Act** | WebSearch "EU AI Act timeline" | Phase 07-privacy.md S11 | Note only |
 | **WCAG** | WebSearch "WCAG latest version" | Phase 05-accessibility.md | Note only (WCAG 2.2 -> 3.0?) |
 | **Google Consent Mode** | WebSearch "Google Consent Mode version" | Phase 07-privacy.md S3 | Note only |
+
+### Tier 1b — CLI Plugins (gh api + installed_plugins.json, automatic)
+
+| Source | Check Method | Compared With | Auto-Update |
+|--------|-------------|---------------|-------------|
+| **superpowers** | `gh api repos/obra/superpowers/releases/latest` | `~/.claude/plugins/installed_plugins.json` version | Note + `/reload` hint |
+| **Other plugins** | Parse `~/.claude/plugins/installed_plugins.json` → per plugin: `gh api repos/{owner}/{repo}/releases/latest` | Installed version | Note + `/reload` hint |
+
+**How to update plugins:** Run `/reload` in Claude Code to pull the latest version from the marketplace. No manual install needed.
+
+**Check logic:**
+1. Read `~/.claude/plugins/installed_plugins.json` → list all installed plugins
+2. Per plugin: extract `version` and git info
+3. Check latest release via `gh api repos/{owner}/{repo}/releases/latest`
+4. Compare installed vs. latest → delta report entry
 
 ### Tier 4 — Ecosystem (WebSearch/gh, situational)
 

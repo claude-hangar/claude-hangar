@@ -28,6 +28,12 @@
 - Password hashing: bcrypt with sufficient rounds
 - CSRF protection on all forms
 
+## MCP Servers
+<!-- If this project uses MCP servers that return large results (DB schemas, API specs),
+     configure the maxResultSizeChars annotation in the MCP server response:
+     _meta: { "anthropic/maxResultSizeChars": 500000 }
+     This prevents truncation of large results (Claude Code 2.1.91+). -->
+
 ## Git & CI/CD
 - Conventional Commits (feat:, fix:, docs:, chore:)
 - Feature branches, PR reviews

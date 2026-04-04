@@ -25,6 +25,14 @@
 - **Hooks:** `src/hooks.server.ts` — `handle()` for auth guards, middleware
 - **Error handling:** `+error.svelte` pages, `handleError` hook
 - **Layouts:** `+layout.svelte` with `+layout.ts`/`+layout.server.ts` for shared data
+- **Remote Functions (2.56+):** Queries need `run()` for non-reactive contexts; `await query().run()` in event handlers
+
+### SvelteKit 2.56.0 Breaking Changes (if kit >= 2.56.0)
+
+- **Queries:** Cannot await queries outside render — use `query().run()` in event handlers
+- **Refreshes:** Server controls via `requested(queryFn, maxLimit)` — old `.updates()` pattern removed
+- **Caching:** Object keys sorted for cache keys — Maps/Sets not allowed as remote function params
+- **TypeScript 6.0:** Officially supported (optional)
 
 ### Conventions
 

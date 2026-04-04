@@ -341,6 +341,50 @@ node scripts/capture-pdf.mjs [options]
 
 ---
 
+## Video Evidence (Playwright 1.59+ Screencast API)
+
+When Playwright >= 1.59.0 is available, capture-pdf can generate **video walkthroughs** alongside PDFs using the Screencast API. This is optional and activated via `--video` flag.
+
+### Video Mode
+
+```bash
+node scripts/capture-pdf.mjs --video --viewport desktop
+```
+
+**How it works:**
+
+1. `page.screencast.start({ path: 'prints/{name}-walkthrough.webm' })` — start recording
+2. `page.screencast.showActions({ position: 'top-right' })` — annotate every click/scroll
+3. Per page: `page.screencast.showChapter(pageName, { description })` — chapter markers
+4. Smart captures show as annotated actions in the video
+5. `page.screencast.stop()` — stop recording
+
+**Use case:** Client presentations where a video walkthrough is more engaging than a PDF, or audit evidence where the navigation flow matters.
+
+### CLI Options (Video)
+
+```
+  --video            Generate video walkthrough alongside PDFs
+  --video-only       Generate only video, no PDFs
+  --video-actions    Show action annotations in video (default: on)
+  --video-chapters   Show chapter titles per page (default: on)
+```
+
+### Frame Capture for AI Vision
+
+For audit workflows, real-time frame capture can feed screenshots to an AI vision model:
+
+```js
+await page.screencast.start({
+  onFrame: ({ data }) => analyzeWithVision(data),
+  size: { width: 1280, height: 720 }
+});
+```
+
+This enables automated visual regression detection during audits.
+
+---
+
 ## Rules
 
 - **Privacy:** Everything local, no external services. Only Playwright + local rendering.
@@ -351,3 +395,4 @@ node scripts/capture-pdf.mjs [options]
 - **No state file:** One-time action, no multi-session tracking needed.
 - **Project-specific customization:** Selectors and sample data can be extended per project. The script is a generatable template, not a rigid tool.
 - **Performance:** Parallel captures (default 3), screenshot reuse where possible.
+- **Video:** Screencast requires Playwright >= 1.59.0. Falls back to PDF-only when unavailable.

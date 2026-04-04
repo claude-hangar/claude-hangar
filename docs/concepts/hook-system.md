@@ -71,6 +71,7 @@ Claude Hangar registers hooks via `settings.json`:
 | `TaskCompleted` | `task-completed-gate.sh` | Quality gate — rejects tasks with errors/empty results |
 | `SubagentStart` | `subagent-tracker.sh` | Track subagent lifecycle for observability |
 | `SubagentStop` | `subagent-tracker.sh` | Track subagent lifecycle for observability |
+| `PermissionDenied` | `permission-denied-retry.sh` | Auto-retry safe tool calls denied by classifier (2.1.89+) |
 
 ## Hook Chain
 
@@ -155,6 +156,38 @@ INPUT=$(cat 2>/dev/null) || true
 ```
 
 ## Performance Patterns
+
+### `if` Conditions (Claude Code 2.1.85+)
+
+The most impactful performance optimization. The `if` field uses permission-rule syntax to filter hook execution **before** the shell process is spawned. Without `if`, every hook receives every tool call and must filter internally (spawning Node.js each time).
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [{
+      "matcher": "Bash",
+      "hooks": [{
+        "type": "command",
+        "if": "Bash(git commit*)",
+        "command": "bash hooks/commit-validator.sh"
+      }]
+    }]
+  }
+}
+```
+
+**Impact:** For a session with 500 tool calls where only 10 are `git commit`, the hook runs 10 times instead of 500. That's **~490 avoided Node.js process starts**.
+
+Recommended `if` conditions for Claude Hangar hooks:
+
+| Hook | Event | Recommended `if` | Effect |
+|------|-------|------------------|--------|
+| `bash-guard.sh` | PreToolUse(Bash) | — (needs all Bash calls) | Already filtered by matcher |
+| `secret-leak-check.sh` | PreToolUse(Write\|Edit) | — (needs all writes) | Already filtered by matcher |
+| `token-warning.sh` | PostToolUse | `Bash\|Read\|Write\|Edit\|Grep\|Glob\|Agent\|WebFetch\|WebSearch` | Skips Task*, ToolSearch, SendMessage |
+| `checkpoint.sh` | PreToolUse(Write\|Edit) | — (needs all writes) | Already filtered by matcher |
+
+**Note:** The `if` field supports glob-like patterns: `Bash(git *)` matches all git commands, `Write(*.env*)` matches .env file writes. Complex patterns (regex, multiple conditions) are not supported — use script-internal filtering for those.
 
 ### Cooldown
 
