@@ -5,6 +5,50 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] — 2026-04-05
+
+### Added — ECC Integration (Major Enhancement)
+
+#### Rules System (7 common + 8 language-specific rule files)
+- `rules/common/` — coding-style, security, testing, git-workflow, agents, performance, governance
+- `rules/typescript/` — patterns and testing
+- `rules/python/` — patterns and testing
+- `rules/go/` — patterns and testing
+- `rules/rust/` — patterns
+- `rules/java/` — patterns
+
+#### Context Modes (3 modes)
+- `core/contexts/dev.md` — active development focus
+- `core/contexts/research.md` — exploration and understanding
+- `core/contexts/review.md` — PR review and code analysis
+
+#### New Agents (9)
+- **planner** — Implementation planning (Opus)
+- **architect** — System design and architecture (Opus)
+- **loop-operator** — Autonomous workflow with safety guardrails (Sonnet)
+- **typescript-reviewer** — TypeScript code review (Sonnet)
+- **python-reviewer** — Python code review (Sonnet)
+- **go-reviewer** — Go code review (Sonnet)
+- **build-resolver-typescript** — TS build error resolution (Sonnet)
+- **build-resolver-python** — Python build error resolution (Sonnet)
+- **build-resolver-go** — Go build error resolution (Sonnet)
+
+#### Learning System
+- **continuous-learning hook** — Captures command patterns and outcomes
+- **instinct-evolve hook** — Extracts session learnings with confidence scores
+- **pattern-extractor skill** — Analyzes patterns for reusable workflows
+
+#### Enhanced Hooks
+- **cost-tracker** — Session metrics and tool usage tracking
+- **desktop-notify** — OS-native notifications (macOS, Linux, Windows)
+- **hook-profiles** — Environment-based hook strictness (minimal/standard/strict)
+
+### Inspired By
+
+- [Everything Claude Code](https://github.com/affaan-m/everything-claude-code)
+
+---
+
 ## [1.2.1] — 2026-03-28
 
 ### Fixed

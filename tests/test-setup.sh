@@ -246,6 +246,92 @@ test_assert \
   "REGISTRY_FILE='$REGISTRY_FILE' node -e \"JSON.parse(require('fs').readFileSync(process.env.REGISTRY_FILE,'utf8'))\" 2>/dev/null"
 
 # ============================================================
+# 9. New directories exist (ECC integration)
+# ============================================================
+
+echo ""
+echo "--- New directories (ECC integration) ---"
+
+# --- Test: New directories exist ---
+test_new_directories() {
+  local errors=0
+  for dir in rules/common core/contexts core/skills/pattern-extractor; do
+    if [ ! -d "$REPO_ROOT/$dir" ]; then
+      echo "  FAIL  Directory missing: $dir"
+      errors=$((errors + 1))
+    fi
+  done
+  for lang in typescript python go rust java; do
+    if [ ! -d "$REPO_ROOT/rules/$lang" ]; then
+      echo "  FAIL  Language rules missing: rules/$lang"
+      errors=$((errors + 1))
+    fi
+  done
+  if [ "$errors" -eq 0 ]; then
+    echo "  PASS  All new directories present"
+  fi
+  return $errors
+}
+
+# --- Test: New agents exist ---
+test_new_agents() {
+  local errors=0
+  for agent in planner architect loop-operator typescript-reviewer python-reviewer go-reviewer build-resolver-typescript build-resolver-python build-resolver-go; do
+    if [ ! -f "$REPO_ROOT/core/agents/$agent.md" ]; then
+      echo "  FAIL  Agent missing: $agent.md"
+      errors=$((errors + 1))
+    fi
+  done
+  if [ "$errors" -eq 0 ]; then
+    echo "  PASS  All new agents present (9/9)"
+  fi
+  return $errors
+}
+
+# --- Test: New hooks exist ---
+test_new_hooks() {
+  local errors=0
+  for hook in continuous-learning instinct-evolve cost-tracker desktop-notify; do
+    if [ ! -f "$REPO_ROOT/core/hooks/$hook.sh" ]; then
+      echo "  FAIL  Hook missing: $hook.sh"
+      errors=$((errors + 1))
+    fi
+  done
+  if [ "$errors" -eq 0 ]; then
+    echo "  PASS  All new hooks present (4/4)"
+  fi
+  return $errors
+}
+
+# Wire the new test functions into the runner
+dir_errors=0
+test_new_directories || dir_errors=$?
+TOTAL=$((TOTAL + 1))
+if [ "$dir_errors" -eq 0 ]; then
+  PASS=$((PASS + 1))
+else
+  FAIL=$((FAIL + 1))
+fi
+
+agent_errors=0
+test_new_agents || agent_errors=$?
+TOTAL=$((TOTAL + 1))
+if [ "$agent_errors" -eq 0 ]; then
+  PASS=$((PASS + 1))
+else
+  FAIL=$((FAIL + 1))
+fi
+
+hook_errors=0
+test_new_hooks || hook_errors=$?
+TOTAL=$((TOTAL + 1))
+if [ "$hook_errors" -eq 0 ]; then
+  PASS=$((PASS + 1))
+else
+  FAIL=$((FAIL + 1))
+fi
+
+# ============================================================
 # Summary
 # ============================================================
 

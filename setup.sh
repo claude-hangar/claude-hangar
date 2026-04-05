@@ -158,6 +158,66 @@ deploy_mcp() {
   fi
 }
 
+# ─── Deploy Rules ─────────────────────────────────────────────────────
+
+deploy_rules() {
+  info "Deploying rules..."
+  local rules_src="$SCRIPT_DIR/rules"
+  local rules_dst="$CLAUDE_DIR/rules"
+
+  if [ ! -d "$rules_src" ]; then
+    warn "No rules directory found — skipping"
+    return 0
+  fi
+
+  mkdir -p "$rules_dst"
+
+  # Copy common rules (always deployed)
+  if [ -d "$rules_src/common" ]; then
+    mkdir -p "$rules_dst/common"
+    cp -r "$rules_src/common/"* "$rules_dst/common/" 2>/dev/null || true
+    success "Common rules deployed"
+  fi
+
+  # Copy language-specific rules if they exist
+  for lang_dir in "$rules_src"/*/; do
+    local lang
+    lang=$(basename "$lang_dir")
+    [ "$lang" = "common" ] && continue
+    [ ! -d "$lang_dir" ] && continue
+    mkdir -p "$rules_dst/$lang"
+    cp -r "$lang_dir"* "$rules_dst/$lang/" 2>/dev/null || true
+    success "Rules deployed: $lang"
+  done
+}
+
+# ─── Deploy Contexts ──────────────────────────────────────────────────
+
+deploy_contexts() {
+  info "Deploying context modes..."
+  local ctx_src="$SCRIPT_DIR/core/contexts"
+  local ctx_dst="$CLAUDE_DIR/contexts"
+
+  if [ ! -d "$ctx_src" ]; then
+    warn "No contexts directory found — skipping"
+    return 0
+  fi
+
+  mkdir -p "$ctx_dst"
+  cp "$ctx_src"/*.md "$ctx_dst/" 2>/dev/null || true
+  success "Context modes deployed ($(ls -1 "$ctx_dst"/*.md 2>/dev/null | wc -l) modes)"
+}
+
+# ─── Initialize Learning System ───────────────────────────────────────
+
+init_learning_system() {
+  info "Initializing learning system..."
+  mkdir -p "$CLAUDE_DIR/.patterns"
+  mkdir -p "$CLAUDE_DIR/.instincts"
+  mkdir -p "$CLAUDE_DIR/.metrics"
+  success "Learning system directories initialized"
+}
+
 # ─── Skill Filtering ──────────────────────────────────────────────────
 
 # List available skill categories from skills_index.json
@@ -292,6 +352,9 @@ deploy_all() {
 
   # Deploy MCP server configs from stacks
   deploy_mcp
+  deploy_rules
+  deploy_contexts
+  init_learning_system
 
   # Settings: merge or deploy template
   if [ ! -f "$CLAUDE_DIR/settings.json" ]; then
@@ -400,6 +463,11 @@ main() {
                   hooks/model-router.sh hooks/task-completed-gate.sh hooks/subagent-tracker.sh \
                   hooks/stop-failure.sh hooks/permission-denied-retry.sh \
                   hooks/task-created-init.sh hooks/worktree-init.sh \
+                  hooks/continuous-learning.sh hooks/instinct-evolve.sh \
+                  hooks/cost-tracker.sh hooks/desktop-notify.sh \
+                  agents/planner.md agents/architect.md agents/loop-operator.md \
+                  agents/typescript-reviewer.md agents/python-reviewer.md agents/go-reviewer.md \
+                  agents/build-resolver-typescript.md agents/build-resolver-python.md agents/build-resolver-go.md \
                   agents/explorer.md agents/explorer-deep.md \
                   agents/security-reviewer.md agents/commit-reviewer.md agents/dependency-checker.md \
                   agents/plan-reviewer.md agents/refactor-agent.md agents/test-writer.md \
