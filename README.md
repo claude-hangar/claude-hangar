@@ -25,10 +25,10 @@ Most Claude Code configs are personal dotfiles — useful to read, hard to reuse
 - **Multi-project orchestration** — manage configs for multiple repos from one place
 - **Modular stacks** — pick only what you need (Astro, SvelteKit, Next.js, Database, Auth)
 - **Battle-tested hooks** that prevent real incidents (secret leaks, destructive commands, context overflow)
-- **23 skills** from project scanning to deployment readiness checks
+- **26 skills** from project scanning to pre-PR verification and context optimization
 - **22 lifecycle hooks** with 4-level quality gates, forensics, and smart context preservation
-- **17 agents** for specialized tasks, code review, and autonomous workflows
-- **15 governance rules** (common + language-specific) always-on code quality
+- **19 agents** for specialized tasks, code review, TDD enforcement, and autonomous workflows
+- **19 governance rules** (common + language-specific) always-on code quality
 - **3 context modes** — dev, research, review
 - **Cross-platform** — Linux, macOS, and Windows (Git Bash)
 

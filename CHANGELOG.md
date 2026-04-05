@@ -7,7 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] — 2026-04-05
 
-### Added — ECC Integration (Major Enhancement)
+### Added — ECC Integration Phase 2
+
+#### New Skills (3)
+- **verification-loop** — Pre-PR 6-phase quality pipeline (build, types, lint, test, security, diff)
+- **context-budget** — Token spending analysis and optimization opportunities
+- **strategic-compact** — Smart /compact timing based on workflow state
+
+#### New Agents (2)
+- **tdd-guide** — TDD enforcement (RED-GREEN-REFACTOR cycle, 80%+ coverage)
+- **doc-updater** — Documentation maintenance and staleness detection
+
+#### New Rules (4)
+- `rules/common/development-workflow.md` — Structured 5-phase dev workflow
+- `rules/common/hooks.md` — Hook design principles and governance
+- `rules/common/patterns.md` — Positive design patterns (repository, service layer, API format)
+- `rules/common/code-review.md` — Centralized review process and severity classification
+
+#### Documentation
+- `docs/token-optimization.md` — 7 strategies for context budget management
+- `docs/agentic-security.md` — Security guide (Lethal Trifecta, threat model, production checklist)
+
+---
+
+### Added — ECC Integration Phase 1
 
 #### Rules System (7 common + 8 language-specific rule files)
 - `rules/common/` — coding-style, security, testing, git-workflow, agents, performance, governance
