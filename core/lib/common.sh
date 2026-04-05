@@ -84,3 +84,31 @@ check_prereqs() {
 file_mtime() {
   stat -c %Y "$1" 2>/dev/null || stat -f %m "$1" 2>/dev/null || echo "0"
 }
+
+# ─── Hook Profile Check ──────────────────────────────────────────────
+
+# Check if current hook should run based on profile
+# Usage: should_hook_run "hook-name" "minimal|standard|strict" || exit 0
+should_hook_run() {
+  local hook_name="$1"
+  local min_profile="${2:-standard}"
+  local current_profile="${HANGAR_HOOK_PROFILE:-standard}"
+
+  # Check disabled hooks list
+  if [ -n "${HANGAR_DISABLED_HOOKS:-}" ]; then
+    echo "$HANGAR_DISABLED_HOOKS" | tr ',' '\n' | grep -qx "$hook_name" && return 1
+  fi
+
+  # Profile hierarchy: minimal < standard < strict
+  case "$min_profile" in
+    minimal) return 0 ;;  # Always runs
+    standard)
+      [ "$current_profile" = "minimal" ] && return 1
+      return 0
+      ;;
+    strict)
+      [ "$current_profile" = "strict" ] && return 0
+      return 1
+      ;;
+  esac
+}
