@@ -1,14 +1,16 @@
 # Hook Profiles
 
 Control hook strictness via the `HANGAR_HOOK_PROFILE` environment variable.
+Each hook declares its minimum profile level — hooks below the active level
+are silently skipped at runtime via `hook-gate.sh`.
 
 ## Available Profiles
 
 | Profile | Behavior | Use When |
 |---------|----------|----------|
-| `minimal` | Safety hooks only (bash-guard, secret-leak-check) | Quick prototyping |
-| `standard` | Safety + quality hooks (default) | Normal development |
-| `strict` | All hooks active, blocking mode | Production/CI |
+| `minimal` | Safety hooks only (3 hooks) | Quick prototyping, minimal overhead |
+| `standard` | Safety + quality hooks (16 hooks, **default**) | Normal development |
+| `strict` | All hooks active (22 hooks) | Production/CI, learning enabled |
 
 ## Usage
 
@@ -23,29 +25,59 @@ echo 'export HANGAR_HOOK_PROFILE=standard' >> ~/.bashrc
 ## Disabling Individual Hooks
 
 ```bash
-# Comma-separated list of hooks to disable
+# Comma-separated list of hooks to disable (overrides profile)
 export HANGAR_DISABLED_HOOKS=token-warning,desktop-notify
 ```
 
+## How It Works
+
+Each hook includes a 3-line gate at the top:
+
+```bash
+HOOK_NAME="bash-guard"; HOOK_MIN_PROFILE="minimal"
+source "${HOME}/.claude/lib/hook-gate.sh" 2>/dev/null || true
+```
+
+The gate script (`core/lib/hook-gate.sh`) checks:
+1. Is this hook in `HANGAR_DISABLED_HOOKS`? → skip
+2. Is the current profile level >= hook's minimum level? → run, else skip
+3. If `hook-gate.sh` is missing → hook runs normally (graceful fallback)
+
 ## Profile Mapping
 
-### minimal
-- bash-guard.sh ✓
-- secret-leak-check.sh ✓
-- Everything else: disabled
+### minimal (3 hooks — safety only)
 
-### standard (default)
-- All safety hooks ✓
-- checkpoint.sh ✓
-- session-start.sh ✓
-- session-stop.sh ✓
-- skill-suggest.sh ✓
-- token-warning.sh ✓
-- Learning hooks: disabled
-- Desktop notify: disabled
+| Hook | Event | Purpose |
+|------|-------|---------|
+| `bash-guard` | PreToolUse/Bash | Block destructive commands |
+| `secret-leak-check` | PreToolUse/Write,Edit | Block secret leaks |
+| `config-protection` | PreToolUse/Write,Edit | Block config weakening |
 
-### strict
-- Everything enabled ✓
-- Blocking mode for quality gates ✓
-- Cost tracking active ✓
-- Learning system active ✓
+### standard (13 additional hooks — default)
+
+| Hook | Event | Purpose |
+|------|-------|---------|
+| `checkpoint` | PreToolUse/Write,Edit | Git stash before edits |
+| `config-change-guard` | ConfigChange | Warn on critical settings |
+| `model-router` | UserPromptSubmit | Smart model tier suggestion |
+| `permission-denied-retry` | PermissionDenied | Auto-retry safe denials |
+| `post-compact` | PostCompact | Context recovery |
+| `session-start` | SessionStart | Load status, tasks, memory |
+| `session-stop` | Stop | Cleanup, log session |
+| `skill-suggest` | UserPromptSubmit | Suggest matching skills |
+| `stop-failure` | StopFailure | Log session errors |
+| `task-completed-gate` | TaskCompleted | 4-level quality gate |
+| `task-created-init` | TaskCreated | Initialize task metadata |
+| `token-warning` | PostToolUse | Alert at 70%/80% context |
+| `worktree-init` | WorktreeCreate | Initialize worktree |
+
+### strict (6 additional hooks — everything)
+
+| Hook | Event | Purpose |
+|------|-------|---------|
+| `continuous-learning` | PostToolUse | Capture success patterns |
+| `instinct-capture` | PostToolUse | Record tool call observations |
+| `instinct-evolve` | Stop | Extract session learnings |
+| `cost-tracker` | PostToolUse | Token/cost tracking |
+| `desktop-notify` | Stop | OS-native notifications |
+| `subagent-tracker` | SubagentStart/Stop | Lifecycle forensics |

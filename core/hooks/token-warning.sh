@@ -12,6 +12,10 @@
 
 # No set -euo pipefail — hooks must be resilient on Windows
 
+# Hook profile gate
+export HOOK_NAME="token-warning"; export HOOK_MIN_PROFILE="standard"
+source "${HOME}/.claude/lib/hook-gate.sh" 2>/dev/null || true
+
 # Session ID for tracking (if not set: PID of parent shell)
 SESSION_ID="${CLAUDE_SESSION_ID:-$$}"
 TRACK_FILE="${TEMP:-/tmp}/claude-token-track-${SESSION_ID}"

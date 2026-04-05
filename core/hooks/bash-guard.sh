@@ -11,6 +11,10 @@
 
 # No set -euo pipefail — hooks must be resilient on Windows
 
+# Hook profile gate
+export HOOK_NAME="bash-guard"; export HOOK_MIN_PROFILE="minimal"
+source "${HOME}/.claude/lib/hook-gate.sh" 2>/dev/null || true
+
 # === 1x stdin read, 1x command extraction ===
 
 INPUT=$(cat 2>/dev/null) || true

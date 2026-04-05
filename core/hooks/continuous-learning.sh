@@ -12,6 +12,10 @@
 
 # No set -euo pipefail — hooks must be resilient on Windows
 
+# Hook profile gate
+export HOOK_NAME="continuous-learning"; export HOOK_MIN_PROFILE="strict"
+source "${HOME}/.claude/lib/hook-gate.sh" 2>/dev/null || true
+
 INPUT=$(cat 2>/dev/null) || true
 [ -z "$INPUT" ] && exit 0
 

@@ -10,6 +10,10 @@
 
 # No set -euo pipefail — hooks must be resilient on Windows
 
+# Hook profile gate
+export HOOK_NAME="secret-leak-check"; export HOOK_MIN_PROFILE="minimal"
+source "${HOME}/.claude/lib/hook-gate.sh" 2>/dev/null || true
+
 # Read input from stdin (JSON) — with fallback on pipe error
 INPUT=$(cat 2>/dev/null) || true
 [ -z "$INPUT" ] && INPUT='{}'

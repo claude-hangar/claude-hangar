@@ -17,6 +17,10 @@
 
 # No set -euo pipefail — hooks must be resilient on Windows
 
+# Hook profile gate
+export HOOK_NAME="model-router"; export HOOK_MIN_PROFILE="standard"
+source "${HOME}/.claude/lib/hook-gate.sh" 2>/dev/null || true
+
 # ============================================================
 # Cooldown: max one suggestion per tier every 5 minutes
 # Prevents nagging on repeated similar prompts.

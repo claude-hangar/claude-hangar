@@ -8,6 +8,10 @@
 
 # No set -euo pipefail — hooks must be resilient on Windows
 
+# Hook profile gate
+export HOOK_NAME="cost-tracker"; export HOOK_MIN_PROFILE="strict"
+source "${HOME}/.claude/lib/hook-gate.sh" 2>/dev/null || true
+
 METRICS_DIR="$HOME/.claude/.metrics"
 mkdir -p "$METRICS_DIR"
 

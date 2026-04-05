@@ -9,6 +9,10 @@
 
 # No set -euo pipefail — hooks must be resilient on Windows
 
+# Hook profile gate
+export HOOK_NAME="skill-suggest"; export HOOK_MIN_PROFILE="standard"
+source "${HOME}/.claude/lib/hook-gate.sh" 2>/dev/null || true
+
 # Input from Claude Code (JSON via stdin)
 INPUT=$(cat 2>/dev/null) || true
 [ -z "$INPUT" ] && INPUT='{}'

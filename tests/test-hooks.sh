@@ -705,6 +705,95 @@ test_output_contains \
   '{"tool_name":"Write","tool_input":{"file_path":"biome.json","content":"{\"linter\":{\"enabled\": false}}"}}'
 
 # ============================================================
+# Hook Profile Gate (hook-gate.sh)
+# ============================================================
+
+echo ""
+echo "--- hook-gate (profile system) ---"
+
+# Test: minimal profile should skip standard hooks
+TOTAL=$((TOTAL + 1))
+GATE_EXIT=0
+HANGAR_HOOK_PROFILE=minimal HOOK_NAME="checkpoint" HOOK_MIN_PROFILE="standard" \
+  bash -c 'source "'"$REPO_ROOT"'/core/lib/hook-gate.sh" 2>/dev/null; echo "ran"' >/dev/null 2>&1 || GATE_EXIT=$?
+if [ "$GATE_EXIT" -eq 0 ]; then
+  # If gate exited 0 without running (output is empty), that means it called exit 0 = skip
+  GATE_OUTPUT=$(HANGAR_HOOK_PROFILE=minimal HOOK_NAME="checkpoint" HOOK_MIN_PROFILE="standard" \
+    bash -c 'source "'"$REPO_ROOT"'/core/lib/hook-gate.sh" 2>/dev/null; echo "ran"' 2>&1)
+  if [ -z "$GATE_OUTPUT" ]; then
+    echo "  PASS  minimal profile should skip standard hooks"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  minimal profile should skip standard hooks (hook ran instead of skipping)"
+    FAIL=$((FAIL + 1))
+  fi
+else
+  echo "  PASS  minimal profile should skip standard hooks"
+  PASS=$((PASS + 1))
+fi
+
+# Test: standard profile should run standard hooks
+TOTAL=$((TOTAL + 1))
+GATE_OUTPUT=$(HANGAR_HOOK_PROFILE=standard HOOK_NAME="checkpoint" HOOK_MIN_PROFILE="standard" \
+  bash -c 'source "'"$REPO_ROOT"'/core/lib/hook-gate.sh" 2>/dev/null; echo "ran"' 2>&1)
+if echo "$GATE_OUTPUT" | grep -q "ran"; then
+  echo "  PASS  standard profile should run standard hooks"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  standard profile should run standard hooks (hook was skipped)"
+  FAIL=$((FAIL + 1))
+fi
+
+# Test: strict profile should run all hooks
+TOTAL=$((TOTAL + 1))
+GATE_OUTPUT=$(HANGAR_HOOK_PROFILE=strict HOOK_NAME="cost-tracker" HOOK_MIN_PROFILE="strict" \
+  bash -c 'source "'"$REPO_ROOT"'/core/lib/hook-gate.sh" 2>/dev/null; echo "ran"' 2>&1)
+if echo "$GATE_OUTPUT" | grep -q "ran"; then
+  echo "  PASS  strict profile should run strict hooks"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  strict profile should run strict hooks (hook was skipped)"
+  FAIL=$((FAIL + 1))
+fi
+
+# Test: standard profile should skip strict hooks
+TOTAL=$((TOTAL + 1))
+GATE_OUTPUT=$(HANGAR_HOOK_PROFILE=standard HOOK_NAME="cost-tracker" HOOK_MIN_PROFILE="strict" \
+  bash -c 'source "'"$REPO_ROOT"'/core/lib/hook-gate.sh" 2>/dev/null; echo "ran"' 2>&1)
+if echo "$GATE_OUTPUT" | grep -q "ran"; then
+  echo "  FAIL  standard profile should skip strict hooks (hook ran)"
+  FAIL=$((FAIL + 1))
+else
+  echo "  PASS  standard profile should skip strict hooks"
+  PASS=$((PASS + 1))
+fi
+
+# Test: disabled hook should be skipped
+TOTAL=$((TOTAL + 1))
+GATE_OUTPUT=$(HANGAR_HOOK_PROFILE=strict HANGAR_DISABLED_HOOKS="cost-tracker,desktop-notify" \
+  HOOK_NAME="cost-tracker" HOOK_MIN_PROFILE="strict" \
+  bash -c 'source "'"$REPO_ROOT"'/core/lib/hook-gate.sh" 2>/dev/null; echo "ran"' 2>&1)
+if echo "$GATE_OUTPUT" | grep -q "ran"; then
+  echo "  FAIL  disabled hook should be skipped (hook ran)"
+  FAIL=$((FAIL + 1))
+else
+  echo "  PASS  disabled hook should be skipped"
+  PASS=$((PASS + 1))
+fi
+
+# Test: minimal profile should always run minimal hooks
+TOTAL=$((TOTAL + 1))
+GATE_OUTPUT=$(HANGAR_HOOK_PROFILE=minimal HOOK_NAME="bash-guard" HOOK_MIN_PROFILE="minimal" \
+  bash -c 'source "'"$REPO_ROOT"'/core/lib/hook-gate.sh" 2>/dev/null; echo "ran"' 2>&1)
+if echo "$GATE_OUTPUT" | grep -q "ran"; then
+  echo "  PASS  minimal profile should always run minimal hooks"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  minimal profile should always run minimal hooks (hook was skipped)"
+  FAIL=$((FAIL + 1))
+fi
+
+# ============================================================
 # Summary
 # ============================================================
 

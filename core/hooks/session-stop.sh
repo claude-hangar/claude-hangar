@@ -8,6 +8,10 @@
 
 # No set -euo pipefail — hooks must be resilient on Windows
 
+# Hook profile gate
+export HOOK_NAME="session-stop"; export HOOK_MIN_PROFILE="standard"
+source "${HOME}/.claude/lib/hook-gate.sh" 2>/dev/null || true
+
 INPUT=$(cat 2>/dev/null) || true
 CWD=$(echo "$INPUT" | node -e "
   const d = JSON.parse(require('fs').readFileSync(0,'utf8'));
