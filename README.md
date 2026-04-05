@@ -25,8 +25,11 @@ Most Claude Code configs are personal dotfiles — useful to read, hard to reuse
 - **Multi-project orchestration** — manage configs for multiple repos from one place
 - **Modular stacks** — pick only what you need (Astro, SvelteKit, Next.js, Database, Auth)
 - **Battle-tested hooks** that prevent real incidents (secret leaks, destructive commands, context overflow)
-- **18 skills** from project scanning to deployment readiness checks
-- **13 lifecycle hooks** with 4-level quality gates, forensics, and smart context preservation
+- **23 skills** from project scanning to deployment readiness checks
+- **22 lifecycle hooks** with 4-level quality gates, forensics, and smart context preservation
+- **17 agents** for specialized tasks, code review, and autonomous workflows
+- **15 governance rules** (common + language-specific) always-on code quality
+- **3 context modes** — dev, research, review
 - **Cross-platform** — Linux, macOS, and Windows (Git Bash)
 
 ## Quick Start
@@ -170,6 +173,20 @@ Each project gets the right CLAUDE.md, stack-specific skills, and CI templates �
 
 → [Multi-Project Guide](docs/multi-project.md)
 
+## Repository Structure
+
+| Directory | Purpose |
+|-----------|---------|
+| `core/` | Global config deployed to ~/.claude/ (hooks, agents, skills, lib, statusline) |
+| `stacks/` | Framework-specific extensions (Astro, SvelteKit, Next.js, Database, Auth) |
+| `templates/` | CI/CD workflows and project CLAUDE.md templates |
+| `registry/` | Multi-project management schema and examples |
+| `tests/` | Hook tests, setup tests, template tests |
+| `docs/` | Documentation, concepts, tutorials |
+| `i18n/` | Internationalization (currently: German) |
+| `rules/` | Always-on governance rules (common + language-specific) |
+| `core/contexts/` | Dynamic context modes (dev, research, review) |
+
 ## Documentation
 
 | Guide | Description |
@@ -211,6 +228,10 @@ Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines
 - **Skills** — Share your workflow automations
 - **Translations** — Help us reach more developers ([i18n guide](i18n/i18n.md))
 - **Bug reports** — Issues with specific OS/shell combinations
+
+## Inspired By
+
+- [Everything Claude Code](https://github.com/affaan-m/everything-claude-code) — Rules system, language agents, learning mechanisms, context modes, hook profiles
 
 ## License
 

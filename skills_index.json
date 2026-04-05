@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "generated": "2026-04-04",
-  "skillCount": 22,
+  "skillCount": 23,
   "categories": {
     "design": ["design-system", "polish"],
     "quality": ["adversarial-review", "inline-review"],
@@ -11,7 +11,8 @@
     "workflow": ["capture-pdf", "codebase-map", "consult", "handoff", "lesson-learned", "scan"],
     "documentation": ["doctor", "error-analyzer", "meta-tags", "favicon-check"],
     "git": ["git-hygiene"],
-    "devops": ["freshness-check"]
+    "devops": ["freshness-check"],
+    "learning": ["pattern-extractor"]
   },
   "skills": [
     {
@@ -197,6 +198,14 @@
       "risk": "safe",
       "description": "Security scan for Claude Code projects (secrets, MCP permissions, hook safety, dependencies).",
       "triggers": ["security scan", "check security", "is this secure", "scan for secrets", "security audit"]
+    },
+    {
+      "id": "pattern-extractor",
+      "path": "core/skills/pattern-extractor",
+      "category": "learning",
+      "risk": "safe",
+      "description": "Analyzes captured patterns from continuous learning to extract reusable workflows and anti-patterns.",
+      "triggers": ["patterns", "learn", "extract patterns", "what did I learn", "analyze patterns"]
     }
   ]
 }
