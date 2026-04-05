@@ -1,0 +1,11 @@
+{
+  "name": "context-budget",
+  "version": "1.0.0",
+  "description": "Analyzes where context tokens are being spent and identifies optimization opportunities.",
+  "category": "performance",
+  "risk": "safe",
+  "triggers": ["context budget", "token usage", "where are my tokens going", "context analysis", "optimize context"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

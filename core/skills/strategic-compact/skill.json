@@ -1,0 +1,11 @@
+{
+  "name": "strategic-compact",
+  "version": "1.0.0",
+  "description": "Suggests optimal moments for /compact based on workflow state and context usage.",
+  "category": "performance",
+  "risk": "safe",
+  "triggers": ["compact strategy", "when to compact", "context management", "strategic compact", "should I compact"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}
