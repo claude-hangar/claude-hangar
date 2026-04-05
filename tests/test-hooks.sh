@@ -662,6 +662,49 @@ test \
   '{}'
 
 # ============================================================
+# config-protection
+# ============================================================
+
+echo ""
+echo "--- config-protection ---"
+
+test \
+  "should exit 0 on non-config file write" \
+  0 \
+  "config-protection.sh" \
+  '{"tool_name":"Write","tool_input":{"file_path":"src/index.ts","content":"console.log(\"hello\")"}}'
+
+test_output_contains \
+  "should warn when disabling TypeScript strict mode" \
+  "CONFIG PROTECTION" \
+  "config-protection.sh" \
+  '{"tool_name":"Edit","tool_input":{"file_path":"tsconfig.json","old_string":"\"strict\": true","new_string":"\"strict\": false"}}'
+
+test_output_contains \
+  "should warn when turning off eslint rules" \
+  "CONFIG PROTECTION" \
+  "config-protection.sh" \
+  '{"tool_name":"Edit","tool_input":{"file_path":".eslintrc.json","old_string":"\"warn\"","new_string":"\"off\""}}'
+
+test \
+  "should exit 0 on non-Write/Edit tools" \
+  0 \
+  "config-protection.sh" \
+  '{"tool_name":"Read","tool_input":{"file_path":"tsconfig.json"}}'
+
+test \
+  "should exit 0 when config change is not weakening" \
+  0 \
+  "config-protection.sh" \
+  '{"tool_name":"Edit","tool_input":{"file_path":"tsconfig.json","old_string":"\"target\": \"ES2020\"","new_string":"\"target\": \"ES2022\""}}'
+
+test_output_contains \
+  "should warn when disabling biome checks" \
+  "CONFIG PROTECTION" \
+  "config-protection.sh" \
+  '{"tool_name":"Write","tool_input":{"file_path":"biome.json","content":"{\"linter\":{\"enabled\": false}}"}}'
+
+# ============================================================
 # Summary
 # ============================================================
 

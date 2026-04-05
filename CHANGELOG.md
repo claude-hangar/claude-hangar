@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] — 2026-04-05
 
+### Added — ECC Integration Phase 2c (Could-Haves)
+
+#### New Skills (4)
+- **safety-guard** — 3-mode write protection (Careful/Freeze/Guard) for autonomous agent runs
+- **rules-distill** — Meta-governance: scans skills to extract cross-cutting principles as shared rules
+- **skill-stocktake** — Skill quality audit across 4 dimensions (actionability, scope, uniqueness, currency)
+- **prompt-optimizer** — 6-phase advisory pipeline: project detection, intent analysis, skill matching
+
+#### New Agents (2)
+- **harness-optimizer** (Opus) — Self-optimization of hooks, skills, rules, context modes, agent routing
+- **performance-optimizer** (Opus) — Active analysis: bundle size, Core Web Vitals, memory leaks, DB queries
+
+#### New Hooks (1)
+- **config-protection** — Blocks weakening of linter/formatter/compiler configs (tsconfig strict, eslint rules, biome, etc.)
+
+#### New Templates (1)
+- **DECISIONS.md** — Append-only Architectural Decision Register (ADR) inspired by GSD v2
+
+#### Inspired By
+- [Everything Claude Code](https://github.com/affaan-m/everything-claude-code) — config-protection, rules-distill, skill-stocktake, safety-guard, prompt-optimizer, harness-optimizer
+- [GSD v2](https://github.com/gsd-build/gsd-2) — DECISIONS.md append-only ADR pattern
+
+---
+
 ### Added — ECC Integration Phase 2
 
 #### New Skills (3)

@@ -25,9 +25,9 @@ Most Claude Code configs are personal dotfiles — useful to read, hard to reuse
 - **Multi-project orchestration** — manage configs for multiple repos from one place
 - **Modular stacks** — pick only what you need (Astro, SvelteKit, Next.js, Database, Auth)
 - **Battle-tested hooks** that prevent real incidents (secret leaks, destructive commands, context overflow)
-- **26 skills** from project scanning to pre-PR verification and context optimization
-- **22 lifecycle hooks** with 4-level quality gates, forensics, and smart context preservation
-- **19 agents** for specialized tasks, code review, TDD enforcement, and autonomous workflows
+- **31 skills** from project scanning to pre-PR verification, context optimization, and meta-governance
+- **22 lifecycle hooks** with 4-level quality gates, config protection, forensics, and smart context preservation
+- **21 agents** for specialized tasks, code review, TDD enforcement, performance analysis, and autonomous workflows
 - **19 governance rules** (common + language-specific) always-on code quality
 - **3 context modes** — dev, research, review
 - **Cross-platform** — Linux, macOS, and Windows (Git Bash)
@@ -85,13 +85,14 @@ cd ~/.claude-hangar && bash setup.sh
 | `session-stop` | Stop | Cleans temp files, logs session cost |
 | `post-compact` | PostCompact | Smart context preservation — detects tasks, plans, branch, HANDOFF.md |
 | `config-change-guard` | ConfigChange | Warns on critical settings changes |
+| `config-protection` | PreToolUse | Blocks weakening of linter/formatter/compiler configs |
 | `skill-suggest` | UserPromptSubmit | Suggests matching skills based on your prompts |
 | `model-router` | UserPromptSubmit | Smart complexity analysis — structural signals, scope detection |
 | `task-completed-gate` | TaskCompleted | 4-level quality gate (existence, errors, evidence, substance) |
 | `subagent-tracker` | SubagentStart/Stop | Lifecycle tracking + forensics (duration, thrashing, failures) |
 | `stop-failure` | StopFailure | Logs errors on session failures |
 
-### Agents (6) — Specialized AI Workers
+### Agents (21) — Specialized AI Workers
 
 | Agent | Model | Purpose |
 |-------|-------|---------|
@@ -101,16 +102,38 @@ cd ~/.claude-hangar && bash setup.sh
 | `commit-reviewer` | Sonnet | Pre-commit review for staged changes |
 | `plan-reviewer` | Sonnet | Spec/plan compliance — verifies nothing more, nothing less |
 | `dependency-checker` | Sonnet | npm audit + outdated packages + CVE research |
+| `planner` | Opus | Complex feature implementation planning |
+| `architect` | Opus | System design and architecture decisions |
+| `loop-operator` | Sonnet | Autonomous workflow with safety guardrails |
+| `tdd-guide` | Sonnet | TDD enforcement (RED-GREEN-REFACTOR cycle) |
+| `doc-updater` | Sonnet | Documentation maintenance and staleness detection |
+| `refactor-agent` | Sonnet | Code restructuring and cleanup |
+| `test-writer` | Sonnet | Test generation for new features |
+| `typescript-reviewer` | Sonnet | TypeScript-specific code review |
+| `python-reviewer` | Sonnet | Python-specific code review |
+| `go-reviewer` | Sonnet | Go-specific code review |
+| `build-resolver-typescript` | Sonnet | TS/JS build error resolution |
+| `build-resolver-python` | Sonnet | Python build error resolution |
+| `build-resolver-go` | Sonnet | Go build error resolution |
+| `harness-optimizer` | Opus | Self-optimization of hooks, skills, rules, and agent configs |
+| `performance-optimizer` | Opus | Bundle analysis, profiling, Core Web Vitals, memory leaks |
 
-### Skills (18) — Slash Commands for Real Work
+### Skills (31) — Slash Commands for Real Work
 
 | Skill | Description |
 |-------|-------------|
 | `/scan` | Auto-detect tech stack, architecture, and generate CLAUDE.md |
 | `/consult` | Interactive improvement wizard with structured plans |
+| `/verify` | Pre-PR 6-phase quality pipeline (build, types, lint, test, security, diff) |
+| `/context-budget` | Token spending analysis and optimization opportunities |
+| `/strategic-compact` | Smart /compact timing based on workflow state |
 | `/audit` | Three-layer website audit (9 phases) |
 | `/project-audit` | Repository audit (10 phases) |
 | `/adversarial-review` | Critical review — minimum 5 findings |
+| `/safety-guard` | 3-mode write protection (Careful/Freeze/Guard) for autonomous runs |
+| `/rules-distill` | Extract cross-cutting rules from skill collection |
+| `/skill-stocktake` | Audit skill quality across 4 dimensions |
+| `/prompt-optimizer` | 6-phase prompt analysis and skill matching pipeline |
 | `/polish` | Frontend quick wins across 6 dimensions |
 | `/deploy-check` | Docker/Traefik deployment readiness |
 | `/git-hygiene` | Stale branches, large files, commit quality |
@@ -139,7 +162,7 @@ Drop-in extensions for your specific tech stack. Each provides a `CLAUDE.md.snip
 
 ### Templates
 
-- **4 project templates** — CLAUDE.md starters (minimal, web, fullstack, management)
+- **5 project templates** — CLAUDE.md starters (minimal, web, fullstack, management) + DECISIONS.md (ADR register)
 - **5 CI/CD templates** — GitHub Actions for Node.js, Python, VPS, GitHub Pages, Cloudflare Pages
 - **Global CLAUDE.md template** — Baseline instructions with `{{PLACEHOLDER}}` customization
 
@@ -231,7 +254,8 @@ Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines
 
 ## Inspired By
 
-- [Everything Claude Code](https://github.com/affaan-m/everything-claude-code) — Rules system, language agents, learning mechanisms, context modes, hook profiles
+- [Everything Claude Code](https://github.com/affaan-m/everything-claude-code) — Rules system, language agents, learning mechanisms, context modes, hook profiles, config protection, meta-governance
+- [GSD v2](https://github.com/gsd-build/gsd-2) — DECISIONS.md (append-only ADR register) pattern
 
 ## License
 
