@@ -1,12 +1,13 @@
 {
   "version": "1.0",
   "generated": "2026-04-04",
-  "skillCount": 23,
+  "skillCount": 26,
   "categories": {
     "design": ["design-system", "polish"],
     "quality": ["adversarial-review", "inline-review"],
     "audit": ["audit", "audit-orchestrator", "audit-runner", "project-audit"],
-    "performance": ["lighthouse-quick"],
+    "performance": ["lighthouse-quick", "context-budget", "strategic-compact"],
+    "quality-gates": ["verification-loop"],
     "security": ["deploy-check", "security-scan"],
     "workflow": ["capture-pdf", "codebase-map", "consult", "handoff", "lesson-learned", "scan"],
     "documentation": ["doctor", "error-analyzer", "meta-tags", "favicon-check"],
@@ -198,6 +199,30 @@
       "risk": "safe",
       "description": "Security scan for Claude Code projects (secrets, MCP permissions, hook safety, dependencies).",
       "triggers": ["security scan", "check security", "is this secure", "scan for secrets", "security audit"]
+    },
+    {
+      "id": "verification-loop",
+      "path": "core/skills/verification-loop",
+      "category": "quality-gates",
+      "risk": "safe",
+      "description": "Pre-PR verification pipeline: build, types, lint, test, security, diff review.",
+      "triggers": ["verify", "pre-pr check", "verification", "ready to merge", "check before pr"]
+    },
+    {
+      "id": "context-budget",
+      "path": "core/skills/context-budget",
+      "category": "performance",
+      "risk": "safe",
+      "description": "Analyzes where context tokens are being spent and identifies optimization opportunities.",
+      "triggers": ["context budget", "token usage", "where are my tokens going", "context analysis"]
+    },
+    {
+      "id": "strategic-compact",
+      "path": "core/skills/strategic-compact",
+      "category": "performance",
+      "risk": "safe",
+      "description": "Suggests optimal moments for /compact based on workflow state and context usage.",
+      "triggers": ["compact strategy", "when to compact", "context management", "strategic compact"]
     },
     {
       "id": "pattern-extractor",

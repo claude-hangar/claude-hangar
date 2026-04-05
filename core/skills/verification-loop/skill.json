@@ -1,0 +1,11 @@
+{
+  "name": "verification-loop",
+  "version": "1.0.0",
+  "description": "Pre-PR verification pipeline: build, types, lint, test, security, diff review in sequence.",
+  "category": "quality",
+  "risk": "safe",
+  "triggers": ["verify", "pre-pr check", "verification", "ready to merge", "check before pr"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}
