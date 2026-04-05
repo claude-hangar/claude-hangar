@@ -1,0 +1,11 @@
+{
+  "name": "pattern-extractor",
+  "version": "1.0.0",
+  "description": "Analyzes captured patterns from continuous learning to extract reusable workflows and anti-patterns.",
+  "category": "learning",
+  "risk": "safe",
+  "triggers": ["patterns", "learn", "extract patterns", "what did I learn", "analyze patterns"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}
