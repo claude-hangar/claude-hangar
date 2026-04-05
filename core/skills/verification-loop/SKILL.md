@@ -2,6 +2,7 @@
 name: verification-loop
 description: Pre-PR verification pipeline that runs build, types, lint, test, security, and diff review in sequence. Use before creating a PR or merging.
 user_invocable: true
+argument_hint: ""
 ---
 
 # /verify — Pre-PR Verification Loop

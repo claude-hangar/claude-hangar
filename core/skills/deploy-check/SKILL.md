@@ -4,6 +4,8 @@ description: >
   Deployment readiness check for Docker/Traefik projects.
   Use when: "deploy check", "deployment check", "ready for deployment",
   "deploy-check", "before deploy", "production ready".
+user_invocable: true
+argument_hint: ""
 ---
 
 <!-- AI-QUICK-REF

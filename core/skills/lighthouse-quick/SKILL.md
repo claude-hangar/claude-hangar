@@ -5,6 +5,8 @@ description: >
   Use when: "lighthouse", "pagespeed", "performance", "core web vitals", "speed".
 effort: low
 allowed-tools: Read, Glob, Grep, Bash
+user_invocable: true
+argument_hint: "[url]"
 ---
 
 <!-- AI-QUICK-REF

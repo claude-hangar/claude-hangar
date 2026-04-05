@@ -275,6 +275,122 @@ exit 0
 
 ---
 
+## Advanced Hook Patterns
+
+The following patterns demonstrate more sophisticated hook designs beyond simple block/allow logic.
+
+### MCP Health Check (Advisory PreToolUse)
+
+The `mcp-health-check` hook monitors MCP server reliability. Instead of blocking tool calls, it tracks failures in a temp file and warns when a server has repeated failures. This is an **advisory** hook — it never blocks, only injects context.
+
+Key techniques:
+- Maintains a failure counter per MCP server in `${TEMP:-/tmp}/claude-mcp-health-{session}.json`
+- Uses `additionalContext` to warn the user when a server exceeds the failure threshold
+- Resets counters on successful calls
+- Always exits 0 — never blocks MCP tool usage
+
+```bash
+# Advisory pattern: track failures, warn on threshold
+FAILURES=$(node -e "
+  const state = require(process.argv[1]);
+  const server = process.argv[2];
+  console.log(state[server]?.failures || 0);
+" "$STATE_FILE" "$SERVER_NAME" 2>/dev/null || echo "0")
+
+if [ "$FAILURES" -ge "$THRESHOLD" ]; then
+  node -e "console.log(JSON.stringify({
+    additionalContext: 'MCP server ' + process.argv[1] + ' has failed ' + process.argv[2] + ' times. Consider restarting it.'
+  }))" "$SERVER_NAME" "$FAILURES"
+fi
+exit 0
+```
+
+### Batch Format: Collector + Runner (PostToolUse + Stop)
+
+This is a **two-hook pattern** where one hook collects data and another acts on it at session end. It avoids running formatters after every file edit (which would be slow and disruptive).
+
+**`batch-format-collector` (PostToolUse):** Watches for Write/Edit tool calls and appends each edited file path to a temp file. Silent on the allow path — no stdout, no blocking.
+
+**`stop-batch-format` (Stop):** Reads the collected file paths, deduplicates them, detects which formatters are available (Prettier, Biome, Black, etc.), and runs them once in batch. Logs results but never blocks session end.
+
+Key techniques:
+- Collector writes to `${TEMP:-/tmp}/claude-batch-format-{session}.txt` (one path per line)
+- Runner reads, deduplicates with `sort -u`, groups by file extension
+- Runner detects formatters from project config files (`package.json`, `pyproject.toml`)
+- Both hooks fail open — collector errors are ignored, runner errors are logged
+
+```bash
+# Collector (PostToolUse): append edited file path
+FILE_PATH=$(echo "$INPUT" | node -e "
+  const d = JSON.parse(require('fs').readFileSync(0,'utf8'));
+  console.log(d.tool_input?.file_path || '');
+" 2>/dev/null || echo "")
+
+[ -z "$FILE_PATH" ] && exit 0
+echo "$FILE_PATH" >> "${TEMP:-/tmp}/claude-batch-format-${SESSION_ID}.txt"
+exit 0
+```
+
+```bash
+# Runner (Stop): format all collected files
+COLLECTED="${TEMP:-/tmp}/claude-batch-format-${SESSION_ID}.txt"
+[ ! -f "$COLLECTED" ] && exit 0
+
+FILES=$(sort -u "$COLLECTED")
+# Detect formatters and run in batch...
+rm -f "$COLLECTED"
+exit 0
+```
+
+### Design Quality Check (PostToolUse Content Analysis)
+
+The `design-quality-check` hook analyzes the **content** of frontend file edits, not just the tool call metadata. It detects patterns that indicate generic AI UI drift — overly symmetric grids, default blue/indigo color schemes, generic placeholder text, and other signals.
+
+Key techniques:
+- Filters on file extension first (`.tsx`, `.svelte`, `.astro`, `.html`, `.css`)
+- Extracts the written content from `tool_input.content` or `tool_input.new_string`
+- Runs pattern matching for known AI aesthetic anti-patterns
+- Uses `additionalContext` to nudge — never blocks, only advises
+- Has a cooldown to avoid firing on every small edit
+
+```bash
+# Content analysis: check for AI aesthetic patterns
+CONTENT=$(echo "$INPUT" | node -e "
+  const d = JSON.parse(require('fs').readFileSync(0,'utf8'));
+  console.log(d.tool_input?.content || d.tool_input?.new_string || '');
+" 2>/dev/null || echo "")
+
+# Check for generic AI patterns
+AI_PATTERNS="grid-cols-3.*grid-cols-3|bg-blue-500|bg-indigo-600|Lorem ipsum|rounded-lg shadow-md p-6"
+if echo "$CONTENT" | grep -qE "$AI_PATTERNS"; then
+  node -e "console.log(JSON.stringify({
+    additionalContext: 'Design drift detected: this looks like generic AI output. Review design-principles.md for project standards.'
+  }))"
+fi
+exit 0
+```
+
+---
+
+## Hook Count Summary
+
+Claude Hangar ships with **17 hooks** across all lifecycle events:
+
+| Event | Count | Hooks |
+|-------|------:|-------|
+| PreToolUse | 5 | secret-leak-check, bash-guard, checkpoint, config-protection, mcp-health-check |
+| PostToolUse | 3 | token-warning, design-quality-check, batch-format-collector |
+| UserPromptSubmit | 2 | skill-suggest, model-router |
+| SessionStart | 1 | session-start |
+| Stop | 2 | session-stop, stop-batch-format |
+| StopFailure | 1 | stop-failure |
+| PostCompact | 1 | post-compact |
+| ConfigChange | 1 | config-change-guard |
+| TaskCompleted | 1 | task-completed-gate |
+| SubagentStart/Stop | 1 | subagent-tracker |
+
+---
+
 ## Next Steps
 
 - [Writing Skills](writing-skills.md) — create skill workflows

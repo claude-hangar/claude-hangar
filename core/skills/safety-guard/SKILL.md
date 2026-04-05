@@ -2,6 +2,7 @@
 name: safety-guard
 description: 3-mode protection system for autonomous agent runs. Careful (confirm risky ops), Freeze (restrict writes to directory), Guard (combined). Use when running autonomous loops or untrusted agent tasks.
 user_invocable: true
+argument_hint: "careful|freeze|guard"
 ---
 
 # /safety-guard — Write Scope Protection

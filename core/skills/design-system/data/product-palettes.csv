@@ -1,0 +1,41 @@
+product_type,primary_hue,accent_hue,mood,palette_name,hex_primary,hex_accent,hex_bg,reasoning
+saas-dashboard,blue,indigo,professional trust,Deep Ocean,#1e40af,#4f46e5,#f8fafc,Blue conveys reliability; indigo accent adds modern depth
+fintech,navy,emerald,secure premium,Vault,#0f172a,#059669,#f0fdf4,Dark navy signals authority; green for growth/money
+healthcare,teal,sky,calm caring,Healing Touch,#0d9488,#0ea5e9,#f0fdfa,Teal is calming clinical; sky blue softens medical sterility
+ecommerce-fashion,rose,amber,trendy warm,Blush Commerce,#e11d48,#f59e0b,#fff7ed,Rose drives urgency; amber warmth for lifestyle appeal
+ecommerce-tech,slate,cyan,modern clean,Circuit,#475569,#06b6d4,#ecfeff,Neutral slate lets products shine; cyan for tech edge
+education,purple,yellow,creative inspiring,Scholar,#7c3aed,#eab308,#fefce8,Purple for wisdom; yellow for optimism and learning
+food-restaurant,orange,green,appetizing fresh,Harvest,#ea580c,#16a34a,#f0fdf4,Orange stimulates appetite; green signals freshness
+travel,sky,amber,adventurous warm,Wanderlust,#0284c7,#d97706,#fffbeb,Sky for openness; amber for warmth and wanderlust
+real-estate,slate,emerald,trustworthy premium,Estate,#334155,#059669,#f0fdf4,Slate professionalism; emerald for growth/nature
+fitness,red,zinc,energetic bold,Pulse,#dc2626,#71717a,#fafafa,Red for energy/urgency; zinc for modern athletic feel
+nonprofit,teal,orange,compassionate warm,Beacon,#0f766e,#ea580c,#fff7ed,Teal for trust/calm; orange for warmth and call-to-action
+legal,navy,gold,authoritative classic,Chambers,#1e3a5f,#b8860b,#fffbeb,Navy for authority; gold for prestige and tradition
+creative-agency,violet,lime,bold playful,Spark,#7c3aed,#84cc16,#f7fee7,Violet for creativity; lime for energy and freshness
+gaming,purple,cyan,immersive electric,Neon Arcade,#9333ea,#22d3ee,#ecfeff,Purple for fantasy; cyan for digital energy
+music,black,rose,emotional edgy,Vinyl,#0a0a0a,#f43f5e,#fff1f2,Black for drama; rose for emotional resonance
+photography,zinc,amber,minimal artistic,Aperture,#3f3f46,#f59e0b,#fffbeb,Neutral zinc showcases images; amber for warmth
+consulting,blue,slate,professional reliable,Advisory,#2563eb,#64748b,#f8fafc,Blue for trust; slate for understated professionalism
+ai-ml,indigo,violet,innovative futuristic,Neural,#4f46e5,#8b5cf6,#faf5ff,Indigo-violet gradient signals innovation and AI
+crypto-web3,purple,emerald,decentralized modern,Chain,#a855f7,#10b981,#ecfdf5,Purple for web3 aesthetic; green for value/growth
+sustainability,green,amber,eco conscious,Terra,#15803d,#d97706,#fffbeb,Green for environment; amber for earth/nature warmth
+wedding,rose,cream,romantic elegant,Petal,#be185d,#fef3c7,#fffbeb,Rose for romance; cream for elegance and softness
+kids-family,yellow,sky,playful cheerful,Playground,#ca8a04,#38bdf8,#f0f9ff,Yellow for joy; sky blue for trust and fun
+luxury,black,gold,premium exclusive,Opulent,#171717,#b8860b,#fefce8,Black for exclusivity; gold for premium positioning
+startup,indigo,emerald,ambitious fresh,Launchpad,#4338ca,#059669,#ecfdf5,Indigo for ambition; emerald for growth potential
+news-media,red,slate,urgent authoritative,Headline,#b91c1c,#475569,#f8fafc,Red for urgency/breaking; slate for credibility
+social-network,blue,pink,friendly connected,Connect,#3b82f6,#ec4899,#fdf2f8,Blue for trust; pink for warmth and social warmth
+developer-tools,zinc,green,technical efficient,Terminal,#27272a,#22c55e,#f0fdf4,Dark zinc for terminal feel; green for success/go
+logistics,blue,orange,reliable efficient,Route,#1d4ed8,#f97316,#fff7ed,Blue for reliability; orange for movement/speed
+automotive,red,steel,powerful sleek,Throttle,#dc2626,#94a3b8,#f8fafc,Red for performance; steel for engineering precision
+spa-wellness,sage,lavender,peaceful serene,Zen,#6b8e6b,#c4b5fd,#faf5ff,Sage for nature/calm; lavender for relaxation
+pet-care,amber,teal,warm friendly,Paws,#d97706,#14b8a6,#f0fdfa,Amber for warmth; teal for health/care
+agriculture,green,brown,natural grounded,Harvest Field,#16a34a,#92400e,#fef3c7,Green for growth; brown for earth/soil
+cybersecurity,slate,red,alert protective,Shield,#1e293b,#ef4444,#fef2f2,Dark slate for security; red for alerts/warnings
+insurance,blue,green,trustworthy stable,Safe Harbor,#1e40af,#15803d,#f0fdf4,Blue for trust; green for financial stability
+architecture,stone,copper,structural elegant,Blueprint,#78716c,#b87333,#fefce8,Stone for materials; copper for warmth/craftsmanship
+bakery-cafe,brown,pink,cozy sweet,Crumb,#92400e,#f9a8d4,#fdf2f8,Brown for coffee/baking; pink for sweetness
+sports-team,team-primary,team-accent,energetic loyal,Rally,dynamic,dynamic,#fafafa,Use team colors — energy and loyalty are universal
+podcast,purple,amber,intimate creative,Airwaves,#7e22ce,#d97706,#fffbeb,Purple for creativity; amber for intimate warmth
+saas-analytics,indigo,teal,data-driven insightful,Metric,#3730a3,#0d9488,#f0fdfa,Indigo for depth; teal for clarity and insight
+marketplace,orange,blue,vibrant trustworthy,Bazaar,#c2410c,#2563eb,#eff6ff,Orange for marketplace energy; blue for buyer trust

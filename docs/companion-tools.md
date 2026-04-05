@@ -35,7 +35,7 @@ Install in this order to avoid conflicts:
 
 ## 1. Superpowers (obra/superpowers)
 
-**What it adds:** 14 deep workflow skills — brainstorming, subagent-driven development, TDD, systematic debugging, planning, and code review.
+**What it adds:** 14 deep workflow skills — brainstorming, subagent-driven development, TDD, systematic debugging, planning, and code review. (136K+ stars)
 
 **Why alongside Hangar:** Hangar protects and organizes. Superpowers guides the development methodology. Zero overlap — Hangar has operational skills (`/scan`, `/audit`, `/deploy-check`), Superpowers has workflow skills (`/brainstorm`, `/write-plan`, `/tdd`).
 
@@ -163,7 +163,7 @@ claude install thedotmack/claude-mem
 
 ## 6. Everything Claude Code (affaan-m/everything-claude-code)
 
-**What it adds:** Comprehensive reference system with instincts, memory patterns, security guidelines, and curated best practices. The most popular community contribution (97K+ stars).
+**What it adds:** Comprehensive reference system with instincts, memory patterns, security guidelines, and curated best practices. The most popular community contribution (140K+ stars).
 
 **Why alongside Hangar:** Good reference material for understanding Claude Code capabilities. Use it as a learning resource alongside Hangar's operational infrastructure.
 

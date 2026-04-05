@@ -165,6 +165,18 @@ structured entries.
 
 ---
 
+## Agent Resilience
+
+Agents should degrade gracefully when their designated model or type is unavailable:
+
+- **Fallback behavior:** If a specific agent type is not available (e.g., model not accessible, agent file missing), the system falls back to a general-purpose agent in the main conversation.
+- **Design for degradation:** Write agent instructions so the core task can still be performed by a less specialized model. Avoid hard dependencies on model-specific capabilities.
+- **Retry pattern:** On "Agent not found" or model availability errors, retry the task with a fallback agent before failing. Pattern from oh-my-opencode: catch agent dispatch errors, retry with the default model.
+
+This means agents should not assume they are the only way to accomplish a task — they are an optimization, not a hard requirement.
+
+---
+
 ## Best Practices
 
 1. **Always set maxTurns** — 10 for quick checks, 15-25 for analysis, 25-35 for deep work

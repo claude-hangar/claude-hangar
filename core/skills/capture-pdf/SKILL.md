@@ -3,6 +3,8 @@ name: capture-pdf
 description: >
   Website-to-PDF capture (all pages + interactive states).
   Use when: "capture", "pdf", "print", "screenshot", "capture pages".
+user_invocable: true
+argument_hint: "[url]"
 ---
 
 <!-- AI-QUICK-REF

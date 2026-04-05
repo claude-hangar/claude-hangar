@@ -13,7 +13,10 @@
 #   bash setup.sh --uninstall  # Remove Hangar-managed files (keeps user data)
 #   bash setup.sh --skills design,security   # Install only specific skill categories
 #   bash setup.sh --minimal                  # Core only (hooks, agents, lib) — no skills
+#   bash setup.sh --with hooks,agents,lib    # Install only specific components
+#   bash setup.sh --without learning,contexts # Install everything except these
 #   bash setup.sh --list-categories          # List available skill categories
+#   bash setup.sh --list-components          # List available components
 # ─────────────────────────────────────────────────────────────────────────
 
 set -euo pipefail
@@ -92,7 +95,7 @@ validate_structure() {
   local hook_count
   hook_count=$(find "$SCRIPT_DIR/core/hooks" -name '*.sh' 2>/dev/null | wc -l)
   if [ "$hook_count" -lt 5 ]; then
-    warn "Only $hook_count hooks found (expected 13+)"
+    warn "Only $hook_count hooks found (expected 27+)"
   fi
 
   # Check agents
@@ -307,6 +310,32 @@ deploy_filtered_skills() {
   success "Deployed $count skill(s) from categories: $categories"
 }
 
+# ─── Component Filtering ─────────────────────────────────────────────
+
+# Available components for --with/--without
+AVAILABLE_COMPONENTS="hooks,agents,skills,lib,rules,contexts,references,mcp-server,statusline,learning"
+
+# Check if a component should be deployed
+# Usage: should_deploy "hooks" && deploy_hooks
+should_deploy() {
+  local component="$1"
+
+  # --with takes precedence: only deploy listed components
+  if [ -n "${INCLUDE_COMPONENTS:-}" ]; then
+    echo ",$INCLUDE_COMPONENTS," | grep -q ",$component," && return 0
+    return 1
+  fi
+
+  # --without: deploy everything except listed
+  if [ -n "${EXCLUDE_COMPONENTS:-}" ]; then
+    echo ",$EXCLUDE_COMPONENTS," | grep -q ",$component," && return 1
+    return 0
+  fi
+
+  # No filter: deploy everything
+  return 0
+}
+
 deploy_all() {
   info "Deploying to $CLAUDE_DIR..."
 
@@ -322,39 +351,69 @@ deploy_all() {
     touch "$CLAUDE_DIR/.hangar-backup-done"
   fi
 
-  # Deploy components
+  # Deploy components (respecting --with/--without filters)
   mkdir -p "$CLAUDE_DIR"
-  deploy_component "$SCRIPT_DIR/core/hooks" "$CLAUDE_DIR/hooks" "Hooks ($(find "$SCRIPT_DIR/core/hooks" -name '*.sh' | wc -l) scripts)"
-  deploy_component "$SCRIPT_DIR/core/agents" "$CLAUDE_DIR/agents" "Agents ($(find "$SCRIPT_DIR/core/agents" -name '*.md' | wc -l) definitions)"
+
+  should_deploy "hooks" && \
+    deploy_component "$SCRIPT_DIR/core/hooks" "$CLAUDE_DIR/hooks" "Hooks ($(find "$SCRIPT_DIR/core/hooks" -name '*.sh' | wc -l) scripts)" || \
+    info "Skipped: hooks (filtered out)"
+
+  should_deploy "agents" && \
+    deploy_component "$SCRIPT_DIR/core/agents" "$CLAUDE_DIR/agents" "Agents ($(find "$SCRIPT_DIR/core/agents" -name '*.md' | wc -l) definitions)" || \
+    info "Skipped: agents (filtered out)"
 
   # Skills deployment: full, filtered, or skipped
-  if [ "${SKILL_MODE:-all}" = "none" ]; then
-    info "Skipping skills deployment (--minimal)"
-  elif [ "${SKILL_MODE:-all}" = "filtered" ]; then
-    deploy_filtered_skills "$SKILL_CATEGORIES"
+  if should_deploy "skills"; then
+    if [ "${SKILL_MODE:-all}" = "none" ]; then
+      info "Skipping skills deployment (--minimal)"
+    elif [ "${SKILL_MODE:-all}" = "filtered" ]; then
+      deploy_filtered_skills "$SKILL_CATEGORIES"
+    else
+      deploy_component "$SCRIPT_DIR/core/skills" "$CLAUDE_DIR/skills" "Skills"
+    fi
   else
-    deploy_component "$SCRIPT_DIR/core/skills" "$CLAUDE_DIR/skills" "Skills"
+    info "Skipped: skills (filtered out)"
   fi
 
-  deploy_component "$SCRIPT_DIR/core/lib" "$CLAUDE_DIR/lib" "Shared lib"
-  deploy_component "$SCRIPT_DIR/core/statusline-command.sh" "$CLAUDE_DIR/statusline-command.sh" "Statusline"
+  should_deploy "lib" && \
+    deploy_component "$SCRIPT_DIR/core/lib" "$CLAUDE_DIR/lib" "Shared lib" || \
+    info "Skipped: lib (filtered out)"
 
-  # Deploy stacks into skills
-  if [ -d "$SCRIPT_DIR/stacks" ]; then
-    for stack_dir in "$SCRIPT_DIR"/stacks/*/; do
-      [ -d "$stack_dir" ] || continue
-      local stack_name
-      stack_name=$(basename "$stack_dir")
-      [ "$stack_name" = "README.md" ] && continue
-      deploy_component "$stack_dir" "$CLAUDE_DIR/skills/$stack_name" "Stack: $stack_name"
-    done
+  should_deploy "statusline" && \
+    deploy_component "$SCRIPT_DIR/core/statusline-command.sh" "$CLAUDE_DIR/statusline-command.sh" "Statusline" || \
+    info "Skipped: statusline (filtered out)"
+
+  # Deploy stacks into skills (stacks are part of skills)
+  if should_deploy "skills"; then
+    if [ -d "$SCRIPT_DIR/stacks" ]; then
+      for stack_dir in "$SCRIPT_DIR"/stacks/*/; do
+        [ -d "$stack_dir" ] || continue
+        local stack_name
+        stack_name=$(basename "$stack_dir")
+        [ "$stack_name" = "README.md" ] && continue
+        deploy_component "$stack_dir" "$CLAUDE_DIR/skills/$stack_name" "Stack: $stack_name"
+      done
+    fi
   fi
 
-  # Deploy MCP server configs from stacks
-  deploy_mcp
-  deploy_rules
-  deploy_contexts
-  init_learning_system
+  # Deploy references
+  should_deploy "references" && {
+    if [ -d "$SCRIPT_DIR/core/references" ]; then
+      deploy_component "$SCRIPT_DIR/core/references" "$CLAUDE_DIR/references" "References"
+    fi
+  } || info "Skipped: references (filtered out)"
+
+  # Deploy MCP server
+  should_deploy "mcp-server" && {
+    deploy_mcp
+    if [ -d "$SCRIPT_DIR/core/mcp-server" ]; then
+      deploy_component "$SCRIPT_DIR/core/mcp-server" "$CLAUDE_DIR/mcp-server" "MCP Server (hangar-state)"
+    fi
+  } || info "Skipped: mcp-server (filtered out)"
+
+  should_deploy "rules" && deploy_rules || info "Skipped: rules (filtered out)"
+  should_deploy "contexts" && deploy_contexts || info "Skipped: contexts (filtered out)"
+  should_deploy "learning" && init_learning_system || info "Skipped: learning (filtered out)"
 
   # Settings: merge or deploy template
   if [ ! -f "$CLAUDE_DIR/settings.json" ]; then
@@ -382,6 +441,10 @@ deploy_all() {
 # Skill deployment mode: "all" (default), "filtered", or "none"
 SKILL_MODE="all"
 SKILL_CATEGORIES=""
+
+# Component filtering for --with/--without
+INCLUDE_COMPONENTS=""
+EXCLUDE_COMPONENTS=""
 
 main() {
   echo ""
@@ -413,12 +476,32 @@ main() {
         fi
         shift
         ;;
+      --with)
+        INCLUDE_COMPONENTS="$2"
+        shift 2
+        ;;
+      --with=*)
+        INCLUDE_COMPONENTS="${1#--with=}"
+        shift
+        ;;
+      --without)
+        EXCLUDE_COMPONENTS="$2"
+        shift 2
+        ;;
+      --without=*)
+        EXCLUDE_COMPONENTS="${1#--without=}"
+        shift
+        ;;
       --minimal)
         SKILL_MODE="none"
         shift
         ;;
       --list-categories)
         mode="list-categories"
+        shift
+        ;;
+      --list-components)
+        mode="list-components"
         shift
         ;;
       *)
@@ -433,6 +516,26 @@ main() {
   case "${mode:-}" in
     list-categories)
       list_categories
+      ;;
+
+    list-components|--list-components)
+      echo ""
+      echo "Available components for --with/--without:"
+      echo ""
+      echo "  hooks       — Lifecycle hooks (safety, quality gates, monitoring)"
+      echo "  agents      — Specialized AI worker definitions"
+      echo "  skills      — Slash commands and workflow automations"
+      echo "  lib         — Shared libraries and defaults"
+      echo "  rules       — Always-on governance rules"
+      echo "  contexts    — Context modes (dev, research, review)"
+      echo "  references  — Shared behavioral references"
+      echo "  mcp-server  — Hangar State MCP server"
+      echo "  statusline  — Terminal statusline integration"
+      echo "  learning    — Continuous learning system directories"
+      echo ""
+      echo "Examples:"
+      echo "  bash setup.sh --with hooks,agents,lib    # Core only"
+      echo "  bash setup.sh --without learning,contexts # Everything except these"
       ;;
 
     --check)
@@ -598,25 +701,33 @@ main() {
       echo "Usage: bash setup.sh [MODE] [OPTIONS]"
       echo ""
       echo "Modes:"
-      echo "  (no args)         Interactive wizard (first run) or sync"
-      echo "  --check           Dry-run validation"
-      echo "  --verify          Verify existing installation"
-      echo "  --sync            Remove orphaned files + redeploy"
-      echo "  --rollback        Restore from backup"
-      echo "  --update          git pull + redeploy"
-      echo "  --uninstall       Remove Hangar files (preserves user data)"
-      echo "  --list-categories List available skill categories with counts"
-      echo "  --help            Show this help"
+      echo "  (no args)           Interactive wizard (first run) or sync"
+      echo "  --check             Dry-run validation"
+      echo "  --verify            Verify existing installation"
+      echo "  --sync              Remove orphaned files + redeploy"
+      echo "  --rollback          Restore from backup"
+      echo "  --update            git pull + redeploy"
+      echo "  --uninstall         Remove Hangar files (preserves user data)"
+      echo "  --list-categories   List available skill categories with counts"
+      echo "  --list-components   List available components for --with/--without"
+      echo "  --help              Show this help"
       echo ""
       echo "Options:"
-      echo "  --skills CATS     Install only skills from given categories (comma-separated)"
-      echo "  --minimal         Install core only (hooks, agents, lib) — skip all skills"
+      echo "  --skills CATS       Install only skills from given categories (comma-separated)"
+      echo "  --minimal           Install core only (hooks, agents, lib) — skip all skills"
+      echo "  --with COMPONENTS   Install only specific components (comma-separated)"
+      echo "  --without COMPS     Install everything except these components"
+      echo ""
+      echo "  Components: hooks, agents, skills, lib, rules, contexts, references,"
+      echo "              mcp-server, statusline, learning"
       echo ""
       echo "Examples:"
-      echo "  bash setup.sh --skills design,security    # Only design + security skills"
-      echo "  bash setup.sh --minimal                   # Core without skills"
-      echo "  bash setup.sh --list-categories            # Show available categories"
-      echo "  bash setup.sh --update --skills audit      # Update + deploy audit skills only"
+      echo "  bash setup.sh --skills design,security      # Only design + security skills"
+      echo "  bash setup.sh --minimal                     # Core without skills"
+      echo "  bash setup.sh --list-categories              # Show available categories"
+      echo "  bash setup.sh --update --skills audit        # Update + deploy audit skills only"
+      echo "  bash setup.sh --with hooks,agents,lib        # Core components only"
+      echo "  bash setup.sh --without learning,contexts    # Everything except these"
       ;;
 
     *)

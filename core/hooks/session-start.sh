@@ -137,6 +137,9 @@ if [ -n "$FRONTEND_HINT" ]; then
   CONTEXT+="$FRONTEND_HINT\n"
 fi
 
+# Write session start timestamp (used by cost-tracker and desktop-notify)
+date +%s > "$HOME/.claude/.session-start" 2>/dev/null || true
+
 # Reset token tracking file (new session)
 SESSION_ID="${CLAUDE_SESSION_ID:-$$}"
 TRACK_FILE="${TEMP:-/tmp}/claude-token-track-${SESSION_ID}"

@@ -2,6 +2,7 @@
 name: strategic-compact
 description: Suggests optimal moments for /compact based on workflow state and context usage. Proactive context management to prevent quality degradation.
 user_invocable: true
+argument_hint: ""
 ---
 
 # /strategic-compact — Smart Context Management

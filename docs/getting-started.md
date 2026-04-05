@@ -8,7 +8,7 @@ Install and configure Claude Hangar — configuration management for [Claude Cod
 
 One repo, one script, a production-grade Claude Code environment:
 
-- **13 hooks** — secret leak detection, bash command guard, token warnings, model routing, quality gates, and more
+- **17 hooks** — secret leak detection, bash command guard, token warnings, model routing, quality gates, and more
 - **6 agents** — codebase explorer, explorer-deep, security reviewer, commit reviewer, plan reviewer, dependency checker
 - **18 skills** — audit, deploy-check, polish, scan, consult, handoff, and more
 - **Statusline** — model, context bar, rate limits, cost, session duration
@@ -64,7 +64,7 @@ Setup copies files from the repo into `~/.claude/`:
 
 ```
 ~/.claude/
-  hooks/                   # 13 hook scripts
+  hooks/                   # 17 hook scripts
     secret-leak-check.sh   #   PreToolUse — blocks secrets in file writes
     bash-guard.sh          #   PreToolUse — blocks destructive commands + enforces commits
     checkpoint.sh          #   PreToolUse — git stash checkpoint before writes
@@ -114,6 +114,14 @@ bash setup.sh --verify     # check all components are installed
 bash setup.sh --update     # git pull + redeploy
 bash setup.sh --rollback   # restore from automatic backup
 ```
+
+### Adding a Stack After Initial Setup
+
+Setup is currently a one-time operation. To add a framework stack (Astro, SvelteKit, Next.js, Database, Auth) after the initial install:
+
+1. **If supported:** `bash setup.sh --stack <name>` (re-runs setup for that stack only)
+2. **Manual alternative:** Copy the stack files from `stacks/<name>/` into your project's `.claude/` directory, then restart Claude Code
+3. **Future:** A dedicated `hangar integrate <stack>` command is planned for seamless post-init stack management
 
 ---
 

@@ -3,6 +3,8 @@ name: freshness-check
 description: >
   Pipeline source freshness check (frameworks, tools, standards).
   Use when: "freshness", "update check", "is everything current", "check versions".
+user_invocable: true
+argument_hint: "check|update|full"
 ---
 
 <!-- AI-QUICK-REF

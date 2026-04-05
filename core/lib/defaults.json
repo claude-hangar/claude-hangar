@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Claude Hangar centralized defaults — single source of truth for all configurable values. Referenced by: setup.sh, hooks, skills, agents, and stack configs. Do not duplicate these values — import or read from this file.",
+  "version": "1.0.0",
+  "hookProfile": "standard",
+  "hookTimeout": {
+    "sync": 10000,
+    "async": 30000
+  },
+  "deployment": {
+    "targetDir": "~/.claude",
+    "backupOnUpdate": true
+  },
+  "contextModes": ["dev", "research", "review"],
+  "defaultContextMode": "dev",
+  "testCoverage": {
+    "minimum": 80,
+    "critical": 95
+  },
+  "git": {
+    "conventionalCommits": true,
+    "autoStashBeforeEdit": true,
+    "noPush": true
+  },
+  "models": {
+    "opus": "claude-opus-4-6",
+    "sonnet": "claude-sonnet-4-6",
+    "haiku": "claude-haiku-4-5-20251001"
+  },
+  "security": {
+    "secretScanEnabled": true,
+    "bashGuardEnabled": true,
+    "configProtectionEnabled": true
+  },
+  "design": {
+    "iconLibrary": "lucide",
+    "fontHosting": "self-hosted",
+    "a11yStandard": "WCAG-AA",
+    "baseGrid": 4
+  }
+}

@@ -2,6 +2,7 @@
 name: handoff
 description: Structured session handoff — preserves context for seamless continuation across sessions.
 user_invocable: true
+argument_hint: "create|read|clean"
 ---
 
 # /handoff — Structured Session Handoff
@@ -121,6 +122,40 @@ When `/handoff read`:
 1. Read HANDOFF.md
 2. Present a concise summary
 3. Ask: "Resume from where we left off?"
+
+## Story Continuity
+
+When `/handoff read` detects previous handoffs for the same project, it
+automatically loads continuity context:
+
+### Auto-Discovery
+
+1. Check `.claude/handoff-archive/` for previous handoffs
+2. Sort by date, take the 3 most recent
+3. Extract from each:
+   - **Code Map changes** — which files were modified and why
+   - **Key Decisions** — architectural choices that affect current work
+   - **Remaining Tasks** — uncompleted work items (may still be relevant)
+   - **Failed Approaches** — what was tried and didn't work (avoid repeating)
+
+### Continuity Context Format
+
+When previous handoffs exist, prepend to the read summary:
+
+```
+Continuity Context (from N previous sessions):
+- Last session (DATE): [summary of what was done]
+- Carried-over decisions: [decisions still relevant]
+- Previously failed: [approaches to avoid]
+- Recurring patterns: [issues seen across sessions]
+```
+
+### Rules
+
+- Only load from the SAME project directory (match by git remote or cwd)
+- Maximum 3 previous handoffs (older ones are too stale)
+- Strip secrets and absolute paths from historical context
+- If handoff archive > 10 files, suggest cleanup: `/handoff clean --archive`
 
 ## Clean Flow
 

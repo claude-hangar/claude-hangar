@@ -9,10 +9,12 @@ System architecture of Claude Hangar.
 ```
 claude-hangar/
 ├── core/                          # Global config → deployed to ~/.claude/
-│   ├── hooks/                     #   13 lifecycle hooks (.sh)
+│   ├── hooks/                     #   17 lifecycle hooks (.sh)
 │   ├── agents/                    #   6 agent definitions (.md)
 │   ├── skills/                    #   18 skill workflows (SKILL.md per dir)
+│   ├── references/                #   Shared behavioral files (3 .md references)
 │   ├── lib/common.sh              #   Shared shell functions
+│   ├── lib/defaults.json          #   Single source of truth for configurable values
 │   ├── statusline-command.sh      #   Statusline script
 │   ├── settings.json.template     #   Settings template (hooks, env, effort)
 │   └── CLAUDE.md.template         #   Global instructions template
@@ -165,6 +167,52 @@ This protects user customizations. To adopt new settings from a Hangar update, m
 4. **Least privilege** — agents get minimum tools
 5. **No vendor lock-in** — shell scripts + Node.js for JSON, no external dependencies
 6. **One command** — `bash setup.sh` handles everything
+
+---
+
+## Shared References & Defaults
+
+### core/references/
+
+Shared behavioral files that skills and agents can reference for consistency. Instead of duplicating instructions across multiple skills, each skill references a shared file.
+
+| Reference | Purpose |
+|-----------|---------|
+| `questioning.md` | Shared questioning style — how skills and agents ask the user questions |
+| `design-principles.md` | Design quality standards — no AI aesthetic, WCAG AA, curated palettes |
+| `code-quality.md` | Code quality defaults — fix code not configs, immutability, coverage |
+
+Skills reference these via relative path:
+
+```markdown
+## Quality Standards
+See [shared design principles](../references/design-principles.md).
+```
+
+This pattern is inspired by GSD v1 shared behavioral references. When a standard changes, update one file instead of editing every skill.
+
+### core/lib/defaults.json
+
+A single source of truth for all configurable values used across hooks, skills, and agents. Instead of hardcoding thresholds and limits in individual scripts, they read from `defaults.json`:
+
+```json
+{
+  "tokenWarning": { "threshold70": 0.70, "threshold80": 0.80 },
+  "coverage": { "minimum": 80, "critical": 95 },
+  "hooks": { "cooldownSeconds": 300 }
+}
+```
+
+Hooks and skills read values via Node.js:
+
+```bash
+THRESHOLD=$(node -e "
+  const d = require('$HOME/.claude/lib/defaults.json');
+  console.log(d.tokenWarning.threshold70);
+")
+```
+
+This eliminates magic numbers scattered across scripts and makes tuning behavior a config change rather than a code change.
 
 ---
 

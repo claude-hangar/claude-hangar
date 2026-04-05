@@ -123,6 +123,22 @@ Hooks are registered in the `hooks` section. Each event contains an array of mat
 
 ---
 
+## Hook Profiles
+
+The `HANGAR_HOOK_PROFILE` environment variable controls which hooks are active:
+
+| Profile | Hooks Enabled | Use Case |
+|---------|--------------|----------|
+| `minimal` | Safety only (bash-guard, secret-leak-check) | Fast sessions, quick questions |
+| `standard` | Safety + quality (default) | Normal development |
+| `strict` | All hooks in blocking mode | Audits, pre-release verification |
+
+Set per session: `HANGAR_HOOK_PROFILE=minimal claude`
+
+The default profile and all other configurable values are defined in `core/lib/defaults.json` — the single source of truth for Hangar's configuration. Hooks, skills, agents, and `setup.sh` all reference this file. Do not duplicate values elsewhere.
+
+---
+
 ## Statusline
 
 The statusline script (`~/.claude/statusline-command.sh`) displays real-time session info:

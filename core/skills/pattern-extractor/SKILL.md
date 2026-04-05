@@ -2,6 +2,7 @@
 name: pattern-extractor
 description: Analyzes captured patterns from continuous learning to extract reusable workflows and anti-patterns. Use when you want to review what's been learned across sessions.
 user_invocable: true
+argument_hint: ""
 ---
 
 # /pattern-extractor — Learn from History

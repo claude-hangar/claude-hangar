@@ -59,6 +59,16 @@ const protectedPatterns = [
   /^\.pylintrc/,
   /^setup\.cfg$/,
   /^\.markdownlint/,
+  /^\.shellcheckrc$/,
+  /^\.ruff\.toml$/,
+  /^ruff\.toml$/,
+  /^\.mypy\.ini$/,
+  /^mypy\.ini$/,
+  /^\.cargo[\\/\\\\]config/,
+  /^deno\.json$/,
+  /^\.swiftlint/,
+  /^\.php-cs-fixer/,
+  /^phpstan/,
 ];
 
 const isProtected = protectedPatterns.some(p => p.test(fileName));
@@ -92,6 +102,16 @@ const weakeningPatterns = [
   { pattern: /disable[=:]/,               desc: 'Disabling linter checks' },
   { pattern: /ignore[=:]/,                desc: 'Ignoring linter checks' },
   { pattern: /max-line-length\s*=\s*\d{4,}/, desc: 'Setting unreasonably high line length' },
+
+  // Rust weakening
+  { pattern: /allow\(clippy/,             desc: 'Allowing clippy warnings' },
+
+  // ShellCheck weakening
+  { pattern: /disable=SC/,               desc: 'Disabling ShellCheck rules' },
+
+  // Ruff/Python weakening
+  { pattern: /select\s*=\s*\[\s*\]/,     desc: 'Empty Ruff rule selection' },
+  { pattern: /fixable\s*=\s*\[\s*\"ALL\"\]/, desc: 'Making all Ruff rules auto-fixable' },
 
   // General weakening
   { pattern: /\"ignore\"/,                desc: 'Setting severity to ignore' },

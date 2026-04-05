@@ -23,10 +23,10 @@ Most Claude Code configs are personal dotfiles — useful to read, hard to reuse
 
 - **One command** deploys a complete, tested setup to `~/.claude/`
 - **Multi-project orchestration** — manage configs for multiple repos from one place
-- **Modular stacks** — pick only what you need (Astro, SvelteKit, Next.js, Database, Auth)
+- **Modular stacks** — pick only what you need (`bash integrate.sh <stack>`) with `--with`/`--without` component control
 - **Battle-tested hooks** that prevent real incidents (secret leaks, destructive commands, context overflow)
 - **31 skills** from project scanning to pre-PR verification, context optimization, and meta-governance
-- **22 lifecycle hooks** with 4-level quality gates, config protection, forensics, and smart context preservation
+- **27 lifecycle hooks** with 4-level quality gates, config protection, MCP health checks, design quality guards, and smart context preservation
 - **21 agents** for specialized tasks, code review, TDD enforcement, performance analysis, and autonomous workflows
 - **19 governance rules** (common + language-specific) always-on code quality
 - **3 context modes** — dev, research, review
@@ -73,7 +73,7 @@ cd ~/.claude-hangar && bash setup.sh
 
 ## What You Get
 
-### Hooks (13) — Automated Safety Net
+### Hooks (19) — Automated Safety Net
 
 | Hook | Event | What It Does |
 |------|-------|-------------|
@@ -91,6 +91,25 @@ cd ~/.claude-hangar && bash setup.sh
 | `task-completed-gate` | TaskCompleted | 4-level quality gate (existence, errors, evidence, substance) |
 | `subagent-tracker` | SubagentStart/Stop | Lifecycle tracking + forensics (duration, thrashing, failures) |
 | `stop-failure` | StopFailure | Logs errors on session failures |
+| `mcp-health-check` | PreToolUse | Checks MCP server health before tool calls, warns on repeated failures |
+| `design-quality-check` | PostToolUse | Detects generic AI UI drift patterns in frontend files |
+| `batch-format-collector` | PostToolUse | Collects edited file paths for batch formatting |
+| `stop-batch-format` | Stop | Runs formatters once at session end on all edited files |
+| `db-query-guard` | PreToolUse | Warns when agent tries to directly query internal databases |
+
+### MCP Server — Hangar State API
+
+A zero-dependency MCP server (`core/mcp-server/server.js`) that exposes Hangar configuration state as 5 read-only tools: `hangar_hooks`, `hangar_skills`, `hangar_agents`, `hangar_config`, `hangar_freshness`.
+
+### Shared References (3)
+
+Shared behavioral files that skills and agents reference for consistency:
+
+| Reference | Purpose |
+|-----------|---------|
+| `questioning.md` | Shared questioning style for skills and agents |
+| `design-principles.md` | Design quality standards (no AI aesthetic, WCAG AA, curated palettes) |
+| `code-quality.md` | Code quality defaults (fix code not configs, immutability, coverage) |
 
 ### Agents (21) — Specialized AI Workers
 
@@ -230,12 +249,12 @@ Claude Hangar is the infrastructure layer. These companion tools extend it:
 
 | Tool | Stars | What It Adds |
 |------|------:|-------------|
-| [**Superpowers**](https://github.com/obra/superpowers) | 104K+ | Deep workflow methodology — brainstorming, TDD, subagent-driven development, systematic debugging |
+| [**Superpowers**](https://github.com/obra/superpowers) | 136K+ | Deep workflow methodology — brainstorming, TDD, subagent-driven development, systematic debugging |
 | [**Trail of Bits Skills**](https://github.com/trailofbits/skills) | 3.8K+ | Professional security skills — CodeQL, Semgrep, variant analysis, fix verification |
 | [**ccusage**](https://github.com/ryoppippi/ccusage) | 11.8K+ | Historical usage analytics — token costs, session history, dashboards |
 | [**claude-squad**](https://github.com/smtg-ai/claude-squad) | 6.4K+ | Multi-session management — run multiple Claude Code instances in parallel |
 | [**claude-mem**](https://github.com/thedotmack/claude-mem) | 39K+ | Persistent memory plugin — session captures, AI compression, semantic search |
-| [**Everything Claude Code**](https://github.com/affaan-m/everything-claude-code) | 97K+ | Comprehensive system with instincts, memory, and security patterns |
+| [**Everything Claude Code**](https://github.com/affaan-m/everything-claude-code) | 140K+ | Comprehensive system with instincts, memory, and security patterns |
 
 All are compatible with Hangar and each other. No conflicts, no overlap.
 
@@ -254,8 +273,12 @@ Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines
 
 ## Inspired By
 
-- [Everything Claude Code](https://github.com/affaan-m/everything-claude-code) — Rules system, language agents, learning mechanisms, context modes, hook profiles, config protection, meta-governance
+- [Everything Claude Code](https://github.com/affaan-m/everything-claude-code) — Rules system, language agents, learning mechanisms, context modes, hook profiles, config protection, meta-governance, shared references
 - [GSD v2](https://github.com/gsd-build/gsd-2) — DECISIONS.md (append-only ADR register) pattern
+- [BMAD-METHOD](https://github.com/bmadcode/BMAD-METHOD) — Story continuity, intent cascade patterns
+- [spec-kit](https://github.com/nicobailey/spec-kit) — User-invocable frontmatter, argument hints
+- [oh-my-opencode](https://github.com/nicholasgubbins/oh-my-opencode) — Agent fallback, hook composition patterns
+- [ui-ux-pro-max-skill](https://github.com/nicholasgubbins/ui-ux-pro-max-skill) — Design token architecture, product palettes
 
 ## License
 

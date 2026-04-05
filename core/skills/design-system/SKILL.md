@@ -3,13 +3,15 @@ name: design-system
 description: >
   Context-aware design intelligence with curated databases for styles, palettes, typography, UX rules, and wow effects.
   Use when: "design", "colors", "typography", "component", "card", "button", "hero", "ui", "palette", "tailwind pattern", "style", "wow", "font".
+user_invocable: true
+argument_hint: "[component|palette|typography]"
 ---
 
 <!-- AI-QUICK-REF
 ## /design-system — Quick Reference
 - **Two tiers:** Inline tables (80% case) + CSV deep layer (20% case)
 - **6 areas:** Spacing, Typography, Colors, Components, Industry Palettes, Wow Effects
-- **Deep data:** data/styles.csv (~50), data/palettes.csv (~80), data/typography.csv (~35), data/ux-rules.csv (~70), data/wow-effects.csv (~25)
+- **Deep data:** data/styles.csv (~50), data/palettes.csv (~80), data/product-palettes.csv (~40), data/typography.csv (~35), data/ux-rules.csv (~70), data/wow-effects.csv (~25)
 - **Activation:** Automatically during UI work, or manually via /design-system
 - **Tailwind v4:** All patterns for current Tailwind version
 - **Persistence:** Optional design-system/MASTER.md per project
@@ -45,6 +47,7 @@ QUESTION                                          ACTION
 ─────────────────────────────────────────────────────────────
 Standard industry palette?                     → Tier 1 inline table (Section 5)
 Unusual mood/industry combo?                   → Read data/palettes.csv
+Product-type-specific palette?                 → Read data/product-palettes.csv
 One of the 10 standard font pairings?          → Tier 1 inline table (Section 3)
 Need more font options or specific mood?       → Read data/typography.csv
 Looking for a specific UI style?               → Read data/styles.csv
@@ -183,6 +186,22 @@ For 70+ more palettes (multiple moods per industry, dark variants, mood-based): 
 2. Choose matching palette from table (or `data/palettes.csv` for more options)
 3. Define as CSS custom properties in `tailwind.config` or `app.css`
 4. Use consistently — no deviations without reason
+
+> **Reference:** For product-specific palettes covering 161 categories with deeper mood/variant matrices, see `nextlevelbuilder/ui-ux-pro-max-skill` v2.5.0. Hangar's palette database focuses on the most common industries — the external resource covers niche and product-specific verticals.
+
+### Product-Type Palettes
+
+For industry-specific palette recommendations, consult `data/product-palettes.csv`.
+Each entry maps a product type to a curated primary/accent/background combination with
+reasoning for why these colors work for that specific industry.
+
+**Usage:** When a user describes their project type (e.g., "fintech dashboard",
+"restaurant website", "SaaS analytics"), look up the matching product type in the CSV
+and use it as the starting point for the palette recommendation.
+
+40 product types covered including: SaaS, fintech, healthcare, e-commerce, education,
+food, travel, real estate, fitness, nonprofit, legal, gaming, music, AI/ML, crypto,
+sustainability, luxury, developer tools, and more.
 
 ---
 

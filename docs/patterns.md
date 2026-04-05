@@ -38,6 +38,37 @@
 - `2` — Blockierend (Tool wird verhindert)
 - Andere — Nicht-blockierend (nur in Verbose-Modus sichtbar)
 
+## Config Protection
+
+### Problem
+Hooks and skills can accidentally overwrite critical config files (`settings.json`, `CLAUDE.md`, `.claude/`) during automated workflows.
+
+### Pattern
+- The `config-change-guard` hook intercepts `ConfigChange` events
+- Blocks unauthorized modifications to protected paths
+- `defaults.json` declares `security.configProtectionEnabled: true` as default
+- Sensitive files require explicit user approval before modification
+
+### When to Use
+- Any hook or skill that writes files should check against the protected path list
+- During automated loops (verification-loop, audit-orchestrator), config protection prevents cascading config corruption
+
+## Batch Format
+
+### Problem
+When a session ends with multiple pending changes (uncommitted edits, temp files, state updates), the `Stop` hook needs to handle them atomically without partial failures.
+
+### Pattern
+- The `session-stop` hook collects all pending cleanup actions before executing
+- Temp files are inventoried first, then deleted in one pass
+- State files (STATUS.md, .tasks.json) are updated before temp cleanup
+- If any cleanup step fails, remaining steps still execute (no `set -e` on cleanup)
+
+### When to Use
+- Any hook that runs at `Stop` or `StopFailure` events
+- Skills that generate temp files during multi-step workflows
+- Batch operations where partial completion is acceptable
+
 ## Audit: Dreischicht-Architektur (v4.0)
 
 ### Drei Schichten pro Phase

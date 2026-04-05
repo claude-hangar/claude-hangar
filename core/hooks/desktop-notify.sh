@@ -12,7 +12,25 @@ export HOOK_NAME="desktop-notify"; export HOOK_MIN_PROFILE="strict"
 source "${HOME}/.claude/lib/hook-gate.sh" 2>/dev/null || true
 
 TITLE="Claude Code"
-MSG="Task completed"
+
+# Try to extract project name from cwd
+PROJECT_NAME=$(basename "$(pwd)" 2>/dev/null || echo "project")
+
+# Calculate session duration if marker exists
+START_MARKER="$HOME/.claude/.session-start"
+DURATION_MSG=""
+if [ -f "$START_MARKER" ]; then
+  START_EPOCH=$(cat "$START_MARKER" 2>/dev/null || echo "0")
+  NOW_EPOCH=$(date +%s 2>/dev/null || echo "0")
+  ELAPSED=$(( NOW_EPOCH - START_EPOCH ))
+  if [ "$ELAPSED" -gt 3600 ]; then
+    DURATION_MSG=" ($(( ELAPSED / 3600 ))h $(( (ELAPSED % 3600) / 60 ))m)"
+  elif [ "$ELAPSED" -gt 60 ]; then
+    DURATION_MSG=" ($(( ELAPSED / 60 ))m)"
+  fi
+fi
+
+MSG="Session completed: ${PROJECT_NAME}${DURATION_MSG}"
 
 # Detect OS and send notification
 case "$(uname -s)" in
