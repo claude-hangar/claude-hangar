@@ -312,7 +312,8 @@ deploy_filtered_skills() {
 
 # ─── Component Filtering ─────────────────────────────────────────────
 
-# Available components for --with/--without
+# Available components for --with/--without (used in --list-components output)
+# shellcheck disable=SC2034
 AVAILABLE_COMPONENTS="hooks,agents,skills,lib,rules,contexts,references,mcp-server,statusline,learning"
 
 # Check if a component should be deployed
