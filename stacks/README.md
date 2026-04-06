@@ -14,6 +14,7 @@ Framework-specific extensions for Claude Code. Each stack provides audit skills,
 | **GitHub** | `github/` | — | GitHub repos, PRs, issues via MCP |
 | **Web** | `web/` | — | Browser automation (Playwright) via MCP |
 | **Security** | `security/` | — | Security scanning (Snyk) via MCP |
+| **Docker** | `docker/` | — | Docker/container CLAUDE.md snippet |
 
 ## Directory Structure
 
@@ -59,6 +60,8 @@ stacks/
 ├── security/
 │   ├── mcp.json              # Snyk MCP server configuration
 │   └── README.md             # Stack documentation
+├── docker/
+│   └── CLAUDE.md.snippet     # Docker/container context snippet
 └── README.md               # This file
 ```
 

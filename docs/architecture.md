@@ -9,10 +9,12 @@ System architecture of Claude Hangar.
 ```
 claude-hangar/
 ├── core/                          # Global config → deployed to ~/.claude/
-│   ├── hooks/                     #   17 lifecycle hooks (.sh)
-│   ├── agents/                    #   6 agent definitions (.md)
-│   ├── skills/                    #   18 skill workflows (SKILL.md per dir)
+│   ├── hooks/                     #   27 lifecycle hooks (.sh)
+│   ├── agents/                    #   21 agent definitions (.md)
+│   ├── skills/                    #   31 skill workflows (SKILL.md per dir)
 │   ├── references/                #   Shared behavioral files (3 .md references)
+│   ├── contexts/                  #   3 context modes (dev, research, review)
+│   ├── mcp-server/                #   Zero-dependency MCP state API
 │   ├── lib/common.sh              #   Shared shell functions
 │   ├── lib/defaults.json          #   Single source of truth for configurable values
 │   ├── statusline-command.sh      #   Statusline script
@@ -27,6 +29,7 @@ claude-hangar/
 │   ├── github/                    #   GitHub MCP server config
 │   ├── security/                  #   Security tools MCP config
 │   └── web/                       #   Web tools (Playwright) MCP config
+├── rules/                         # Governance rules (common + language-specific)
 ├── templates/                     # Scaffolding (used on demand, not auto-deployed)
 │   ├── ci/                        #   GitHub Actions workflows
 │   └── project/                   #   CLAUDE.md templates (minimal, web, fullstack, management)
@@ -186,7 +189,7 @@ Skills reference these via relative path:
 
 ```markdown
 ## Quality Standards
-See [shared design principles](../references/design-principles.md).
+See [shared design principles](../core/references/design-principles.md).
 ```
 
 This pattern is inspired by GSD v1 shared behavioral references. When a standard changes, update one file instead of editing every skill.

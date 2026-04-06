@@ -8,13 +8,17 @@ Unlike skills (invoked on demand) or hooks (triggered by events), rules are **al
 ```
 rules/
 ├── common/          # Language-agnostic rules (always loaded)
-│   ├── coding-style.md
-│   ├── security.md
-│   ├── testing.md
-│   ├── git-workflow.md
 │   ├── agents.md
+│   ├── code-review.md
+│   ├── coding-style.md
+│   ├── development-workflow.md
+│   ├── git-workflow.md
+│   ├── governance.md
+│   ├── hooks.md
+│   ├── patterns.md
 │   ├── performance.md
-│   └── governance.md
+│   ├── security.md
+│   └── testing.md
 ├── typescript/      # TypeScript-specific rules
 ├── python/          # Python-specific rules
 ├── go/              # Go-specific rules

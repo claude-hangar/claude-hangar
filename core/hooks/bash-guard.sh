@@ -34,114 +34,66 @@ COMMAND=$(echo "$INPUT" | node -e "
 
 BLOCKED=""
 
-# --- 1. Destructive filesystem operations ---
+# Helper: block if pattern matches (reduces boilerplate)
+block_if() {
+  local pattern="$1" message="$2" flags="${3:--qE}"
+  # shellcheck disable=SC2086
+  if echo "$COMMAND" | grep $flags -- "$pattern" 2>/dev/null; then
+    BLOCKED+="$message\n"
+  fi
+}
 
-# rm -rf / or rm -rf /* (root deletion)
-if echo "$COMMAND" | grep -qE 'rm\s+(-[a-zA-Z]*r[a-zA-Z]*f|(-[a-zA-Z]*f[a-zA-Z]*r))\s+/(\s|$|\*)'; then
-  BLOCKED+="rm -rf / (root directory deletion)\n"
-fi
+# --- 1. Destructive filesystem operations ---
+block_if 'rm\s+(-[a-zA-Z]*r[a-zA-Z]*f|(-[a-zA-Z]*f[a-zA-Z]*r))\s+/(\s|$|\*)' \
+  "rm -rf / (root directory deletion)"
 
 # rm -rf ~ or $HOME (but allow rm on specific subdirectories like ~/.claude/skills/foo)
-# Block: rm -rf ~, rm -rf ~/, rm -rf ~/*, rm -rf $HOME
-# Allow: rm -rf ~/.claude/skills/foo (2+ path segments after ~)
 if echo "$COMMAND" | grep -qE 'rm\s+(-[a-zA-Z]*r[a-zA-Z]*f|(-[a-zA-Z]*f[a-zA-Z]*r))\s+(~|\$HOME|\$\{HOME\}|"?\$HOME"?)(\s|$|/(\s|$|\*))' && \
    ! echo "$COMMAND" | grep -qE 'rm\s+(-[a-zA-Z]*r[a-zA-Z]*f|(-[a-zA-Z]*f[a-zA-Z]*r))\s+(~|\$HOME|\$\{HOME\})/[^/\s]+/[^/\s]+'; then
   BLOCKED+="rm -rf ~ (home directory deletion)\n"
 fi
 
-# rm -rf . (current directory)
-if echo "$COMMAND" | grep -qE 'rm\s+(-[a-zA-Z]*r[a-zA-Z]*f|(-[a-zA-Z]*f[a-zA-Z]*r))\s+\.(\s|$)'; then
-  BLOCKED+="rm -rf . (current directory deletion)\n"
-fi
-
-# rm -rf C:\ or D:\ (Windows root)
-if echo "$COMMAND" | grep -qiE 'rm\s+(-[a-zA-Z]*r[a-zA-Z]*f|(-[a-zA-Z]*f[a-zA-Z]*r))\s+[A-Z]:[/\\](\s|$|\*)'; then
-  BLOCKED+="rm -rf <drive>: (Windows root deletion)\n"
-fi
+block_if 'rm\s+(-[a-zA-Z]*r[a-zA-Z]*f|(-[a-zA-Z]*f[a-zA-Z]*r))\s+\.(\s|$)' \
+  "rm -rf . (current directory deletion)"
+block_if 'rm\s+(-[a-zA-Z]*r[a-zA-Z]*f|(-[a-zA-Z]*f[a-zA-Z]*r))\s+[A-Z]:[/\\](\s|$|\*)' \
+  "rm -rf <drive>: (Windows root deletion)" "-qiE"
 
 # --- 2. Remote code execution ---
-
-# curl|bash, curl|sh, wget|bash, wget|sh
-if echo "$COMMAND" | grep -qE '(curl|wget)\s+[^|]*\|\s*(ba)?sh'; then
-  BLOCKED+="curl/wget | bash (remote code execution)\n"
-fi
-
-# eval "$(curl ...)" or eval "$(wget ...)"
-if echo "$COMMAND" | grep -qE 'eval\s+.*\$\((curl|wget)'; then
-  BLOCKED+="eval \$(curl/wget) (remote code execution)\n"
-fi
-
-# bash <(curl ...) — process substitution
-if echo "$COMMAND" | grep -qE '(ba)?sh\s+<\(\s*(curl|wget)'; then
-  BLOCKED+="bash <(curl) (remote code execution via process substitution)\n"
-fi
+block_if '(curl|wget)\s+[^|]*\|\s*(ba)?sh' \
+  "curl/wget | bash (remote code execution)"
+block_if 'eval\s+.*\$\((curl|wget)' \
+  "eval \$(curl/wget) (remote code execution)"
+block_if '(ba)?sh\s+<\(\s*(curl|wget)' \
+  "bash <(curl) (remote code execution via process substitution)"
 
 # --- 3. Dangerous permissions ---
-
-# chmod 777 (world-writable)
-if echo "$COMMAND" | grep -qE 'chmod\s+(-R\s+)?777'; then
-  BLOCKED+="chmod 777 (world-writable — security risk)\n"
-fi
+block_if 'chmod\s+(-R\s+)?777' \
+  "chmod 777 (world-writable — security risk)"
 
 # --- 4. Disk/system operations ---
-
-# mkfs (format filesystem)
-if echo "$COMMAND" | grep -qE '\bmkfs\b'; then
-  BLOCKED+="mkfs (format filesystem)\n"
-fi
-
-# dd if= ... of=/dev/ (raw disk write)
-if echo "$COMMAND" | grep -qE '\bdd\b.*\bof=/dev/'; then
-  BLOCKED+="dd of=/dev/ (raw disk write)\n"
-fi
-
-# Fork bomb
-if echo "$COMMAND" | grep -qE ':\(\)\s*\{.*\|'; then
-  BLOCKED+="Fork bomb detected\n"
-fi
+block_if '\bmkfs\b' "mkfs (format filesystem)"
+block_if '\bdd\b.*\bof=/dev/' "dd of=/dev/ (raw disk write)"
+block_if ':\(\)\s*\{.*\|' "Fork bomb detected"
 
 # --- 4b. Windows-specific destructive commands ---
-
-# del /s /q (recursive delete on Windows)
-if echo "$COMMAND" | grep -qiE '\bdel\b.*/s.*/q'; then
-  BLOCKED+="del /s /q (Windows recursive delete)\n"
-fi
-
-# rd /s /q (remove directory on Windows)
-if echo "$COMMAND" | grep -qiE '\brd\b.*/s.*/q'; then
-  BLOCKED+="rd /s /q (Windows recursive directory removal)\n"
-fi
+block_if '\bdel\b.*/s.*/q' "del /s /q (Windows recursive delete)" "-qiE"
+block_if '\brd\b.*/s.*/q' "rd /s /q (Windows recursive directory removal)" "-qiE"
 
 # --- 5. Git protection ---
-
-# git push --force / -f
-if echo "$COMMAND" | grep -qE 'git\s+push\s+.*(-f\b|--force\b)'; then
-  BLOCKED+="git push --force (can overwrite remote history)\n"
-fi
-
-# git reset --hard origin
-if echo "$COMMAND" | grep -qE 'git\s+reset\s+--hard\s+origin'; then
-  BLOCKED+="git reset --hard origin (discards all local changes)\n"
-fi
-
-# --no-verify (hook bypass)
-if echo "$COMMAND" | grep -qF -- '--no-verify'; then
-  BLOCKED+="--no-verify (git hook bypass)\n"
-fi
+block_if 'git\s+push\s+.*(-f\b|--force\b)' \
+  "git push --force (can overwrite remote history)"
+block_if 'git\s+reset\s+--hard\s+origin' \
+  "git reset --hard origin (discards all local changes)"
+block_if '--no-verify' "--no-verify (git hook bypass)" "-qF"
 
 # --- 6. Accidental publish ---
-
-# npm publish (without --dry-run)
 if echo "$COMMAND" | grep -qE '\bnpm\s+publish\b' && ! echo "$COMMAND" | grep -qF -- '--dry-run'; then
   BLOCKED+="npm publish (without --dry-run — accidental publish?)\n"
 fi
 
 # --- 7. SQL injection via CLI ---
-
-# DROP TABLE / DROP DATABASE
-if echo "$COMMAND" | grep -qiE '\bDROP\s+(TABLE|DATABASE)\b'; then
-  BLOCKED+="DROP TABLE/DATABASE (destructive SQL operation)\n"
-fi
+block_if '\bDROP\s+(TABLE|DATABASE)\b' \
+  "DROP TABLE/DATABASE (destructive SQL operation)" "-qiE"
 
 # --- Command guard result ---
 

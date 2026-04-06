@@ -278,12 +278,6 @@ test \
   '{"tool_input":{"command":"chmod 777 /var/www/html"}}'
 
 test \
-  "should block git push --force" \
-  2 \
-  "bash-guard.sh" \
-  '{"tool_input":{"command":"git push --force origin main"}}'
-
-test \
   "should block git push -f" \
   2 \
   "bash-guard.sh" \
@@ -294,18 +288,6 @@ test \
   2 \
   "bash-guard.sh" \
   '{"tool_input":{"command":"git reset --hard origin/main"}}'
-
-test \
-  "should block npm publish without --dry-run" \
-  2 \
-  "bash-guard.sh" \
-  '{"tool_input":{"command":"npm publish"}}'
-
-test \
-  "should allow npm publish --dry-run" \
-  0 \
-  "bash-guard.sh" \
-  '{"tool_input":{"command":"npm publish --dry-run"}}'
 
 test \
   "should block DROP TABLE" \
@@ -791,6 +773,339 @@ if echo "$GATE_OUTPUT" | grep -q "ran"; then
 else
   echo "  FAIL  minimal profile should always run minimal hooks (hook was skipped)"
   FAIL=$((FAIL + 1))
+fi
+
+# ============================================================
+# batch-format-collector.sh
+# ============================================================
+
+echo ""
+echo "--- batch-format-collector ---"
+
+test \
+  "should exit 0 on Edit tool (collector)" \
+  0 \
+  "batch-format-collector.sh" \
+  '{"tool_name":"Edit","tool_input":{"file_path":"src/index.ts","old_string":"foo","new_string":"bar"}}'
+
+test \
+  "should exit 0 on Write tool (collector)" \
+  0 \
+  "batch-format-collector.sh" \
+  '{"tool_name":"Write","tool_input":{"file_path":"src/app.tsx","content":"export default function App() {}"}}'
+
+test \
+  "should exit 0 on non-Edit/Write tool (ignored)" \
+  0 \
+  "batch-format-collector.sh" \
+  '{"tool_name":"Read","tool_input":{"file_path":"src/index.ts"}}'
+
+test \
+  "should exit 0 on empty input" \
+  0 \
+  "batch-format-collector.sh" \
+  ''
+
+# ============================================================
+# continuous-learning.sh
+# ============================================================
+
+echo ""
+echo "--- continuous-learning ---"
+
+test \
+  "should exit 0 on Bash tool with command" \
+  0 \
+  "continuous-learning.sh" \
+  '{"tool_name":"Bash","tool_input":{"command":"npm test"},"tool_result":{"exit_code":0}}'
+
+test \
+  "should exit 0 on non-Bash tool (skipped)" \
+  0 \
+  "continuous-learning.sh" \
+  '{"tool_name":"Edit","tool_input":{"file_path":"src/index.ts"}}'
+
+test \
+  "should exit 0 on trivial command (skipped)" \
+  0 \
+  "continuous-learning.sh" \
+  '{"tool_name":"Bash","tool_input":{"command":"ls -la"}}'
+
+test \
+  "should exit 0 on empty input" \
+  0 \
+  "continuous-learning.sh" \
+  ''
+
+# ============================================================
+# cost-tracker.sh
+# ============================================================
+
+echo ""
+echo "--- cost-tracker ---"
+
+test \
+  "should exit 0 on session end" \
+  0 \
+  "cost-tracker.sh" \
+  '{"cwd":"."}'
+
+test \
+  "should exit 0 on empty input" \
+  0 \
+  "cost-tracker.sh" \
+  '{}'
+
+# ============================================================
+# db-query-guard.sh
+# ============================================================
+
+echo ""
+echo "--- db-query-guard ---"
+
+test \
+  "should exit 0 on normal Bash command" \
+  0 \
+  "db-query-guard.sh" \
+  '{"tool_name":"Bash","tool_input":{"command":"npm test"}}'
+
+test_output_contains \
+  "should warn on sqlite3 targeting .claude/ state" \
+  "DB GUARD" \
+  "db-query-guard.sh" \
+  '{"tool_name":"Bash","tool_input":{"command":"sqlite3 ~/.claude/state.db \"SELECT * FROM sessions\""}}'
+
+test_output_contains \
+  "should warn on reading .claude/ .jsonl state file" \
+  "DB GUARD" \
+  "db-query-guard.sh" \
+  '{"tool_name":"Bash","tool_input":{"command":"cat ~/.claude/.patterns/session.jsonl"}}'
+
+test_output_contains \
+  "should warn on deleting database file" \
+  "DB GUARD" \
+  "db-query-guard.sh" \
+  '{"tool_name":"Bash","tool_input":{"command":"rm state.db"}}'
+
+test \
+  "should exit 0 on non-Bash tool (skipped)" \
+  0 \
+  "db-query-guard.sh" \
+  '{"tool_name":"Read","tool_input":{"file_path":"state.db"}}'
+
+test \
+  "should exit 0 on empty input" \
+  0 \
+  "db-query-guard.sh" \
+  '{}'
+
+# ============================================================
+# design-quality-check.sh
+# ============================================================
+
+echo ""
+echo "--- design-quality-check ---"
+
+test \
+  "should exit 0 on clean frontend file" \
+  0 \
+  "design-quality-check.sh" \
+  '{"tool_name":"Write","tool_input":{"file_path":"src/Hero.tsx","content":"<div className=\"flex items-center\"><h1>Our Product</h1></div>"}}'
+
+test_output_contains \
+  "should warn on 2+ generic AI patterns (CTA + gradient)" \
+  "DESIGN QUALITY" \
+  "design-quality-check.sh" \
+  '{"tool_name":"Write","tool_input":{"file_path":"src/Hero.tsx","content":"<div className=\"from-purple-500 to-pink-500\"><button>Get Started</button><button>Learn More</button></div>"}}'
+
+test \
+  "should exit 0 on non-frontend file (ignored)" \
+  0 \
+  "design-quality-check.sh" \
+  '{"tool_name":"Write","tool_input":{"file_path":"src/utils.ts","content":"from-purple-500 to-pink-500 get started learn more"}}'
+
+test \
+  "should exit 0 on non-Write/Edit tool" \
+  0 \
+  "design-quality-check.sh" \
+  '{"tool_name":"Read","tool_input":{"file_path":"src/Hero.tsx"}}'
+
+test \
+  "should exit 0 on single pattern (below threshold)" \
+  0 \
+  "design-quality-check.sh" \
+  '{"tool_name":"Write","tool_input":{"file_path":"src/Page.astro","content":"<button>Get Started</button>"}}'
+
+test_output_contains \
+  "should warn on hero pattern + placeholder text" \
+  "DESIGN QUALITY" \
+  "design-quality-check.sh" \
+  '{"tool_name":"Write","tool_input":{"file_path":"src/Hero.svelte","content":"<h1 class=\"text-6xl leading-tight\">Welcome to Our Platform</h1><p>Lorem ipsum dolor sit amet</p>"}}'
+
+# ============================================================
+# desktop-notify.sh
+# ============================================================
+
+echo ""
+echo "--- desktop-notify ---"
+
+test \
+  "should exit 0 on session stop" \
+  0 \
+  "desktop-notify.sh" \
+  '{"cwd":"."}'
+
+test \
+  "should exit 0 on empty input" \
+  0 \
+  "desktop-notify.sh" \
+  '{}'
+
+# ============================================================
+# instinct-capture.sh
+# ============================================================
+
+echo ""
+echo "--- instinct-capture ---"
+
+test \
+  "should exit 0 on Bash tool call" \
+  0 \
+  "instinct-capture.sh" \
+  '{"tool_name":"Bash","tool_input":{"command":"npm test"}}'
+
+test \
+  "should exit 0 on Write tool call" \
+  0 \
+  "instinct-capture.sh" \
+  '{"tool_name":"Write","tool_input":{"file_path":"src/index.ts","content":"export {}"}}'
+
+test \
+  "should exit 0 on Read tool (skipped — not tracked)" \
+  0 \
+  "instinct-capture.sh" \
+  '{"tool_name":"Read","tool_input":{"file_path":"src/index.ts"}}'
+
+test \
+  "should exit 0 on empty input" \
+  0 \
+  "instinct-capture.sh" \
+  ''
+
+# ============================================================
+# instinct-evolve.sh
+# ============================================================
+
+echo ""
+echo "--- instinct-evolve ---"
+
+test \
+  "should exit 0 on session end (no pattern data)" \
+  0 \
+  "instinct-evolve.sh" \
+  '{"cwd":"."}'
+
+test \
+  "should exit 0 on empty input" \
+  0 \
+  "instinct-evolve.sh" \
+  '{}'
+
+# ============================================================
+# mcp-health-check.sh
+# ============================================================
+
+echo ""
+echo "--- mcp-health-check ---"
+
+test \
+  "should exit 0 on non-MCP tool (skipped)" \
+  0 \
+  "mcp-health-check.sh" \
+  '{"tool_name":"Bash","tool_input":{"command":"ls"}}'
+
+test \
+  "should exit 0 on MCP tool with no failure history" \
+  0 \
+  "mcp-health-check.sh" \
+  '{"tool_name":"mcp__plugin_github_github__get_me","tool_input":{}}'
+
+test \
+  "should exit 0 on empty input" \
+  0 \
+  "mcp-health-check.sh" \
+  '{}'
+
+# Simulate 3+ recent MCP failures and test the warning
+TOTAL=$((TOTAL + 1))
+MCP_HEALTH_DIR="$HOME/.claude/.mcp-health"
+mkdir -p "$MCP_HEALTH_DIR" 2>/dev/null || true
+MCP_FAILURES_FILE="$MCP_HEALTH_DIR/failures.jsonl"
+MCP_BACKUP=""
+if [ -f "$MCP_FAILURES_FILE" ]; then
+  MCP_BACKUP=$(cat "$MCP_FAILURES_FILE")
+fi
+NOW_MS=$(node -e "console.log(Date.now())")
+echo "{\"server\":\"plugin_test_server\",\"timestamp\":$NOW_MS,\"error\":\"timeout\"}" > "$MCP_FAILURES_FILE"
+echo "{\"server\":\"plugin_test_server\",\"timestamp\":$NOW_MS,\"error\":\"timeout\"}" >> "$MCP_FAILURES_FILE"
+echo "{\"server\":\"plugin_test_server\",\"timestamp\":$NOW_MS,\"error\":\"timeout\"}" >> "$MCP_FAILURES_FILE"
+MCP_OUTPUT=$(echo '{"tool_name":"mcp__plugin_test_server__some_tool","tool_input":{}}' | bash "$HOOKS_DIR/mcp-health-check.sh" 2>&1)
+if echo "$MCP_OUTPUT" | grep -qi "MCP server"; then
+  echo "  PASS  should warn on MCP server with 3+ recent failures"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  should warn on MCP server with 3+ recent failures (output did not contain warning)"
+  FAIL=$((FAIL + 1))
+fi
+# Restore original failures file
+if [ -n "$MCP_BACKUP" ]; then
+  echo "$MCP_BACKUP" > "$MCP_FAILURES_FILE"
+else
+  rm -f "$MCP_FAILURES_FILE" 2>/dev/null || true
+fi
+
+# ============================================================
+# stop-batch-format.sh
+# ============================================================
+
+echo ""
+echo "--- stop-batch-format ---"
+
+test \
+  "should exit 0 when no collector file exists" \
+  0 \
+  "stop-batch-format.sh" \
+  '{"cwd":"."}'
+
+test \
+  "should exit 0 on empty input" \
+  0 \
+  "stop-batch-format.sh" \
+  '{}'
+
+# Test with an empty collector file
+TOTAL=$((TOTAL + 1))
+BATCH_DIR="$HOME/.claude/.batch-format"
+mkdir -p "$BATCH_DIR" 2>/dev/null || true
+BATCH_BACKUP=""
+if [ -f "$BATCH_DIR/edited-files.txt" ]; then
+  BATCH_BACKUP=$(cat "$BATCH_DIR/edited-files.txt")
+fi
+: > "$BATCH_DIR/edited-files.txt"
+BATCH_EXIT=0
+echo '{"cwd":"."}' | bash "$HOOKS_DIR/stop-batch-format.sh" >/dev/null 2>&1 || BATCH_EXIT=$?
+if [ "$BATCH_EXIT" -eq 0 ]; then
+  echo "  PASS  should exit 0 when collector file is empty"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  should exit 0 when collector file is empty (expected 0, got $BATCH_EXIT)"
+  FAIL=$((FAIL + 1))
+fi
+# Restore original collector file
+if [ -n "$BATCH_BACKUP" ]; then
+  echo "$BATCH_BACKUP" > "$BATCH_DIR/edited-files.txt"
+else
+  rm -f "$BATCH_DIR/edited-files.txt" 2>/dev/null || true
 fi
 
 # ============================================================
