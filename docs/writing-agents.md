@@ -57,7 +57,7 @@ Guidelines: read-only tasks use `sonnet` with `effort: low`. Analysis tasks use 
 
 ---
 
-## The 5 Included Agents
+## Built-in Agents (21)
 
 | Agent | Model | Effort | Tools | Isolation | maxTurns |
 |-------|-------|--------|-------|-----------|----------|

@@ -28,6 +28,8 @@ The schema lives at [`registry/registry.schema.json`](../registry/registry.schem
 | `skills` | No | Skills to deploy from the skills directory |
 | `hooks` | No | Hook scripts to deploy from the hooks directory |
 | `workflows` | No | CI/CD templates to deploy to `.github/workflows/` |
+| `mcpServers` | No | MCP server IDs to activate (array of string) |
+| `servers` | No | Deployment servers (array of objects) |
 | `description` | No | Short project description |
 
 ---
@@ -45,7 +47,7 @@ From [`registry/example-registry.json`](../registry/example-registry.json):
       "repo": "my-org/my-website",
       "defaultPath": "~/projects/my-website",
       "configFiles": ["CLAUDE.md", ".claude/settings.json"],
-      "skills": ["seo-audit.md", "performance-check.md"],
+      "skills": ["audit", "astro"],
       "hooks": ["secret-leak-check.sh", "bash-guard.sh", "checkpoint.sh"],
       "workflows": ["ci-node.yml", "deploy-ghpages.yml"],
       "description": "Marketing website built with Astro (SSG) and Tailwind CSS."

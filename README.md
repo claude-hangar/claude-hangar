@@ -134,7 +134,7 @@ Shared behavioral files that skills and agents reference for consistency:
 | `loop-operator` | Sonnet | Autonomous workflow with safety guardrails |
 | `tdd-guide` | Sonnet | TDD enforcement (RED-GREEN-REFACTOR cycle) |
 | `doc-updater` | Sonnet | Documentation maintenance and staleness detection |
-| `refactor-agent` | Sonnet | Code restructuring and cleanup |
+| `refactor-agent` | Opus | Code restructuring and cleanup (worktree isolation) |
 | `test-writer` | Sonnet | Test generation for new features |
 | `typescript-reviewer` | Sonnet | TypeScript-specific code review |
 | `python-reviewer` | Sonnet | Python-specific code review |
@@ -174,23 +174,33 @@ Shared behavioral files that skills and agents reference for consistency:
 | `/audit-orchestrator` | Multi-audit coordination |
 | `/audit-runner` | Autonomous batch audit execution |
 | `/handoff` | Structured session handoff for seamless context continuity |
+| `/codebase-map` | Structural overview for context recovery after /compact |
+| `/doctor` | Project health check (git-hygiene + deploy-check + freshness) |
+| `/error-analyzer` | Systematic root-cause analysis for build/test/runtime failures |
+| `/inline-review` | Quick self-review checklist after code changes |
+| `/pattern-extractor` | Analyze captured patterns from continuous learning |
+| `/security-scan` | Claude Code security scan (secrets, MCP, hooks, deps) |
 
-### Stacks (5) — Framework Extensions
+### Stacks (9) — Framework & Tool Extensions
 
-Drop-in extensions for your specific tech stack. Each provides a `CLAUDE.md.snippet` you can paste into your project:
+Drop-in extensions for your specific tech stack. Full stacks provide `CLAUDE.md.snippet` + audit skills. MCP stacks provide tool integrations.
 
-| Stack | Includes |
-|-------|----------|
-| **Astro** | SSG/SSR patterns, content collections, View Transitions, v5→v6 migration |
-| **SvelteKit** | Svelte 5 runes, load functions, form actions, Kit 2 migration |
-| **Next.js** | App Router, Server Components, Server Actions |
-| **Database** | Drizzle ORM, migrations, schema design, connection pooling |
-| **Auth** | Custom bcrypt + sessions, secure cookies, CSRF, rate limiting |
+| Stack | Type | Includes |
+|-------|------|----------|
+| **Astro** | Full | SSG/SSR patterns, content collections, View Transitions, `/astro-audit` |
+| **SvelteKit** | Full | Svelte 5 runes, load functions, form actions, `/sveltekit-audit` |
+| **Next.js** | Full | App Router, Server Components, Server Actions |
+| **Database** | Full | Drizzle ORM, migrations, schema design, `/db-audit` |
+| **Auth** | Full | Custom bcrypt + sessions, secure cookies, `/auth-audit` |
+| **Docker** | Snippet | Docker/container CLAUDE.md context |
+| **GitHub** | MCP | GitHub repos, PRs, issues via MCP server |
+| **Web** | MCP | Browser automation (Playwright) via MCP server |
+| **Security** | MCP | Security scanning (Snyk) via MCP server |
 
 ### Templates
 
 - **5 project templates** — CLAUDE.md starters (minimal, web, fullstack, management) + DECISIONS.md (ADR register)
-- **5 CI/CD templates** — GitHub Actions for Node.js, Python, VPS, GitHub Pages, Cloudflare Pages
+- **6 CI/CD templates** — GitHub Actions for Node.js, Python, VPS (GHCR), Docker Compose, GitHub Pages, Cloudflare Pages
 - **Global CLAUDE.md template** — Baseline instructions with `{{PLACEHOLDER}}` customization
 
 ## Multi-Project Orchestration

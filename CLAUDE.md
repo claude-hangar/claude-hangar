@@ -10,11 +10,12 @@ Open-source configuration management for Claude Code. This repo provides hooks, 
 
 | Directory | Purpose |
 |-----------|---------|
-| `core/` | Global config deployed to ~/.claude/ (hooks, agents, skills, lib, statusline) |
-| `stacks/` | Framework-specific extensions (Astro, SvelteKit, Next.js, Database, Auth) |
+| `core/` | Global config deployed to ~/.claude/ (hooks, agents, skills, lib, statusline, mcp-server) |
+| `stacks/` | Framework-specific extensions (Astro, SvelteKit, Next.js, Database, Auth, Docker, GitHub, Web, Security) |
+| `rules/` | Governance rules (common + language-specific: TypeScript, Python, Go, Rust, Java) |
 | `templates/` | CI/CD workflows and project CLAUDE.md templates |
-| `registry/` | Multi-project management schema and examples |
-| `tests/` | Hook tests, setup tests, template tests |
+| `registry/` | Multi-project management schema, examples, and deploy script |
+| `tests/` | Hook tests (test-hooks.sh), setup tests, MCP tests, model tests |
 | `docs/` | Documentation, concepts, tutorials |
 | `i18n/` | Internationalization (currently: German) |
 
@@ -65,8 +66,11 @@ Open-source configuration management for Claude Code. This repo provides hooks, 
 
 Before any PR:
 1. `bash tests/test-hooks.sh` — All hook patterns pass
-2. `bash setup.sh --check` — Dry-run succeeds
-3. CI green (ShellCheck, JSON, secrets, markdown)
+2. `bash tests/test-setup.sh` — Setup validation passes
+3. `bash tests/test-mcp.sh` — MCP config validation passes
+4. `bash tests/test-models.sh` — Agent model references valid
+5. `bash setup.sh --check` — Dry-run succeeds
+6. CI green (ShellCheck, JSON, secrets, tests, markdown)
 
 ## File Naming
 

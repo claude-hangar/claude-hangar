@@ -26,6 +26,7 @@ claude-hangar/
 │   ├── nextjs/
 │   ├── database/
 │   ├── auth/
+│   ├── docker/
 │   ├── github/                    #   GitHub MCP server config
 │   ├── security/                  #   Security tools MCP config
 │   └── web/                       #   Web tools (Playwright) MCP config
@@ -35,7 +36,8 @@ claude-hangar/
 │   └── project/                   #   CLAUDE.md templates (minimal, web, fullstack, management)
 ├── registry/                      # Multi-project management
 │   ├── registry.schema.json       #   JSON Schema for registry files
-│   └── example-registry.json      #   Example multi-project config
+│   ├── example-registry.json      #   Example multi-project config
+│   └── deploy.sh                  #   Registry deployment script
 ├── tests/                         # Hook tests, setup tests
 ├── i18n/                          # Internationalization
 └── setup.sh                       # Deployment script

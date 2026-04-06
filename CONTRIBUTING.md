@@ -51,6 +51,9 @@ cd claude-hangar
 
 # Run tests
 bash tests/test-hooks.sh
+bash tests/test-setup.sh
+bash tests/test-mcp.sh
+bash tests/test-models.sh
 
 # Dry-run setup
 bash setup.sh --check

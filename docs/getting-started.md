@@ -68,23 +68,29 @@ Setup copies files from the repo into `~/.claude/`:
     secret-leak-check.sh       #   PreToolUse — blocks secrets in file writes
     bash-guard.sh              #   PreToolUse — blocks destructive commands + enforces commits
     checkpoint.sh              #   PreToolUse — git stash checkpoint before writes
+    config-protection.sh       #   PreToolUse — blocks weakening of linter/formatter configs
+    db-query-guard.sh          #   PreToolUse — warns on direct database access
+    mcp-health-check.sh        #   PreToolUse — checks MCP server health before tool calls
+    permission-denied-retry.sh #   PreToolUse — retries with adjusted approach
     token-warning.sh           #   PostToolUse — warns at 70% and 80% context usage
+    batch-format-collector.sh  #   PostToolUse — collects edited file paths for batch formatting
+    continuous-learning.sh     #   PostToolUse — captures patterns from agent work
+    cost-tracker.sh            #   PostToolUse — tracks token costs per session
+    design-quality-check.sh    #   PostToolUse — detects generic AI UI drift patterns
+    instinct-capture.sh        #   PostToolUse — captures instinct patterns
     skill-suggest.sh           #   UserPromptSubmit — suggests matching skills
     model-router.sh            #   UserPromptSubmit — suggests optimal model tier
     session-start.sh           #   SessionStart — loads STATUS.md, tasks, memory hygiene
     session-stop.sh            #   Stop — cleanup temp files, log session cost
+    desktop-notify.sh          #   Stop — OS notification when session ends
+    instinct-evolve.sh         #   Stop — evolves instinct data from session
+    stop-batch-format.sh       #   Stop — runs formatters once at session end
+    stop-failure.sh            #   StopFailure — logs errors on session failure
     post-compact.sh            #   PostCompact — resets tracking + context reload reminder
     config-change-guard.sh     #   ConfigChange — warns on critical settings changes
     task-completed-gate.sh     #   TaskCompleted — quality gate for task completion
-    subagent-tracker.sh        #   SubagentStart/Stop — subagent observability
-    stop-failure.sh            #   StopFailure — logs errors on session failure
-    continuous-learning.sh     #   PostToolUse — captures patterns from agent work
-    cost-tracker.sh            #   PostToolUse — tracks token costs per session
-    desktop-notify.sh          #   Stop — OS notification when session ends
-    instinct-capture.sh        #   PostToolUse — captures instinct patterns
-    instinct-evolve.sh         #   Stop — evolves instinct data from session
-    permission-denied-retry.sh #   PreToolUse — retries with adjusted approach
     task-created-init.sh       #   TaskCreated — initializes new tasks
+    subagent-tracker.sh        #   SubagentStart/Stop — subagent observability
     worktree-init.sh           #   WorktreeInit — initializes worktree environment
   agents/                          # 21 agent definitions
     explorer.md                    #   Quick codebase search (Sonnet, read-only)
@@ -95,19 +101,19 @@ Setup copies files from the repo into `~/.claude/`:
     dependency-checker.md          #   npm audit + outdated (Sonnet, read-only)
     planner.md                     #   Implementation planning (Opus)
     architect.md                   #   System design decisions (Opus)
-    tdd-guide.md                   #   TDD workflow guidance (Opus)
-    doc-updater.md                 #   Documentation updates (Opus)
-    refactor-agent.md              #   Code restructuring (Opus)
-    test-writer.md                 #   Test generation (Opus)
-    typescript-reviewer.md         #   TypeScript-specific review (Opus)
-    python-reviewer.md             #   Python-specific review (Opus)
-    go-reviewer.md                 #   Go-specific review (Opus)
-    build-resolver-typescript.md   #   TypeScript build error resolution (Opus)
-    build-resolver-python.md       #   Python build error resolution (Opus)
-    build-resolver-go.md           #   Go build error resolution (Opus)
+    tdd-guide.md                   #   TDD workflow guidance (Sonnet)
+    doc-updater.md                 #   Documentation updates (Sonnet)
+    refactor-agent.md              #   Code restructuring (Sonnet)
+    test-writer.md                 #   Test generation (Sonnet)
+    typescript-reviewer.md         #   TypeScript-specific review (Sonnet)
+    python-reviewer.md             #   Python-specific review (Sonnet)
+    go-reviewer.md                 #   Go-specific review (Sonnet)
+    build-resolver-typescript.md   #   TypeScript build error resolution (Sonnet)
+    build-resolver-python.md       #   Python build error resolution (Sonnet)
+    build-resolver-go.md           #   Go build error resolution (Sonnet)
     harness-optimizer.md           #   Harness config optimization (Opus)
     performance-optimizer.md       #   Performance optimization (Opus)
-    loop-operator.md               #   Autonomous workflow management (Opus)
+    loop-operator.md               #   Autonomous workflow management (Sonnet)
   skills/                  # 31 skill definitions (audit, scan, consult, handoff, ...)
   lib/common.sh            # Shared shell functions (colors, logging, OS detection)
   statusline-command.sh    # Statusline script

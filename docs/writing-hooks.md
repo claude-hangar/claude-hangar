@@ -374,20 +374,21 @@ exit 0
 
 ## Hook Count Summary
 
-Claude Hangar ships with **17 hooks** across all lifecycle events:
+Claude Hangar ships with **27 hooks** across all lifecycle events:
 
 | Event | Count | Hooks |
 |-------|------:|-------|
-| PreToolUse | 5 | secret-leak-check, bash-guard, checkpoint, config-protection, mcp-health-check |
-| PostToolUse | 3 | token-warning, design-quality-check, batch-format-collector |
+| PreToolUse | 7 | secret-leak-check, bash-guard, checkpoint, config-protection, mcp-health-check, db-query-guard, permission-denied-retry |
+| PostToolUse | 6 | token-warning, design-quality-check, batch-format-collector, continuous-learning, cost-tracker, instinct-capture |
 | UserPromptSubmit | 2 | skill-suggest, model-router |
 | SessionStart | 1 | session-start |
-| Stop | 2 | session-stop, stop-batch-format |
-| StopFailure | 1 | stop-failure |
+| Stop | 5 | session-stop, stop-batch-format, stop-failure, desktop-notify, instinct-evolve |
 | PostCompact | 1 | post-compact |
 | ConfigChange | 1 | config-change-guard |
 | TaskCompleted | 1 | task-completed-gate |
+| TaskCreated | 1 | task-created-init |
 | SubagentStart/Stop | 1 | subagent-tracker |
+| WorktreeCreate | 1 | worktree-init |
 
 ---
 
