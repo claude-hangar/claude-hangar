@@ -118,6 +118,8 @@ jobs:
         run: bash tests/test-mcp.sh
       - name: Run setup tests
         run: bash tests/test-setup.sh
+      - name: Run model tests
+        run: bash tests/test-models.sh
 
   markdown-lint:
     name: Markdown Lint

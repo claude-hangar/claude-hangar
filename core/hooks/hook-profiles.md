@@ -9,8 +9,8 @@ are silently skipped at runtime via `hook-gate.sh`.
 | Profile | Behavior | Use When |
 |---------|----------|----------|
 | `minimal` | Safety hooks only (3 hooks) | Quick prototyping, minimal overhead |
-| `standard` | Safety + quality hooks (16 hooks, **default**) | Normal development |
-| `strict` | All hooks active (22 hooks) | Production/CI, learning enabled |
+| `standard` | Safety + quality hooks (21 hooks, **default**) | Normal development |
+| `strict` | All hooks active (27 hooks) | Production/CI, learning enabled |
 
 ## Usage
 
@@ -53,15 +53,20 @@ The gate script (`core/lib/hook-gate.sh`) checks:
 | `secret-leak-check` | PreToolUse/Write,Edit | Block secret leaks |
 | `config-protection` | PreToolUse/Write,Edit | Block config weakening |
 
-### standard (13 additional hooks — default)
+### standard (18 additional hooks — default)
 
 | Hook | Event | Purpose |
 |------|-------|---------|
 | `checkpoint` | PreToolUse/Write,Edit | Git stash before edits |
 | `config-change-guard` | ConfigChange | Warn on critical settings |
+| `db-query-guard` | PreToolUse/Bash | Warn on direct DB access |
+| `design-quality-check` | PostToolUse/Write,Edit | Detect generic AI UI patterns |
+| `mcp-health-check` | PreToolUse | MCP server health monitoring |
 | `model-router` | UserPromptSubmit | Smart model tier suggestion |
 | `permission-denied-retry` | PermissionDenied | Auto-retry safe denials |
 | `post-compact` | PostCompact | Context recovery |
+| `batch-format-collector` | PostToolUse/Write,Edit | Collect paths for batch format |
+| `stop-batch-format` | Stop | Run formatters on all edited files |
 | `session-start` | SessionStart | Load status, tasks, memory |
 | `session-stop` | Stop | Cleanup, log session |
 | `skill-suggest` | UserPromptSubmit | Suggest matching skills |

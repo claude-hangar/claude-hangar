@@ -58,9 +58,9 @@ cd ~/.claude-hangar && bash setup.sh
 [+] Prerequisites: git ✓  node ✓
 [+] Structure validation passed
 [i] Deploying to /home/user/.claude/...
-[+] Deployed: Hooks (13 scripts)
-[+] Deployed: Agents (6 definitions)
-[+] Deployed: Skills (18 commands)
+[+] Deployed: Hooks (27 scripts)
+[+] Deployed: Agents (21 definitions)
+[+] Deployed: Skills (31 commands)
 [+] Deployed: Shared lib
 [+] Deployed: Statusline
 [+] Deployed: settings.json (from template)
@@ -73,29 +73,37 @@ cd ~/.claude-hangar && bash setup.sh
 
 ## What You Get
 
-### Hooks (19) — Automated Safety Net
+### Hooks (27) — Automated Safety Net
 
 | Hook | Event | What It Does |
 |------|-------|-------------|
 | `secret-leak-check` | PreToolUse | Blocks writes containing API keys, tokens, or credentials |
 | `bash-guard` | PreToolUse | Prevents destructive commands (`rm -rf`, `DROP TABLE`, force-push) |
 | `checkpoint` | PreToolUse | Auto-creates git stash snapshots before file edits |
-| `token-warning` | PostToolUse | Alerts at 70% and 80% context utilization |
-| `session-start` | SessionStart | Loads STATUS.md, tasks, and memory on session start |
-| `session-stop` | Stop | Cleans temp files, logs session cost |
-| `post-compact` | PostCompact | Smart context preservation — detects tasks, plans, branch, HANDOFF.md |
-| `config-change-guard` | ConfigChange | Warns on critical settings changes |
 | `config-protection` | PreToolUse | Blocks weakening of linter/formatter/compiler configs |
-| `skill-suggest` | UserPromptSubmit | Suggests matching skills based on your prompts |
-| `model-router` | UserPromptSubmit | Smart complexity analysis — structural signals, scope detection |
-| `task-completed-gate` | TaskCompleted | 4-level quality gate (existence, errors, evidence, substance) |
-| `subagent-tracker` | SubagentStart/Stop | Lifecycle tracking + forensics (duration, thrashing, failures) |
-| `stop-failure` | StopFailure | Logs errors on session failures |
 | `mcp-health-check` | PreToolUse | Checks MCP server health before tool calls, warns on repeated failures |
+| `db-query-guard` | PreToolUse | Warns when agent tries to directly query internal databases |
+| `permission-denied-retry` | PreToolUse | Retries with adjusted approach on permission denial |
+| `token-warning` | PostToolUse | Alerts at 70% and 80% context utilization |
+| `continuous-learning` | PostToolUse | Captures patterns and learnings from agent work |
+| `cost-tracker` | PostToolUse | Tracks token costs per session |
 | `design-quality-check` | PostToolUse | Detects generic AI UI drift patterns in frontend files |
 | `batch-format-collector` | PostToolUse | Collects edited file paths for batch formatting |
+| `instinct-capture` | PostToolUse | Captures instinct patterns from tool usage |
+| `skill-suggest` | UserPromptSubmit | Suggests matching skills based on your prompts |
+| `model-router` | UserPromptSubmit | Smart complexity analysis — structural signals, scope detection |
+| `session-start` | SessionStart | Loads STATUS.md, tasks, and memory on session start |
+| `config-change-guard` | ConfigChange | Warns on critical settings changes |
+| `task-completed-gate` | TaskCompleted | 4-level quality gate (existence, errors, evidence, substance) |
+| `task-created-init` | TaskCreated | Initializes new tasks with metadata |
+| `subagent-tracker` | SubagentStart/Stop | Lifecycle tracking + forensics (duration, thrashing, failures) |
+| `post-compact` | PostCompact | Smart context preservation — detects tasks, plans, branch, HANDOFF.md |
+| `worktree-init` | WorktreeInit | Initializes worktree environment for isolated work |
+| `session-stop` | Stop | Cleans temp files, logs session cost |
+| `stop-failure` | StopFailure | Logs errors on session failures |
 | `stop-batch-format` | Stop | Runs formatters once at session end on all edited files |
-| `db-query-guard` | PreToolUse | Warns when agent tries to directly query internal databases |
+| `instinct-evolve` | Stop | Evolves instinct data from session patterns |
+| `desktop-notify` | Stop | OS notification when session ends (Windows/Linux/macOS) |
 
 ### MCP Server — Hangar State API
 
@@ -191,23 +199,22 @@ Manage Claude Code configs for multiple repositories from one `registry.json`:
 
 ```json
 {
-  "projects": {
-    "website": {
-      "path": "~/projects/website",
-      "stack": "astro",
-      "template": "web"
+  "projects": [
+    {
+      "name": "website",
+      "repo": "my-org/website",
+      "defaultPath": "~/projects/website",
+      "skills": ["audit", "astro"],
+      "workflows": ["ci-node.yml", "deploy-ghpages.yml"]
     },
-    "api": {
-      "path": "~/projects/api",
-      "stack": "database",
-      "template": "fullstack"
-    },
-    "docs": {
-      "path": "~/projects/docs",
-      "stack": null,
-      "template": "minimal"
+    {
+      "name": "api",
+      "repo": "my-org/api",
+      "defaultPath": "~/projects/api",
+      "skills": ["audit", "database", "auth"],
+      "workflows": ["ci-node.yml", "deploy-vps-ghcr.yml"]
     }
-  }
+  ]
 }
 ```
 

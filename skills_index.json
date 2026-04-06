@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "generated": "2026-04-04",
-  "skillCount": 26,
+  "generated": "2026-04-06",
+  "skillCount": 31,
   "categories": {
     "design": ["design-system", "polish"],
     "quality": ["adversarial-review", "inline-review"],
@@ -13,7 +13,8 @@
     "documentation": ["doctor", "error-analyzer", "meta-tags", "favicon-check"],
     "git": ["git-hygiene"],
     "devops": ["freshness-check"],
-    "learning": ["pattern-extractor"]
+    "learning": ["pattern-extractor"],
+    "governance": ["prompt-optimizer", "rules-distill", "safety-guard", "skill-stocktake"]
   },
   "skills": [
     {
@@ -231,6 +232,38 @@
       "risk": "safe",
       "description": "Analyzes captured patterns from continuous learning to extract reusable workflows and anti-patterns.",
       "triggers": ["patterns", "learn", "extract patterns", "what did I learn", "analyze patterns"]
+    },
+    {
+      "id": "prompt-optimizer",
+      "path": "core/skills/prompt-optimizer",
+      "category": "governance",
+      "risk": "safe",
+      "description": "Analyzes draft prompts, identifies gaps, matches available skills/agents, and recommends optimal workflows.",
+      "triggers": ["optimize prompt", "which skill", "prompt analysis", "skill matching"]
+    },
+    {
+      "id": "rules-distill",
+      "path": "core/skills/rules-distill",
+      "category": "governance",
+      "risk": "safe",
+      "description": "Scans all skills and rules to extract cross-cutting principles that should become shared rules.",
+      "triggers": ["distill rules", "extract rules", "rule governance", "shared rules"]
+    },
+    {
+      "id": "safety-guard",
+      "path": "core/skills/safety-guard",
+      "category": "governance",
+      "risk": "safe",
+      "description": "3-mode protection system for autonomous agent runs. Careful (confirm risky ops), Freeze (restrict writes), Guard (combined).",
+      "triggers": ["safety guard", "freeze mode", "careful mode", "protect writes", "autonomous safety"]
+    },
+    {
+      "id": "skill-stocktake",
+      "path": "core/skills/skill-stocktake",
+      "category": "governance",
+      "risk": "safe",
+      "description": "Audits skill quality across four dimensions (actionability, scope fit, uniqueness, currency).",
+      "triggers": ["skill audit", "stocktake", "skill quality", "audit skills"]
     }
   ]
 }

@@ -8,9 +8,9 @@ Install and configure Claude Hangar — configuration management for [Claude Cod
 
 One repo, one script, a production-grade Claude Code environment:
 
-- **17 hooks** — secret leak detection, bash command guard, token warnings, model routing, quality gates, and more
-- **6 agents** — codebase explorer, explorer-deep, security reviewer, commit reviewer, plan reviewer, dependency checker
-- **18 skills** — audit, deploy-check, polish, scan, consult, handoff, and more
+- **27 hooks** — secret leak detection, bash command guard, token warnings, model routing, quality gates, and more
+- **21 agents** — codebase explorer, explorer-deep, security reviewer, commit reviewer, plan reviewer, dependency checker, and more
+- **31 skills** — audit, deploy-check, polish, scan, consult, handoff, and more
 - **Statusline** — model, context bar, rate limits, cost, session duration
 - **Multi-project registry** — manage configs across many repos from one place
 
@@ -64,28 +64,51 @@ Setup copies files from the repo into `~/.claude/`:
 
 ```
 ~/.claude/
-  hooks/                   # 17 hook scripts
-    secret-leak-check.sh   #   PreToolUse — blocks secrets in file writes
-    bash-guard.sh          #   PreToolUse — blocks destructive commands + enforces commits
-    checkpoint.sh          #   PreToolUse — git stash checkpoint before writes
-    token-warning.sh       #   PostToolUse — warns at 70% and 80% context usage
-    skill-suggest.sh       #   UserPromptSubmit — suggests matching skills
-    model-router.sh        #   UserPromptSubmit — suggests optimal model tier
-    session-start.sh       #   SessionStart — loads STATUS.md, tasks, memory hygiene
-    session-stop.sh        #   Stop — cleanup temp files, log session cost
-    post-compact.sh        #   PostCompact — resets tracking + context reload reminder
-    config-change-guard.sh #   ConfigChange — warns on critical settings changes
-    task-completed-gate.sh #   TaskCompleted — quality gate for task completion
-    subagent-tracker.sh    #   SubagentStart/Stop — subagent observability
-    stop-failure.sh        #   StopFailure — logs errors on session failure
-  agents/                  # 6 agent definitions
-    explorer.md            #   Quick codebase search (Sonnet, read-only)
-    explorer-deep.md       #   Deep analysis (Opus, worktree isolation)
-    security-reviewer.md   #   Security review (Opus, OWASP Top 10)
-    commit-reviewer.md     #   Pre-commit review (Sonnet, read-only)
-    plan-reviewer.md       #   Spec/plan compliance (Sonnet, read-only)
-    dependency-checker.md  #   npm audit + outdated (Sonnet, read-only)
-  skills/                  # 18 skill definitions (audit, scan, consult, handoff, ...)
+  hooks/                       # 27 hook scripts
+    secret-leak-check.sh       #   PreToolUse — blocks secrets in file writes
+    bash-guard.sh              #   PreToolUse — blocks destructive commands + enforces commits
+    checkpoint.sh              #   PreToolUse — git stash checkpoint before writes
+    token-warning.sh           #   PostToolUse — warns at 70% and 80% context usage
+    skill-suggest.sh           #   UserPromptSubmit — suggests matching skills
+    model-router.sh            #   UserPromptSubmit — suggests optimal model tier
+    session-start.sh           #   SessionStart — loads STATUS.md, tasks, memory hygiene
+    session-stop.sh            #   Stop — cleanup temp files, log session cost
+    post-compact.sh            #   PostCompact — resets tracking + context reload reminder
+    config-change-guard.sh     #   ConfigChange — warns on critical settings changes
+    task-completed-gate.sh     #   TaskCompleted — quality gate for task completion
+    subagent-tracker.sh        #   SubagentStart/Stop — subagent observability
+    stop-failure.sh            #   StopFailure — logs errors on session failure
+    continuous-learning.sh     #   PostToolUse — captures patterns from agent work
+    cost-tracker.sh            #   PostToolUse — tracks token costs per session
+    desktop-notify.sh          #   Stop — OS notification when session ends
+    instinct-capture.sh        #   PostToolUse — captures instinct patterns
+    instinct-evolve.sh         #   Stop — evolves instinct data from session
+    permission-denied-retry.sh #   PreToolUse — retries with adjusted approach
+    task-created-init.sh       #   TaskCreated — initializes new tasks
+    worktree-init.sh           #   WorktreeInit — initializes worktree environment
+  agents/                          # 21 agent definitions
+    explorer.md                    #   Quick codebase search (Sonnet, read-only)
+    explorer-deep.md               #   Deep analysis (Opus, worktree isolation)
+    security-reviewer.md           #   Security review (Opus, OWASP Top 10)
+    commit-reviewer.md             #   Pre-commit review (Sonnet, read-only)
+    plan-reviewer.md               #   Spec/plan compliance (Sonnet, read-only)
+    dependency-checker.md          #   npm audit + outdated (Sonnet, read-only)
+    planner.md                     #   Implementation planning (Opus)
+    architect.md                   #   System design decisions (Opus)
+    tdd-guide.md                   #   TDD workflow guidance (Opus)
+    doc-updater.md                 #   Documentation updates (Opus)
+    refactor-agent.md              #   Code restructuring (Opus)
+    test-writer.md                 #   Test generation (Opus)
+    typescript-reviewer.md         #   TypeScript-specific review (Opus)
+    python-reviewer.md             #   Python-specific review (Opus)
+    go-reviewer.md                 #   Go-specific review (Opus)
+    build-resolver-typescript.md   #   TypeScript build error resolution (Opus)
+    build-resolver-python.md       #   Python build error resolution (Opus)
+    build-resolver-go.md           #   Go build error resolution (Opus)
+    harness-optimizer.md           #   Harness config optimization (Opus)
+    performance-optimizer.md       #   Performance optimization (Opus)
+    loop-operator.md               #   Autonomous workflow management (Opus)
+  skills/                  # 31 skill definitions (audit, scan, consult, handoff, ...)
   lib/common.sh            # Shared shell functions (colors, logging, OS detection)
   statusline-command.sh    # Statusline script
   settings.json            # Hook registration, env vars, effort level

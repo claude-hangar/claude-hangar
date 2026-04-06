@@ -50,7 +50,7 @@ OS=$(detect_os)
 check_prerequisites() {
   local missing=()
   command -v git &>/dev/null || missing+=("git")
-  command -v node &>/dev/null || missing+=("node")
+  command -v node &>/dev/null || missing+=("node (18+)")
   command -v npx &>/dev/null || missing+=("npx (optional, for MCP servers)")
   command -v jq &>/dev/null || missing+=("jq (optional, for statusline)")
 
@@ -67,6 +67,18 @@ check_prerequisites() {
     error "Install missing prerequisites, then re-run setup."
     return 1
   fi
+
+  # Check Node.js minimum version (18+)
+  if command -v node &>/dev/null; then
+    local node_major
+    node_major=$(node -e "console.log(process.versions.node.split('.')[0])" 2>/dev/null || echo "0")
+    if [ "$node_major" -lt 18 ] 2>/dev/null; then
+      error "Node.js $node_major.x detected — version 18+ required"
+      error "Install a current LTS version from https://nodejs.org/"
+      return 1
+    fi
+  fi
+
   return 0
 }
 
@@ -340,16 +352,21 @@ should_deploy() {
 deploy_all() {
   info "Deploying to $CLAUDE_DIR..."
 
-  # Backup existing config
-  if [ -d "$CLAUDE_DIR" ] && [ ! -f "$CLAUDE_DIR/.hangar-backup-done" ]; then
+  # Backup existing config (timestamped, runs every time)
+  if [ -d "$CLAUDE_DIR" ]; then
     local backup_dir
     backup_dir="$CLAUDE_DIR/.backup-$(date +%Y%m%d-%H%M%S)"
-    mkdir -p "$backup_dir"
-    for item in hooks agents skills lib statusline-command.sh settings.json CLAUDE.md; do
-      [ -e "$CLAUDE_DIR/$item" ] && cp -r "$CLAUDE_DIR/$item" "$backup_dir/" 2>/dev/null || true
+    local has_content=false
+    for item in hooks agents skills lib rules contexts references mcp-server statusline-command.sh settings.json CLAUDE.md; do
+      [ -e "$CLAUDE_DIR/$item" ] && has_content=true && break
     done
-    success "Backed up existing config to $backup_dir"
-    touch "$CLAUDE_DIR/.hangar-backup-done"
+    if [ "$has_content" = true ]; then
+      mkdir -p "$backup_dir"
+      for item in hooks agents skills lib rules contexts references mcp-server statusline-command.sh settings.json CLAUDE.md; do
+        [ -e "$CLAUDE_DIR/$item" ] && cp -r "$CLAUDE_DIR/$item" "$backup_dir/" 2>/dev/null || true
+      done
+      success "Backed up existing config to $backup_dir"
+    fi
   fi
 
   # Deploy components (respecting --with/--without filters)
@@ -569,12 +586,18 @@ main() {
                   hooks/task-created-init.sh hooks/worktree-init.sh \
                   hooks/continuous-learning.sh hooks/instinct-evolve.sh \
                   hooks/cost-tracker.sh hooks/desktop-notify.sh \
+                  hooks/batch-format-collector.sh hooks/config-protection.sh \
+                  hooks/db-query-guard.sh hooks/design-quality-check.sh \
+                  hooks/instinct-capture.sh hooks/mcp-health-check.sh \
+                  hooks/stop-batch-format.sh \
                   agents/planner.md agents/architect.md agents/loop-operator.md \
                   agents/typescript-reviewer.md agents/python-reviewer.md agents/go-reviewer.md \
                   agents/build-resolver-typescript.md agents/build-resolver-python.md agents/build-resolver-go.md \
                   agents/explorer.md agents/explorer-deep.md \
                   agents/security-reviewer.md agents/commit-reviewer.md agents/dependency-checker.md \
                   agents/plan-reviewer.md agents/refactor-agent.md agents/test-writer.md \
+                  agents/doc-updater.md agents/harness-optimizer.md \
+                  agents/performance-optimizer.md agents/tdd-guide.md \
                   statusline-command.sh lib/common.sh settings.json; do
         total=$((total + 1))
         if [ -f "$CLAUDE_DIR/$item" ]; then
@@ -600,7 +623,7 @@ main() {
         exit 1
       fi
       info "Restoring from: $latest_backup"
-      for item in hooks agents skills lib statusline-command.sh settings.json CLAUDE.md; do
+      for item in hooks agents skills lib rules contexts references mcp-server statusline-command.sh settings.json CLAUDE.md; do
         [ -e "$latest_backup/$item" ] && cp -r "$latest_backup/$item" "$CLAUDE_DIR/" 2>/dev/null || true
       done
       success "Rollback complete"

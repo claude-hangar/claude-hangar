@@ -44,5 +44,15 @@ age-key*
 *.bak
 *.orig
 
+# Session state (machine-specific)
+STATUS.md
+MEMORY.md
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
 # Claude worktrees
 .claude/agent-*/
