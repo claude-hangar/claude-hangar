@@ -225,4 +225,9 @@ This eliminates magic numbers scattered across scripts and makes tuning behavior
 
 - [Configuration Reference](configuration.md) — settings details
 - [Writing Hooks](writing-hooks.md) — hook development
+- [Writing Skills](writing-skills.md) — skill development
+- [Writing Agents](writing-agents.md) — agent development
+- [Capability Surface Guide](capability-surface-guide.md) — when to use Rule vs Skill vs Hook vs Agent
+- [Skill Adaptation Policy](skill-adaptation-policy.md) — adopting patterns from community repos
 - [Multi-Project Setup](multi-project.md) — registry system
+- [Troubleshooting](troubleshooting.md) — common issues and upstream bugs

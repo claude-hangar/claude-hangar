@@ -32,6 +32,13 @@ Most Claude Code configs are personal dotfiles — useful to read, hard to reuse
 - **3 context modes** — dev, research, review
 - **Cross-platform** — Linux, macOS, and Windows (Git Bash)
 
+## Prerequisites
+
+- **Node.js** >= 22.12.0 (for hook JSON parsing via `node -e`)
+- **Bash** >= 4.0 (Git Bash on Windows, native on macOS/Linux)
+- **Git** >= 2.20
+- **GitHub CLI** (`gh`) — optional, for GitHub stack features and freshness checks
+
 ## Quick Start
 
 **One-liner install:**

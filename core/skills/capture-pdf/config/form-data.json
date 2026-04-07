@@ -2,23 +2,23 @@
   "fields": {
     "firstName": {
       "match": ["first", "vorname", "fname", "first_name", "firstname"],
-      "value": "Maria"
+      "value": "{{TEST_FIRST_NAME}}"
     },
     "lastName": {
       "match": ["last", "nachname", "lname", "last_name", "lastname", "surname"],
-      "value": "Mustermann"
+      "value": "{{TEST_LAST_NAME}}"
     },
     "fullName": {
       "match": ["name", "fullname", "full_name"],
-      "value": "Maria Mustermann"
+      "value": "{{TEST_FULL_NAME}}"
     },
     "email": {
       "match": ["email", "e-mail", "mail"],
-      "value": "maria@beispiel.de"
+      "value": "{{TEST_EMAIL}}"
     },
     "phone": {
       "match": ["phone", "telefon", "tel", "mobile", "handy", "fon"],
-      "value": "+49 89 123 4567"
+      "value": "{{TEST_PHONE}}"
     },
     "message": {
       "match": ["message", "nachricht", "kommentar", "comment", "bemerkung", "anmerkung", "text", "body"],
@@ -26,7 +26,7 @@
     },
     "company": {
       "match": ["company", "firma", "organization", "organisation", "unternehmen", "betrieb"],
-      "value": "Musterfirma GmbH"
+      "value": "{{TEST_COMPANY}}"
     },
     "street": {
       "match": ["street", "strasse", "address", "adresse", "str"],
