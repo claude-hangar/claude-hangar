@@ -146,4 +146,4 @@ This checklist is for projects already successfully running on 6.x.
 
 ---
 
-As of: 2026-04-07 (updated for Astro 6.1.4, Vite 8.0.3, Zod 4.3.6 — 6.1.4 fixes: Cloudflare adapter miniflare restart on config change (in-place Vite restart instead of new server), React 19 Float mechanism injecting into islands instead of document, pages with dotted filenames, unused re-exports from assets/utils barrel file)
+As of: 2026-04-08 (updated for Astro 6.1.4, Vite 8.0.7, Zod 4.3.6 — 6.1.4 fixes: Cloudflare adapter miniflare restart on config change (in-place Vite restart instead of new server), React 19 Float mechanism injecting into islands instead of document, pages with dotted filenames, unused re-exports from assets/utils barrel file)

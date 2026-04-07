@@ -5,6 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] — 2026-04-08
+
+### Updated — Full Freshness Check (Vite 8.0.7, Svelte 5.55.2, Lighthouse 13.1.0, SDK 0.85.0, Community Sync)
+
+#### Version Updates
+| Package | Previous | Current |
+|---------|----------|---------|
+| Vite | 8.0.3 | 8.0.7 |
+| Svelte | 5.55.1 | 5.55.2 |
+| Lighthouse | 13.0.3 | 13.1.0 |
+| Claude Code | 2.1.92 | 2.1.94 |
+| Anthropic SDK | 0.82.0 | 0.85.0 |
+| GSD v1 | 1.33.0 | 1.34.2 |
+| GSD v2 | 2.64.0 | 2.65.0 |
+| oh-my-opencode | 3.15.2 | 3.15.3 |
+
+#### Checklist & Reference Updates
+- **Astro v6-stable** — Updated as-of dates for Vite 8.0.7
+- **Astro v6-beta** — Updated as-of dates for Vite 8.0.7
+- **SvelteKit checklist** — Updated as-of for Svelte 5.55.2
+- **.freshness-state.json** — Full sync: all 37 sources current, 12 open opportunities
+
+#### New Documentation
+- **capability-surface-guide.md** — Decision tree for Rule vs Skill vs MCP vs Hook vs Agent (inspired by ECC)
+- **skill-adaptation-policy.md** — Governance for adopting patterns from community repos (inspired by ECC)
+- **troubleshooting.md** — Added "Known Upstream Bugs" section (stdin consumption, hook hot-reload, MCP auth, 529 errors)
+
+#### Community Sync
+- GSD v2.65.0: Pre-execution plan verification, post-execution consistency checks, intent+phase guards
+- oh-my-opencode v3.15.3: Session origins tracking, lineage-aware continuation
+- ECC v1.10.0: Capability surface selection, skill adaptation policy, hook troubleshooting patterns adopted
+- All 19 community repos checked and as-of dates updated
+
+---
+
 ## [Unreleased] — 2026-04-07
 
 ### Updated — Astro 6.1.4 & GSD v1.34 Freshness

@@ -292,4 +292,4 @@ Finding prefix: `SKT-NN` (SvelteKit), `BP-NN` (Best Practice)
 
 ---
 
-As of: 2026-04-04 (updated for SvelteKit 2.56.1 — 5 breaking changes in 2.56.0: reworked client-driven refreshes, stabilized remote function caching, run() method on queries, TypeScript 6.0 support, isolated command-triggered refresh failures)
+As of: 2026-04-08 (updated for SvelteKit 2.56.1, Svelte 5.55.2 — 5 breaking changes in 2.56.0: reworked client-driven refreshes, stabilized remote function caching, run() method on queries, TypeScript 6.0 support, isolated command-triggered refresh failures)

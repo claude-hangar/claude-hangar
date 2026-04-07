@@ -49,6 +49,29 @@ exit 0
 - On Windows: Check that Node.js is in the system PATH, not just user PATH
 - In CI: Ensure the `actions/setup-node` step runs before hook tests
 
+### Known Upstream Bugs (Claude Code)
+
+These are known issues in Claude Code itself, not in Hangar hooks.
+
+**stdin must be consumed:**
+Hooks that receive JSON via stdin MUST consume it (e.g., `input=$(cat)`), even if unused. Failing to consume stdin can cause the hook to hang or produce misleading "hook error" labels.
+
+**Hook edits require session restart:**
+Changes to hook scripts or `settings.json` hook configuration do NOT hot-reload. You must restart the Claude Code session for changes to take effect.
+
+**MCP auth breaks after compaction:**
+After `/compact`, MCP server authentication can break silently. Fix: toggle the MCP connector off and on again, or restart the session.
+
+**Early compaction can be counterproductive:**
+Setting `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` too low (e.g., 50%) triggers compaction too early, losing valuable context. Default behavior is usually better.
+
+**529 Overloaded errors:**
+If Claude Code returns 529 errors frequently:
+- Set `ENABLE_TOOL_SEARCH=auto:5` to reduce tool search overhead
+- Reduce `MAX_THINKING_TOKENS` if set
+- Disable unused MCP servers to reduce token load
+- Reduce number of parallel operations
+
 ## Skills
 
 ### Skill not found / not suggested
