@@ -80,4 +80,4 @@ Astro-spezifische Audit-Checks. Nur §-Sektionen laden die zur aktuellen Phase p
 
 ---
 
-As of: 2026-03-27 (updated for Astro 6.1.1 — Sharp codec config, i18n fallback routes, SmartyPants, CSRF dev fix)
+As of: 2026-04-07 (updated for Astro 6.1.4 — Sharp codec config, i18n fallback routes, SmartyPants, CSRF dev fix, Cloudflare miniflare restart, React 19 Float fix)

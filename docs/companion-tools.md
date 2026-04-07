@@ -173,9 +173,23 @@ claude install thedotmack/claude-mem
 
 ## 7. GSD v1 — Get Shit Done (gsd-build/get-shit-done)
 
-**What it adds:** Meta-prompting and spec-driven development system as a Claude Code plugin. ~44 slash commands (`/gsd:*`), 16 agents, planning workflows, and context monitoring.
+**What it adds:** Meta-prompting and spec-driven development system. v1.34+ provides 60+ slash commands (`/gsd:*`), 19+ agents, planning workflows, context monitoring, and a TypeScript SDK. Supports 12+ runtimes (Claude Code, Codex, Gemini, Copilot, OpenCode, Windsurf, Cursor, Trae, Kilo, Augment, Cline, Antigravity).
 
-**Why alongside Hangar:** GSD v1 provides structured project planning (requirements, roadmap, phases) that Hangar doesn't cover. Hangar provides safety hooks and operational skills that GSD doesn't.
+**Why alongside Hangar:** GSD v1 provides structured project planning (requirements, roadmap, phases, workstreams) that Hangar doesn't cover. Hangar provides safety hooks and operational skills that GSD doesn't.
+
+**Key features (v1.28+):**
+
+| Feature | Since | What it does |
+|---------|-------|--------------|
+| Workstreams | v1.28 | Parallel milestone work via `/gsd:workstreams` |
+| Advisor Mode | v1.27 | Research-backed discussion with parallel evaluating agents |
+| GSD SDK | v1.30 | TypeScript headless SDK (`gsd-sdk init`, `gsd-sdk auto`) |
+| Skills Migration | v1.31 | Commands install as `skills/gsd-*/SKILL.md` files |
+| STATE.md Gates | v1.32 | Consistency validation (`state validate`, `state sync`) |
+| Autonomous Mode | v1.32 | `--to N`, `--interactive`, `--power` flags |
+| Global Learnings | v1.34 | Persistent CRUD store with cross-session reuse |
+| Codebase Intel | v1.34 | Queryable `.planning/intel/` JSON store |
+| Execution Profiles | v1.34 | dev/research/review context modes |
 
 **Install (local only — avoids global conflicts):**
 
@@ -184,7 +198,7 @@ cd your-project
 npx get-shit-done-cc --claude --local
 ```
 
-**Compatibility:** GSD v1 installed locally (`.claude/`) does not conflict with Hangar's global `~/.claude/` config. All GSD files use `gsd-` prefix. **Do NOT install globally** — this would conflict with Hangar's statusline and hooks.
+**Compatibility:** GSD v1 installed locally (`.claude/`) does not conflict with Hangar's global `~/.claude/` config. All GSD files use `gsd-` prefix. **Do NOT install globally** — this would conflict with Hangar's statusline and hooks. Requires Node.js >= 22.
 
 **Conflict zones (global install only):**
 

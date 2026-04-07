@@ -286,4 +286,35 @@ Patch releases:
 
 ---
 
-As of: 2026-03-21 (updated for Astro 6.0.8)
+## 6.1.0 — March 2026
+
+-> [Astro 6.1 Blog Post](https://astro.build/blog/astro-610/)
+
+### New Features
+
+- **Sharp Codec-Specific Image Defaults** — `image.service.config` for global encoding settings
+  - Codec-level optimization: JPEG (mozjpeg), WebP, AVIF, PNG with per-codec compression options
+  - Applied to every image processed during build — no need to repeat per-image
+- **Advanced SmartyPants Configuration** — `markdown.smartypants` as object
+  - Per-punctuation control: French guillemets, German quotation marks, custom dash styles
+  - Replaces boolean-only toggle with fine-grained localization support
+- **i18n Fallback Routes for Integrations** — `fallbackRoutes` on `astro:routes:resolved` hook
+  - Routes with `fallbackType: 'rewrite'` now exposed to integrations
+  - Enables `@astrojs/sitemap` to include fallback pages in sitemaps
+
+### Improvements
+
+- **Mobile View Transitions** — client router skips animations when browsers provide native transitions (iOS Safari swipe gestures)
+- **CSRF checkOrigin fix** — `X-Forwarded-Proto` correctly interpreted behind TLS-terminating reverse proxies
+- React hydration fixes for conditional slot rendering and `experimentalReactChildren` mismatches
+
+### Patch Releases
+
+- **6.1.1** — Cloudflare adapter dev rendering fixes, additional stabilization
+- **6.1.2** — Zod v4 validation error formatting (human-readable messages instead of raw JSON)
+- **6.1.3** — Cloudflare adapter dev rendering, skew protection query params for rolling deployments, HMR with Cloudflare prerenderEnvironment, MDX AstroContainer HTML escaping, cross-page CSS leak, SSR "No matching renderer" without src/pages/
+- **6.1.4** — Cloudflare adapter miniflare restart fix (in-place Vite restart instead of new server), React 19 Float mechanism injecting into islands instead of document, pages with dotted filenames, unused re-exports from assets/utils barrel file
+
+---
+
+As of: 2026-04-07 (updated for Astro 6.1.4)

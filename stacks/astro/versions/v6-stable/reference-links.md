@@ -4,6 +4,7 @@
 
 - [Astro 6 Docs](https://docs.astro.build/)
 - [Astro 6.0 Release Blog Post](https://astro.build/blog/astro-6/)
+- [Astro 6.1 Release Blog Post](https://astro.build/blog/astro-610/)
 - [Astro 6 Upgrade Guide](https://docs.astro.build/en/guides/upgrade-to/v6/)
 - [Astro Blog](https://astro.build/blog/)
 
@@ -46,4 +47,4 @@
 
 ---
 
-As of: 2026-04-04 (updated for Astro 6.1.3, Vite 8.0.3, Zod 4.3.6)
+As of: 2026-04-07 (updated for Astro 6.1.4, Vite 8.0.3, Zod 4.3.6)

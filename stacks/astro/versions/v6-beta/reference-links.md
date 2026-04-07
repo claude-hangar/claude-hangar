@@ -2,10 +2,11 @@
 
 ## Official Documentation
 
-- [Astro 6 Upgrade Guide](https://v6.docs.astro.build/en/guides/upgrade-to/v6/)
-- [Astro 6 Beta Blog Post](https://astro.build/blog/)
-- [Astro Docs (v6)](https://v6.docs.astro.build/)
-- [Astro Docs (Stable)](https://docs.astro.build/)
+- [Astro 6 Upgrade Guide](https://docs.astro.build/en/guides/upgrade-to/v6/)
+- [Astro 6.0 Release Blog Post](https://astro.build/blog/astro-6/)
+- [Astro 6.1 Release Blog Post](https://astro.build/blog/astro-610/)
+- [Astro Docs](https://docs.astro.build/)
+- [Astro Blog](https://astro.build/blog/)
 
 ## Changelogs & Releases
 
@@ -90,4 +91,4 @@
 
 ---
 
-As of: 2026-03-26 (updated for Astro 6.0.8 stable, Vite 8.0.3, Zod 4.3.6)
+As of: 2026-04-07 (updated for Astro 6.1.4 stable, Vite 8.0.3, Zod 4.3.6)

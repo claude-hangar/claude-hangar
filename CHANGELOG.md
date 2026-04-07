@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] — 2026-04-07
+
+### Updated — Astro 6.1.4 & GSD v1.34 Freshness
+
+#### Astro Stack
+- **v6-stable/checklist.md** — Updated for Astro 6.1.4 (Cloudflare miniflare restart, React 19 Float fix, dotted filenames, barrel file cleanup)
+- **v6-stable/reference-links.md** — Version bump to 6.1.4
+- **v6-beta/changelog.md** — Added full 6.1.x section (6.1.0 features: Sharp codec config, SmartyPants, i18n fallback routes; patch releases 6.1.1–6.1.4)
+- **SKILL.md** — Updated latest version reference (6.0.8 → 6.1.4, checklist count 28 → 31)
+- **audit/stacks/frontend/astro.md** — Updated as-of to 6.1.4
+
+#### Companion Tools
+- **docs/companion-tools.md** — GSD v1 section rewritten for v1.34 (60+ commands, 19+ agents, 12+ runtimes, GSD SDK, Workstreams, Advisor Mode, Global Learnings Store, Codebase Intel, Autonomous Mode, Execution Profiles)
+
+---
+
 ## [Unreleased] — 2026-04-05
 
 ### Added — ECC Integration Phase 2c (Could-Haves)
