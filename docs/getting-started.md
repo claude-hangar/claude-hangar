@@ -103,7 +103,7 @@ Setup copies files from the repo into `~/.claude/`:
     architect.md                   #   System design decisions (Opus)
     tdd-guide.md                   #   TDD workflow guidance (Sonnet)
     doc-updater.md                 #   Documentation updates (Sonnet)
-    refactor-agent.md              #   Code restructuring (Sonnet)
+    refactor-agent.md              #   Code restructuring (Opus)
     test-writer.md                 #   Test generation (Sonnet)
     typescript-reviewer.md         #   TypeScript-specific review (Sonnet)
     python-reviewer.md             #   Python-specific review (Sonnet)

@@ -76,7 +76,7 @@ Zusammenfassung:
 
 - **Wie starte ich den Explorer?** → Einfach eine Frage stellen die mit "analysiere", "erklaere", "wo ist", "zeig mir" oder "wie funktioniert" beginnt. Er wird automatisch gewaehlt.
 - **Kann der Explorer Fehler machen?** → Er kann falsch interpretieren, aber er kann nichts kaputt machen (keine Schreibrechte).
-- **Ist der Explorer langsamer als direkt fragen?** → Er nutzt ein schnelleres Modell (Haiku) und ist dadurch schneller und guenstiger als der normale Modus.
+- **Ist der Explorer langsamer als direkt fragen?** → Er nutzt ein schnelleres Modell (Sonnet) und ist dadurch schneller und guenstiger als der normale Modus.
 - **Kann ich nach der Analyse Aenderungen machen?** → Ja. Sag einfach was du aendern willst — dann wechselt der Modus automatisch.
 
 ## Naechste Schritte
