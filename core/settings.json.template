@@ -24,6 +24,19 @@
           {
             "type": "command",
             "command": "bash ~/.claude/hooks/bash-guard.sh"
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/db-query-guard.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/mcp-health-check.sh"
           }
         ]
       }
@@ -39,11 +52,15 @@
         ]
       },
       {
-        "matcher": "Bash|Write|Edit|Skill|Agent",
+        "matcher": "Write|Edit",
         "hooks": [
           {
             "type": "command",
-            "command": "bash ~/.claude/hooks/instinct-capture.sh"
+            "command": "bash ~/.claude/hooks/design-quality-check.sh"
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/batch-format-collector.sh"
           }
         ]
       }
@@ -104,6 +121,10 @@
           {
             "type": "command",
             "command": "bash ~/.claude/hooks/session-stop.sh"
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/stop-batch-format.sh"
           }
         ]
       }
@@ -126,28 +147,6 @@
           {
             "type": "command",
             "command": "bash ~/.claude/hooks/task-completed-gate.sh"
-          }
-        ]
-      }
-    ],
-    "SubagentStart": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/subagent-tracker.sh"
-          }
-        ]
-      }
-    ],
-    "SubagentStop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/subagent-tracker.sh"
           }
         ]
       }
