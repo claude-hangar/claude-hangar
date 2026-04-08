@@ -1,0 +1,11 @@
+{
+  "name": "skill-stocktake",
+  "version": "1.0.0",
+  "description": "Audits skill quality across four dimensions (actionability, scope fit, uniqueness, currency).",
+  "category": "governance",
+  "risk": "safe",
+  "triggers": ["skill audit", "stocktake", "skill quality", "audit skills"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

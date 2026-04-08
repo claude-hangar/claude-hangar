@@ -1,0 +1,11 @@
+{
+  "name": "rules-distill",
+  "version": "1.0.0",
+  "description": "Scans all skills and rules to extract cross-cutting principles that should become shared rules.",
+  "category": "governance",
+  "risk": "safe",
+  "triggers": ["distill rules", "extract rules", "rule governance", "shared rules"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

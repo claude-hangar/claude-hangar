@@ -1,0 +1,11 @@
+{
+  "name": "prompt-optimizer",
+  "version": "1.0.0",
+  "description": "Analyzes draft prompts, identifies gaps, matches available skills/agents, and recommends optimal workflows.",
+  "category": "governance",
+  "risk": "safe",
+  "triggers": ["optimize prompt", "which skill", "prompt analysis", "skill matching"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

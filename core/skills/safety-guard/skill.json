@@ -1,0 +1,11 @@
+{
+  "name": "safety-guard",
+  "version": "1.0.0",
+  "description": "3-mode protection system for autonomous agent runs. Careful (confirm risky ops), Freeze (restrict writes), Guard (combined).",
+  "category": "governance",
+  "risk": "safe",
+  "triggers": ["safety guard", "freeze mode", "careful mode", "protect writes", "autonomous safety"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}
