@@ -1,16 +1,10 @@
 ---
+name: refactor-agent
 model: opus
 description: Systematic code refactoring agent. Plans transformations, executes in isolated worktree, produces structured diffs for review.
 isolation: worktree
 maxTurns: 40
-tools:
-  - Read
-  - Write
-  - Edit
-  - Glob
-  - Grep
-  - Bash
-  - LSP
+tools: Read, Write, Edit, Glob, Grep, Bash, LSP
 ---
 
 # Refactor Agent

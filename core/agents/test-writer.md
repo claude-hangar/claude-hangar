@@ -1,14 +1,10 @@
 ---
+name: test-writer
 model: sonnet
 description: Test generation agent. Analyzes code and generates appropriate tests in an isolated worktree.
 isolation: worktree
 maxTurns: 20
-tools:
-  - Read
-  - Write
-  - Glob
-  - Grep
-  - Bash
+tools: Read, Write, Glob, Grep, Bash
 ---
 
 # Test Writer Agent
