@@ -145,7 +145,7 @@ Fully autonomous SvelteKit audit without prompts.
 ### Severity Order of Areas in Auto Mode
 
 CRITICAL areas first:
-`ENV -> CFG -> CODE -> ROUT -> LOAD -> FORM -> SSR -> API -> HOOK -> ADPT -> STORE -> TOOL -> DB -> AUTH`
+`ENV -> CFG -> CODE -> ROUT -> LOAD -> FORM -> SSR -> API -> HOOK -> ADPT -> STORE -> CSP -> TOOL -> DB -> AUTH -> PERF2`
 
 ---
 
@@ -193,7 +193,9 @@ Save in project root (gitignored).
     "STORE": { "status": "pending", "session": null, "findingsCount": 0, "completeness": null, "layers": null },
     "TOOL": { "status": "pending", "session": null, "findingsCount": 0, "completeness": null, "layers": null },
     "DB": { "status": "pending", "session": null, "findingsCount": 0, "completeness": null, "layers": null },
-    "AUTH": { "status": "pending", "session": null, "findingsCount": 0, "completeness": null, "layers": null }
+    "AUTH": { "status": "pending", "session": null, "findingsCount": 0, "completeness": null, "layers": null },
+    "CSP": { "status": "pending", "session": null, "findingsCount": 0, "completeness": null, "layers": null },
+    "PERF2": { "status": "pending", "session": null, "findingsCount": 0, "completeness": null, "layers": null }
   },
   "summary": {
     "total": 0,
@@ -249,6 +251,8 @@ Save in project root (gitignored).
 | **TOOL** | Dev Tooling | svelte-check, prettier-plugin-svelte, eslint-plugin-svelte |
 | **DB** | Database | Drizzle integration, schema, migrations, server-only |
 | **AUTH** | Auth Patterns | Session, cookies, protected routes via hooks |
+| **CSP** | Content Security Policy | Trusted Types directives, CSP configuration |
+| **PERF2** | Performance & Bundling | Treeshaking, code splitting, bundle optimization |
 
 ---
 
@@ -310,7 +314,7 @@ Each directory under `versions/` contains:
 | `checklist.md` | Checkpoints with IDs, severity, description |
 
 Currently available:
-- `versions/kit2-svelte5/` — Best practices for SvelteKit 2 + Svelte 5 (48 checkpoints)
+- `versions/kit2-svelte5/` — Best practices for SvelteKit 2 + Svelte 5 (51 checkpoints)
 
 Additionally:
 - `fix-templates.md` — Quick-fix templates for common SvelteKit findings

@@ -1,6 +1,6 @@
 # SvelteKit 2 + Svelte 5 — Best-Practice Checklist
 
-48 checkpoints in 14 areas. Severity: CRITICAL > HIGH > MEDIUM > LOW.
+51 checkpoints in 16 areas. Severity: CRITICAL > HIGH > MEDIUM > LOW.
 Finding prefix: `SKT-NN` (SvelteKit), `BP-NN` (Best Practice)
 
 ---
@@ -292,4 +292,25 @@ Finding prefix: `SKT-NN` (SvelteKit), `BP-NN` (Best Practice)
 
 ---
 
-As of: 2026-04-08 (updated for SvelteKit 2.56.1, Svelte 5.55.2 — 5 breaking changes in 2.56.0: reworked client-driven refreshes, stabilized remote function caching, run() method on queries, TypeScript 6.0 support, isolated command-triggered refresh failures)
+## CSP — Content Security Policy (2 Checks, Top: HIGH) — NEW from 2.57.0
+
+- [ ] **CSP-01** [HIGH] [MUST] Trusted Types directives include SvelteKit values
+  - `config.kit.csp.directives['trusted-types']` must include `'svelte-trusted-html'` and `'sveltekit-trusted-url'`
+  - When service worker auto-registers: `'sveltekit-trusted-url'` is required
+  - Without these: CSP violations in browsers enforcing Trusted Types
+- [ ] **CSP-02** [LOW] [CAN] `submit()` return value utilized for validation
+  - SvelteKit 2.57.0: `submit()` now returns boolean indicating submission validity
+  - Useful for enhanced form remote functions with client-side validation feedback
+
+---
+
+## PERF2 — Performance & Bundling (1 Check, Top: MEDIUM) — NEW from 2.57.0
+
+- [ ] **PERF2-01** [MEDIUM] [SHOULD] Treeshaking for prerendered remote functions verified
+  - SvelteKit 2.57.0 reimplemented treeshaking for non-dynamic prerendered remote functions
+  - Check bundle size before/after upgrade — should decrease
+  - False "inlineDynamicImports ignored with codeSplitting" warnings with Vite 8 eliminated
+
+---
+
+As of: 2026-04-08 (updated for SvelteKit 2.57.0, Svelte 5.55.2 — 2.57.0: submit() returns boolean, CSP trusted-types required, treeshaking reimplemented, Vite 8 code-splitting warnings fixed, Chrome DevTools workspace requests silently 404'd)

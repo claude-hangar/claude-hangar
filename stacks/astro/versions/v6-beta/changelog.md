@@ -317,4 +317,14 @@ Patch releases:
 
 ---
 
-As of: 2026-04-07 (updated for Astro 6.1.4)
+## 6.1.5 — April 8, 2026
+
+- Fix: `<Picture>` component build error when prerendered pages used alongside pages calling `render()` on content collection entries
+- Fix: Sync content inside `<Fragment>` elements wasn't streaming to the browser until all async sibling expressions completed
+- Fix: UnoCSS dev mode restored when used with client router (partial revert of Vue component styles persistence change)
+- Fix: `astro add cloudflare` now sets `compatibility_date` to today's date instead of deriving from locally installed packages
+- Chore: Removed `dlv` dependency from codebase
+
+---
+
+As of: 2026-04-08 (updated for Astro 6.1.5)
