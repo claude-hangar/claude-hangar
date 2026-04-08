@@ -31,3 +31,5 @@ if [ -f "$LOG_FILE" ]; then
     tail -50 "$LOG_FILE" > "${LOG_FILE}.tmp" && mv "${LOG_FILE}.tmp" "$LOG_FILE"
   fi
 fi
+
+exit 0

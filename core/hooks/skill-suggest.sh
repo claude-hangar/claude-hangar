@@ -139,3 +139,5 @@ node -e "console.log(JSON.stringify({
   result: 'message',
   message: 'Skill suggestion: ' + process.argv[1] + ' matches this request. Use the skill for better results.'
 }))" "$MATCH"
+
+exit 0

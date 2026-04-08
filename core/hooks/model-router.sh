@@ -166,3 +166,5 @@ elif [ "$TIER" = "opus" ]; then
     message: 'Model hint: This looks like a complex/architectural task. Opus may deliver better results for deep analysis, planning, and large-scope work. Switch with /model opus.'
   }))"
 fi
+
+exit 0

@@ -104,3 +104,5 @@ if (warning) {
 
 # Update cooldown timestamp
 date +%s > "$COOLDOWN_FILE"
+
+exit 0
