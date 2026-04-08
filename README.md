@@ -90,7 +90,7 @@ cd ~/.claude-hangar && bash setup.sh
 | `config-protection` | PreToolUse | Blocks weakening of linter/formatter/compiler configs |
 | `mcp-health-check` | PreToolUse | Checks MCP server health before tool calls, warns on repeated failures |
 | `db-query-guard` | PreToolUse | Warns when agent tries to directly query internal databases |
-| `permission-denied-retry` | PreToolUse | Retries with adjusted approach on permission denial |
+| `permission-denied-retry` | PermissionDenied | Retries with adjusted approach on permission denial |
 | `token-warning` | PostToolUse | Alerts at 70% and 80% context utilization |
 | `continuous-learning` | PostToolUse | Captures patterns and learnings from agent work |
 | `cost-tracker` | PostToolUse | Tracks token costs per session |
@@ -105,7 +105,7 @@ cd ~/.claude-hangar && bash setup.sh
 | `task-created-init` | TaskCreated | Initializes new tasks with metadata |
 | `subagent-tracker` | SubagentStart/Stop | Lifecycle tracking + forensics (duration, thrashing, failures) |
 | `post-compact` | PostCompact | Smart context preservation — detects tasks, plans, branch, HANDOFF.md |
-| `worktree-init` | WorktreeInit | Initializes worktree environment for isolated work |
+| `worktree-init` | WorktreeCreate | Initializes worktree environment for isolated work |
 | `session-stop` | Stop | Cleans temp files, logs session cost |
 | `stop-failure` | StopFailure | Logs errors on session failures |
 | `stop-batch-format` | Stop | Runs formatters once at session end on all edited files |
