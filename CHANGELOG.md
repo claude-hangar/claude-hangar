@@ -5,11 +5,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] — 2026-04-08
+## [Unreleased]
 
-### Updated — Full Freshness Check (Vite 8.0.7, Svelte 5.55.2, Lighthouse 13.1.0, SDK 0.85.0, Community Sync)
+### Added
 
-#### Version Updates
+#### ECC Integration Phase 2c — Skills, Agents, Hooks (2026-04-05)
+- **safety-guard** skill — 3-mode write protection (Careful/Freeze/Guard) for autonomous agent runs
+- **rules-distill** skill — Meta-governance: scans skills to extract cross-cutting principles as shared rules
+- **skill-stocktake** skill — Skill quality audit across 4 dimensions (actionability, scope, uniqueness, currency)
+- **prompt-optimizer** skill — 6-phase advisory pipeline: project detection, intent analysis, skill matching
+- **harness-optimizer** agent (Opus) — Self-optimization of hooks, skills, rules, context modes, agent routing
+- **performance-optimizer** agent (Opus) — Active analysis: bundle size, Core Web Vitals, memory leaks, DB queries
+- **config-protection** hook — Blocks weakening of linter/formatter/compiler configs (tsconfig strict, eslint rules, biome, etc.)
+- **DECISIONS.md** template — Append-only Architectural Decision Register (ADR) inspired by GSD v2
+
+#### ECC Integration Phase 2 — Skills, Agents, Rules, Docs (2026-04-05)
+- **verification-loop** skill — Pre-PR 6-phase quality pipeline (build, types, lint, test, security, diff)
+- **context-budget** skill — Token spending analysis and optimization opportunities
+- **strategic-compact** skill — Smart /compact timing based on workflow state
+- **tdd-guide** agent — TDD enforcement (RED-GREEN-REFACTOR cycle, 80%+ coverage)
+- **doc-updater** agent — Documentation maintenance and staleness detection
+- 4 governance rules: development-workflow, hooks, patterns, code-review
+- `docs/token-optimization.md` — 7 strategies for context budget management
+- `docs/agentic-security.md` — Security guide (Lethal Trifecta, threat model, production checklist)
+
+#### ECC Integration Phase 1 — Rules, Contexts, Agents, Learning (2026-04-05)
+- **Rules system** — 7 common + 8 language-specific rule files (TypeScript, Python, Go, Rust, Java)
+- **Context modes** — dev, research, review (3 modes)
+- 9 new agents: planner, architect, loop-operator, 3 language reviewers, 3 build resolvers
+- **Learning system** — continuous-learning hook, instinct-evolve hook, pattern-extractor skill
+- **Enhanced hooks** — cost-tracker, desktop-notify, hook-profiles (minimal/standard/strict)
+
+### Changed
+
+#### Astro Stack Updates (2026-04-07)
+- **v6-stable/checklist.md** — Updated for Astro 6.1.4 (Cloudflare miniflare restart, React 19 Float fix, dotted filenames, barrel file cleanup)
+- **v6-stable/reference-links.md** — Version bump to 6.1.4
+- **v6-beta/changelog.md** — Added full 6.1.x section (6.1.0–6.1.4)
+- **SKILL.md** — Updated latest version reference (6.0.8 → 6.1.4, checklist count 28 → 31)
+- **docs/companion-tools.md** — GSD v1 section rewritten for v1.34
+
+#### Freshness Check & Community Sync (2026-04-08)
+
 | Package | Previous | Current |
 |---------|----------|---------|
 | Vite | 8.0.3 | 8.0.7 |
@@ -21,129 +58,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | GSD v2 | 2.64.0 | 2.65.0 |
 | oh-my-opencode | 3.15.2 | 3.15.3 |
 
-#### Checklist & Reference Updates
-- **Astro v6-stable** — Updated as-of dates for Vite 8.0.7
-- **Astro v6-beta** — Updated as-of dates for Vite 8.0.7
-- **SvelteKit checklist** — Updated as-of for Svelte 5.55.2
-- **.freshness-state.json** — Full sync: all 37 sources current, 12 open opportunities
+- All 37 freshness sources current, 19 community repos synced
+- New docs: capability-surface-guide.md, skill-adaptation-policy.md, troubleshooting.md (upstream bugs)
 
-#### New Documentation
-- **capability-surface-guide.md** — Decision tree for Rule vs Skill vs MCP vs Hook vs Agent (inspired by ECC)
-- **skill-adaptation-policy.md** — Governance for adopting patterns from community repos (inspired by ECC)
-- **troubleshooting.md** — Added "Known Upstream Bugs" section (stdin consumption, hook hot-reload, MCP auth, 529 errors)
+### Fixed
 
-#### Community Sync
-- GSD v2.65.0: Pre-execution plan verification, post-execution consistency checks, intent+phase guards
-- oh-my-opencode v3.15.3: Session origins tracking, lineage-aware continuation
-- ECC v1.10.0: Capability surface selection, skill adaptation policy, hook troubleshooting patterns adopted
-- All 19 community repos checked and as-of dates updated
-
----
-
-## [Unreleased] — 2026-04-07
-
-### Updated — Astro 6.1.4 & GSD v1.34 Freshness
-
-#### Astro Stack
-- **v6-stable/checklist.md** — Updated for Astro 6.1.4 (Cloudflare miniflare restart, React 19 Float fix, dotted filenames, barrel file cleanup)
-- **v6-stable/reference-links.md** — Version bump to 6.1.4
-- **v6-beta/changelog.md** — Added full 6.1.x section (6.1.0 features: Sharp codec config, SmartyPants, i18n fallback routes; patch releases 6.1.1–6.1.4)
-- **SKILL.md** — Updated latest version reference (6.0.8 → 6.1.4, checklist count 28 → 31)
-- **audit/stacks/frontend/astro.md** — Updated as-of to 6.1.4
-
-#### Companion Tools
-- **docs/companion-tools.md** — GSD v1 section rewritten for v1.34 (60+ commands, 19+ agents, 12+ runtimes, GSD SDK, Workstreams, Advisor Mode, Global Learnings Store, Codebase Intel, Autonomous Mode, Execution Profiles)
-
----
-
-## [Unreleased] — 2026-04-05
-
-### Added — ECC Integration Phase 2c (Could-Haves)
-
-#### New Skills (4)
-- **safety-guard** — 3-mode write protection (Careful/Freeze/Guard) for autonomous agent runs
-- **rules-distill** — Meta-governance: scans skills to extract cross-cutting principles as shared rules
-- **skill-stocktake** — Skill quality audit across 4 dimensions (actionability, scope, uniqueness, currency)
-- **prompt-optimizer** — 6-phase advisory pipeline: project detection, intent analysis, skill matching
-
-#### New Agents (2)
-- **harness-optimizer** (Opus) — Self-optimization of hooks, skills, rules, context modes, agent routing
-- **performance-optimizer** (Opus) — Active analysis: bundle size, Core Web Vitals, memory leaks, DB queries
-
-#### New Hooks (1)
-- **config-protection** — Blocks weakening of linter/formatter/compiler configs (tsconfig strict, eslint rules, biome, etc.)
-
-#### New Templates (1)
-- **DECISIONS.md** — Append-only Architectural Decision Register (ADR) inspired by GSD v2
-
-#### Inspired By
-- [Everything Claude Code](https://github.com/affaan-m/everything-claude-code) — config-protection, rules-distill, skill-stocktake, safety-guard, prompt-optimizer, harness-optimizer
-- [GSD v2](https://github.com/gsd-build/gsd-2) — DECISIONS.md append-only ADR pattern
-
----
-
-### Added — ECC Integration Phase 2
-
-#### New Skills (3)
-- **verification-loop** — Pre-PR 6-phase quality pipeline (build, types, lint, test, security, diff)
-- **context-budget** — Token spending analysis and optimization opportunities
-- **strategic-compact** — Smart /compact timing based on workflow state
-
-#### New Agents (2)
-- **tdd-guide** — TDD enforcement (RED-GREEN-REFACTOR cycle, 80%+ coverage)
-- **doc-updater** — Documentation maintenance and staleness detection
-
-#### New Rules (4)
-- `rules/common/development-workflow.md` — Structured 5-phase dev workflow
-- `rules/common/hooks.md` — Hook design principles and governance
-- `rules/common/patterns.md` — Positive design patterns (repository, service layer, API format)
-- `rules/common/code-review.md` — Centralized review process and severity classification
-
-#### Documentation
-- `docs/token-optimization.md` — 7 strategies for context budget management
-- `docs/agentic-security.md` — Security guide (Lethal Trifecta, threat model, production checklist)
-
----
-
-### Added — ECC Integration Phase 1
-
-#### Rules System (7 common + 8 language-specific rule files)
-- `rules/common/` — coding-style, security, testing, git-workflow, agents, performance, governance
-- `rules/typescript/` — patterns and testing
-- `rules/python/` — patterns and testing
-- `rules/go/` — patterns and testing
-- `rules/rust/` — patterns
-- `rules/java/` — patterns
-
-#### Context Modes (3 modes)
-- `core/contexts/dev.md` — active development focus
-- `core/contexts/research.md` — exploration and understanding
-- `core/contexts/review.md` — PR review and code analysis
-
-#### New Agents (9)
-- **planner** — Implementation planning (Opus)
-- **architect** — System design and architecture (Opus)
-- **loop-operator** — Autonomous workflow with safety guardrails (Sonnet)
-- **typescript-reviewer** — TypeScript code review (Sonnet)
-- **python-reviewer** — Python code review (Sonnet)
-- **go-reviewer** — Go code review (Sonnet)
-- **build-resolver-typescript** — TS build error resolution (Sonnet)
-- **build-resolver-python** — Python build error resolution (Sonnet)
-- **build-resolver-go** — Go build error resolution (Sonnet)
-
-#### Learning System
-- **continuous-learning hook** — Captures command patterns and outcomes
-- **instinct-evolve hook** — Extracts session learnings with confidence scores
-- **pattern-extractor skill** — Analyzes patterns for reusable workflows
-
-#### Enhanced Hooks
-- **cost-tracker** — Session metrics and tool usage tracking
-- **desktop-notify** — OS-native notifications (macOS, Linux, Windows)
-- **hook-profiles** — Environment-based hook strictness (minimal/standard/strict)
+#### Infrastructure Fixes (2026-04-08)
+- **settings.json.template** — Synced with hook-profiles.md: added 5 missing standard hooks (db-query-guard, design-quality-check, mcp-health-check, batch-format-collector, stop-batch-format), removed 2 strict-only hooks from standard template
+- **skill.json** — Added missing metadata files for 4 governance skills (prompt-optimizer, rules-distill, safety-guard, skill-stocktake)
+- **README.md** — Corrected Node.js minimum version from >= 22.12.0 to >= 18 LTS
 
 ### Inspired By
-
 - [Everything Claude Code](https://github.com/affaan-m/everything-claude-code)
+- [GSD v2](https://github.com/gsd-build/gsd-2)
 
 ---
 
