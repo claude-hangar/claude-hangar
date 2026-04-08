@@ -8,7 +8,7 @@ Framework-specific extensions for Claude Code. Each stack provides audit skills,
 |-------|-----------|-------------|-------------|
 | **Astro** | `astro/` | `/astro-audit` | SSG/SSR with Astro, Content Collections, View Transitions |
 | **SvelteKit** | `sveltekit/` | `/sveltekit-audit` | SSR/SSG with SvelteKit 2 + Svelte 5 runes |
-| **Next.js** | `nextjs/` | — | App Router, Server Components, Server Actions |
+| **Next.js** | `nextjs/` | `/nextjs-audit` | App Router, Server Components, Server Actions |
 | **Database** | `database/` | `/db-audit` | Drizzle ORM + PostgreSQL schema, migrations, performance |
 | **Auth** | `auth/` | `/auth-audit` | Custom bcryptjs + sessions (no external auth providers) |
 | **GitHub** | `github/` | — | GitHub repos, PRs, issues via MCP |
@@ -37,8 +37,12 @@ stacks/
 │   └── versions/
 │       └── kit2-svelte5/
 ├── nextjs/
+│   ├── SKILL.md            # /nextjs-audit — App Router best-practice audit
 │   ├── CLAUDE.md.snippet   # Paste into project CLAUDE.md
-│   └── README.md           # Stack documentation
+│   ├── README.md           # Stack documentation
+│   ├── fix-templates.md    # Quick-fix templates
+│   └── versions/
+│       └── app-router/
 ├── database/
 │   ├── SKILL.md            # /db-audit — Drizzle ORM + PostgreSQL audit
 │   ├── CLAUDE.md.snippet   # Paste into project CLAUDE.md
@@ -85,6 +89,7 @@ Stacks with a `SKILL.md` file provide dedicated audit slash commands:
 ```
 /astro-audit start       # Astro version + best practices
 /sveltekit-audit start   # SvelteKit 2 + Svelte 5 patterns
+/nextjs-audit start      # Next.js App Router best practices
 /db-audit start          # Database schema + migrations
 /auth-audit start        # Auth security (OWASP ASVS)
 ```
