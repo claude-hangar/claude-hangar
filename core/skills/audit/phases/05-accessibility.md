@@ -1,6 +1,6 @@
 # Phase 05: Accessibility
 
-WCAG 2.1 AA Konformitaet — Barrierefreiheit fuer alle Nutzer.
+WCAG 2.2 AA Konformitaet — Barrierefreiheit fuer alle Nutzer.
 Finding-Prefix: `A11Y`
 
 ---
@@ -69,8 +69,30 @@ Finding-Prefix: `A11Y`
 
 ---
 
+## Regulatorische Entwicklungen
+
+### EAA / BFSG Enforcement
+
+> **European Accessibility Act — Durchsetzung (April 2026):**
+> - EAA-Enforcement nimmt Fahrt auf: Frankreich (Abmahnungen gegen Lebensmitteleinzelhaendler),
+>   Schweden (PTS E-Commerce-Inspektionen 2026), Fruehjahr 2026 Audits fuer saeumige Berichterstatter
+> - Erste Bussgeld-Verfahren laufen seit November 2025
+> - EN 301 549 v4.1.1 erwartet **Q3 2026** (integriert WCAG 2.2 Referenzen)
+
+### WCAG 3.0 Ausblick
+
+> **WCAG 3.0 Status (April 2026):**
+> - Working Draft aktualisiert Maerz 2026 mit ueberarbeiteter Struktur und Zeitplan
+> - Candidate Recommendation (CR) angepeilt **Q4 2027**, W3C Recommendation ca. **2028**
+> - **WCAG 2.2 AA bleibt unser Audit-Ziel** bis WCAG 3.0 CR-Status erreicht
+
+---
+
 ## Ergebnis
 
 Findings als A11Y-01, A11Y-02, ... dokumentieren.
 Fehlende Keyboard-Navigation: HIGH. Kontrast-Fehler: MEDIUM.
 BFSG-relevant: Barrierefreiheit ab Juni 2025 gesetzlich verpflichtend.
+EAA-Enforcement: Bussgeld-Verfahren laufen — Compliance jetzt pruefen.
+
+As of: 2026-04-09 (updated for EAA enforcement, EN 301 549 v4.1.1 timeline, WCAG 3.0 status)

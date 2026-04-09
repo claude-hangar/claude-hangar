@@ -185,6 +185,7 @@ This means agents should not assume they are the only way to accomplish a task �
 4. **Trigger phrases** — include in description for discoverability
 5. **Read-only by default** — add Write/Edit only when needed, with worktree isolation
 6. **Document Bash usage** — list specific permitted commands
+7. **Sanitize agent names** — zero-width space characters (`\u200B`, `\uFEFF`, `\u200C`, `\u200D`) in agent names, YAML frontmatter keys, or markdown headers cause silent routing failures. These invisible Unicode characters can be introduced by copy-pasting from editors, web pages, or chat systems. Always strip non-printable characters except standard whitespace from agent names and config keys. (Reference: oh-my-opencode v3.16.0 fixed ZWSP pollution across multiple paths.)
 
 ---
 

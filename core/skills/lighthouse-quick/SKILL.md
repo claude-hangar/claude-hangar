@@ -138,3 +138,9 @@ When called in the context of `/polish` or `/audit`, additionally write/extend `
 - Not real Lighthouse — purely static code analysis
 - GDPR check (fonts) is always included
 - For Astro: recommend `<Image>` component instead of `<img>`
+
+## Upstream Reference
+
+Real Lighthouse is at version **13.1.0** (minor update from 13.0.3). This is a minor release with potential scoring refinements — no major audit category changes expected. If users ask about Lighthouse score discrepancies, consider whether they upgraded between runs.
+
+As of: 2026-04-09
