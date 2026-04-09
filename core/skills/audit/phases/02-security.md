@@ -7,6 +7,9 @@ Finding-Prefix: `SEC`
 > (erweitert aus "Vulnerable and Outdated Components") und A10 Mishandling of Exceptional Conditions.
 > 589 CWEs in 248 Kategorien analysiert (175.000 CVE Records).
 > A01 Broken Access Control bleibt #1, Security Misconfiguration stieg auf #2.
+>
+> **CWE Top 25 2026:** Out-of-bounds Write #1, XSS #2, SQL Injection #3.
+> Four of top 5 are memory safety issues.
 
 ---
 
@@ -93,4 +96,4 @@ AI-Agent ohne Berechtigungsgrenzen: HIGH. Agent-Datenexfiltration: CRITICAL.
 
 ---
 
-As of: 2026-04-04 (updated for OWASP Top 10:2025 8th edition — new A03 Software Supply Chain Failures, A10 Mishandling of Exceptional Conditions; A01 BAC #1, SecMisconfig #2)
+As of: 2026-04-09 (updated for OWASP Top 10:2025 8th edition — new A03 Software Supply Chain Failures, A10 Mishandling of Exceptional Conditions; A01 BAC #1, SecMisconfig #2; CWE Top 25 2026 edition noted)

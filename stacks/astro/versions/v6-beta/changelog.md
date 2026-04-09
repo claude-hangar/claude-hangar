@@ -327,4 +327,4 @@ Patch releases:
 
 ---
 
-As of: 2026-04-08 (updated for Astro 6.1.5)
+As of: 2026-04-09 (updated for Astro 6.1.5, Vite 8.0.8)

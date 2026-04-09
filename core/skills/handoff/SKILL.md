@@ -78,6 +78,50 @@ discovered during this session]
 - Lint: [clean/warnings]
 ```
 
+## Structured Phase Anchor
+
+For programmatic handoffs between agents or automated workflows, use this structured JSON format alongside (or instead of) the freeform HANDOFF.md. This enables downstream agents to inherit context and decisions without parsing freeform text.
+
+**Reference:** gsd-v2 v2.65.0 phase anchor pattern.
+
+### Format
+
+Include a `handoff-anchor.json` in the project root:
+
+```json
+{
+  "phase": "implementation|review|testing|deployment",
+  "intent": "What the session was trying to accomplish",
+  "decisions": ["Key decisions made and why"],
+  "blockers": ["Unresolved issues"],
+  "nextSteps": ["Concrete next actions with file paths"],
+  "artifacts": ["Files created/modified"],
+  "openQuestions": ["Things that need user input"]
+}
+```
+
+### Field Definitions
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `phase` | string | Current workflow phase: `implementation`, `review`, `testing`, or `deployment` |
+| `intent` | string | One sentence describing what the session was trying to accomplish |
+| `decisions` | string[] | Key decisions made during the session, each with rationale |
+| `blockers` | string[] | Unresolved issues that prevent progress (empty array if none) |
+| `nextSteps` | string[] | Concrete, actionable next steps with file paths where relevant |
+| `artifacts` | string[] | Files created, modified, or deleted during the session |
+| `openQuestions` | string[] | Questions that need user input before proceeding |
+
+### When to Use
+
+- **Agent-to-agent handoff:** Always generate `handoff-anchor.json` so the next agent can parse context programmatically
+- **Session end with `/handoff create`:** Generate both `HANDOFF.md` (human-readable) and `handoff-anchor.json` (machine-readable)
+- **Automated pipelines:** Use `handoff-anchor.json` exclusively — skip the Markdown
+
+### Clean Flow Integration
+
+When `/handoff clean` runs, archive `handoff-anchor.json` alongside `HANDOFF.md` into `.claude/handoff-archive/` with the same timestamp prefix.
+
 ## Creation Flow
 
 ### Step 1: Gather Context

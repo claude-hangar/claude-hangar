@@ -88,6 +88,8 @@ These go stale silently. Without regular checks, you audit against outdated stan
 | **OWASP ASVS** | WebSearch "OWASP ASVS version" | Phase 08-security.md S10 | Note only |
 | **CWE Top 25** | WebSearch "CWE Top 25 latest" | Phase 02-security.md | Note only |
 
+> **CWE Top 25 2026:** Out-of-bounds Write #1, XSS #2, SQL Injection #3. Four of top 5 are memory safety issues.
+
 ### Tier 3 — Laws & Regulations (WebSearch, manual review)
 
 | Source | Check Method | Compared With | Auto-Update |

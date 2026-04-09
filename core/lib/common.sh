@@ -3,7 +3,8 @@
 # common.sh — Shared shell functions for Claude Hangar
 # ─────────────────────────────────────────────────────────────────────────
 # Loaded by setup.sh, audit-runner.sh and other scripts via source.
-# Contains: Color codes, logging, OS detection, path conversion.
+# Contains: Color codes, logging, OS detection, path conversion,
+#           BOM-safe JSON reading, atomic file writes, Node.js helpers.
 #
 # Usage:
 #   source "$SCRIPT_DIR/core/lib/common.sh"
@@ -84,6 +85,92 @@ check_prereqs() {
 file_mtime() {
   stat -c %Y "$1" 2>/dev/null || stat -f %m "$1" 2>/dev/null || echo "0"
 }
+
+# ─── BOM-safe JSON reading ───────────────────────────────────────────
+# Windows editors (Notepad, PowerShell) often save UTF-8 files with a
+# Byte Order Mark (\xEF\xBB\xBF = U+FEFF). This invisible prefix causes
+# "Unexpected token" / "InvalidSymbol at offset 0" when parsing JSON.
+#
+# Usage (bash):
+#   content=$(strip_bom < "$file")
+#   data=$(read_json_file "$file")
+#
+# Usage (inline node -e in hooks):
+#   const data = safeParseJSON(fs.readFileSync(file, 'utf8'));
+#   — where safeParseJSON is: JSON.parse(s.replace(/^\uFEFF/, ''))
+
+strip_bom() {
+  # Read stdin and strip UTF-8 BOM if present (first 3 bytes: EF BB BF)
+  node -e "
+    process.stdin.setEncoding('utf8');
+    let d='';
+    process.stdin.on('data', c => d += c);
+    process.stdin.on('end', () => process.stdout.write(d.replace(/^\uFEFF/, '')));
+  "
+}
+
+read_json_file() {
+  # Read a JSON file, strip BOM, parse and re-serialize (validates JSON)
+  # Returns clean JSON on stdout, exits non-zero on parse error
+  local file="$1"
+  [ -f "$file" ] || { echo "{}"; return 0; }
+  node -e "
+    const fs = require('fs');
+    const raw = fs.readFileSync(process.argv[1], 'utf8').replace(/^\uFEFF/, '');
+    const data = JSON.parse(raw);
+    process.stdout.write(JSON.stringify(data));
+  " "$file"
+}
+
+# ─── Atomic file writes ─────────────────────────────────────────────
+# Write content to a temporary file, then rename to target path.
+# Prevents corruption if a process crashes or is killed mid-write.
+# The temp file is created in the same directory as the target so that
+# rename (mv) is atomic on the same filesystem.
+#
+# Usage (bash):
+#   atomic_write "/path/to/state.json" "$json_content"
+#
+# Usage (inline node -e in hooks):
+#   atomicWriteSync(target, content)
+#   — see NODE_ATOMIC_WRITE below for the JS implementation
+
+atomic_write() {
+  local target="$1"
+  local content="$2"
+  local dir
+  dir="$(dirname "$target")"
+  # Ensure target directory exists
+  [ -d "$dir" ] || mkdir -p "$dir"
+  # Unique temp file: PID + RANDOM avoids collisions
+  local tmp="${target}.tmp.$$.$RANDOM"
+  if printf '%s' "$content" > "$tmp" && mv "$tmp" "$target"; then
+    return 0
+  else
+    # Clean up failed temp file
+    rm -f "$tmp" 2>/dev/null
+    return 1
+  fi
+}
+
+# ─── Node.js snippets for inline use in hooks ───────────────────────
+# Hooks use `node -e` for JSON processing. These string constants hold
+# reusable JS helper functions that hooks can prepend to their scripts.
+#
+# Usage in a hook:
+#   node -e "
+#     ${NODE_SAFE_JSON}
+#     ${NODE_ATOMIC_WRITE}
+#     const data = safeParseJSON(fs.readFileSync('state.json', 'utf8'));
+#     data.count++;
+#     atomicWriteSync('state.json', JSON.stringify(data));
+#   "
+
+# shellcheck disable=SC2034
+NODE_SAFE_JSON='function safeParseJSON(s,fallback){try{return JSON.parse(s.replace(/^\uFEFF/,""));}catch(e){return fallback!==undefined?fallback:{};}}'
+
+# shellcheck disable=SC2034
+NODE_ATOMIC_WRITE='function atomicWriteSync(target,content){const fs=require("fs"),path=require("path"),tmp=target+".tmp."+process.pid+"."+Math.random().toString(36).slice(2);try{fs.writeFileSync(tmp,content);fs.renameSync(tmp,target);}catch(e){try{fs.unlinkSync(tmp);}catch(_){}throw e;}}'
 
 # ─── Hook Profile Check ──────────────────────────────────────────────
 

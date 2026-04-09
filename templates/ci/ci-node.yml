@@ -8,6 +8,10 @@
 #   schedule:
 #     - cron: '0 2 * * *'
 #       timezone: 'Europe/Berlin'
+#
+# GitHub Agentic Workflows (Technical Preview, Feb 2026):
+# Markdown workflow files in .github/workflows/ can be converted to
+# Actions YAML via `gh aw` CLI. Evaluate if relevant for your project.
 
 name: CI
 

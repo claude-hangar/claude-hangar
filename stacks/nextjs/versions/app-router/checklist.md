@@ -188,4 +188,4 @@ Finding prefix: `NXT-NN`
 
 ---
 
-As of: 2026-04-04 (created for Next.js 16.2.2, React 19, App Router, Turbopack)
+As of: 2026-04-09 (updated for Next.js 16.2.3, React 19, App Router, Turbopack)

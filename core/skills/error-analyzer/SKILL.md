@@ -85,11 +85,12 @@ Now diagnose the root cause:
 - **Environment:** OS difference, Node version, file permissions
 - **Race condition:** Timing-dependent, works locally but fails in CI
 - **Data issue:** Corrupt input, missing file, encoding problem
+- **Quota exhaustion:** API rate limit (429), quota exceeded — **classify as STOP, not retryable**
 
 **Output format:**
 ```
 CAUSE: [one-line root cause]
-  Category: [code | config | dependency | environment | race | data]
+  Category: [code | config | dependency | environment | race | data | quota]
   Causal chain: [A] → [B] → [C] → [Symptom]
   Evidence: [how you verified this]
 ```
@@ -170,6 +171,67 @@ Autonomous mode. Complete all 5 steps without pausing:
 | **Works on my machine** | Dismiss env differences | Investigate the difference |
 | **Blame the framework** | Assume the tool is broken | Verify your usage first |
 | **Skip prevention** | Fix and move on | Always add a test or guard |
+| **Retry quota exhaustion** | 429 retry loops, 30-min lockouts | STOP — inform user, wait or switch API keys |
+
+## Quota Exhaustion Protocol
+
+API quota exhaustion (HTTP 429 with "rate limit" or "quota exceeded") is a **STOP classification** — it must never be retried automatically. Retrying quota exhaustion causes cascading failures: 429 retry loops that escalate to 30-minute lockouts.
+
+**When a 429 is detected:**
+
+1. **STOP** — Do not retry the request
+2. **Classify** — Distinguish between rate limit (temporary, wait and retry once) and quota exceeded (hard limit, no retry)
+3. **Inform** — Tell the user: which API, what the limit is, when it resets (if known)
+4. **Suggest** — Wait for reset window, switch API keys, or reduce request volume
+
+**Reference:** oh-my-opencode v3.16.0 learned this the hard way — blind retries on 429s caused cascading lockouts across multiple API providers.
+
+## Agent Introspection Debugging
+
+When an AI agent itself causes the error (wrong code generation, hallucinated imports, incorrect assumptions), use this 4-phase self-debugging workflow:
+
+### Phase 1: Failure Capture
+
+Record precisely what happened:
+- Exact error message and stack trace
+- What the agent was attempting to do
+- What code was generated or modified
+- What context the agent had at the time
+
+### Phase 2: Root-Cause Analysis
+
+Categorize the failure:
+- **Code bug:** Agent generated logically incorrect code
+- **Config issue:** Agent assumed a configuration that doesn't exist
+- **Environment problem:** Agent assumed a tool, path, or runtime that isn't available
+- **AI hallucination:** Agent invented an API, module, flag, or behavior that doesn't exist
+
+### Phase 3: Contained Recovery
+
+Fix within the smallest possible scope:
+- Revert the broken change, don't layer fixes on top of fixes
+- Fix only the root cause, don't cascade changes to "related" code
+- Verify the fix in isolation before proceeding with the original task
+
+### Phase 4: Report
+
+Document what happened:
+```
+INTROSPECTION:
+  Failed action: [what was attempted]
+  Root cause: [code bug | config issue | environment | hallucination]
+  Recovery: [what was done to fix it]
+  Prevention: [what to check next time]
+```
+
+### Common Agent Failure Patterns
+
+| Pattern | Symptom | Root Cause | Recovery |
+|---------|---------|-----------|----------|
+| **Import ghost** | Module not found | AI generated import for nonexistent module | Check actual exports, use correct path |
+| **Signature drift** | Type error on function call | Function signature changed but callers weren't updated | Update all callers or revert signature |
+| **Test theater** | Tests pass but feature broken | Tests mock too much or test the wrong thing | Write integration test against real behavior |
+| **Config phantom** | Works locally, fails in CI | Env var or config present locally but not in CI | Add to .env.example and CI config |
 
 ## Integration with Other Tools
 

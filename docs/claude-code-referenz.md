@@ -907,3 +907,24 @@ Output Styles überschreiben Teile des System-Prompts direkt – anders als clau
 | Multi-Agent Kollaboration | Agent Teams (experimentell) |
 | Browser steuern | Chrome Integration (--chrome) |
 | Tastenkuerzel anpassen | /keybindings oder keybindings.json |
+
+---
+
+# 20. ANTHROPIC SDK — MANAGED AGENTS API
+
+Ab SDK v0.86.0 bietet Anthropic die **Managed Agents API** (Beta):
+
+| Endpoint | Zweck |
+|----------|-------|
+| `client.beta.agents.create()` | Persistente Agenten erstellen (model, system prompt, tools) |
+| `client.beta.sessions.create()` | Sessions an Agent+Environment pinnen |
+| `client.beta.skills.create()` | Custom SKILL.md-Dateien hochladen |
+| `client.beta.vaults.credentials.create()` | Credential Management |
+
+**Hangar-Kompatibilitaet:** Unser SKILL.md-Format ist direkt kompatibel mit der Upload-API (`client.beta.skills.create()`). Skills koennen ohne Konvertierung hochgeladen werden.
+
+### Breaking Changes in v0.86.0
+
+- Named Path Parameters (statt positional)
+- URI Encoding Changes fuer Pfad-Parameter
+- Bestehende API-Clients muessen aktualisiert werden

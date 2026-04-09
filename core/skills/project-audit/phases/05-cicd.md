@@ -28,6 +28,7 @@ Finding-Prefix: `CICD`
 - [ ] Environment Protection Rules fuer Prod-Deployments?
 - [ ] **Timezone Cron (Maerz 2026):** `timezone` Feld neben cron-Expression? (IANA, z.B. `Europe/Berlin`) — verhindert UTC-Versatz
 - [ ] **Environments ohne Deployment (Maerz 2026):** `deployment: false` wenn Environment nur fuer Secrets/Approval, nicht fuer Deployments genutzt wird
+- [ ] **GitHub Agentic Workflows (Technical Preview, Feb 2026):** `.github/workflows/` Markdown-Dateien werden via `gh aw` CLI in Actions konvertiert — pruefen ob fuer das Projekt relevant
 
 ### 3. Deployment-Pipeline
 
@@ -76,4 +77,4 @@ Actions mit write-all Permissions: HIGH. Keine CI/CD: MEDIUM. Kein Caching: LOW.
 
 ---
 
-As of: 2026-03-27 (added GitHub Actions timezone cron, deployment:false environments)
+As of: 2026-04-09 (added GitHub Agentic Workflows tech preview note, GitHub Actions timezone cron, deployment:false environments)

@@ -21,3 +21,7 @@ MCP server for GitHub integration. Provides Claude Code with direct access to re
 - Review and create pull requests
 - Create branches and manage files
 - Query commit history
+
+## GitHub Agentic Workflows (Technical Preview)
+
+Since February 2026, GitHub offers **Agentic Workflows** in technical preview. Markdown files in `.github/workflows/` can be converted to GitHub Actions via the `gh aw` CLI. This allows defining workflows in natural language that are then compiled to standard Actions YAML. Informational only — evaluate if relevant for your project.

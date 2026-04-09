@@ -78,4 +78,39 @@ STATUS.md — safe to compact.
 **Command:** /compact
 ```
 
+## Compaction Loop Cap
+
+To prevent infinite compact-work-compact cycles that indicate the task is too large
+for a single session, strategic-compact enforces a maximum of **3 compactions per session**.
+
+### How It Works
+
+The skill tracks compaction count internally. On each invocation:
+
+1. **Count < 3** — Proceed normally with compaction analysis and execution
+2. **Count = 3** — Issue a warning and block further compaction:
+
+```
+## Compaction Limit Reached
+
+You have compacted 3 times this session. This indicates context is being
+consumed faster than expected.
+
+**Recommended actions:**
+1. Break the current task into smaller, independently completable sub-tasks
+2. Commit current progress and start a fresh session for the next sub-task
+3. Use /handoff to preserve context for the next session
+
+Further compaction is blocked to prevent quality degradation from
+repeated context loss.
+```
+
+### Why This Matters
+
+Each compaction loses nuance — decisions, investigation trails, and subtle context
+that summaries cannot fully preserve. After 3 compactions, the accumulated loss
+significantly impacts quality. It is better to commit progress and start fresh than
+to continue with degraded context. Reference: oh-my-opencode v3.16.0 added a similar
+cap to prevent infinite compaction cycles.
+
 Inspired by ECC's strategic-compaction skill and GSD v2's fresh-context-per-task concept.

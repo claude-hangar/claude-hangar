@@ -11,7 +11,7 @@ argument_hint: ""
 <!-- AI-QUICK-REF
 ## /git-hygiene — Quick Reference
 - **Modes:** scan (all), branches, history, commits
-- **Checks:** Stale branches, large files, conventional commits, .gitignore, unmerged branches
+- **Checks:** Stale branches, large files, conventional commits, .gitignore, unmerged branches, orphaned worktrees
 - **Output:** Report with findings per category
 - **Non-destructive:** Read-only, changes nothing
 -->
@@ -25,7 +25,7 @@ stale branches, large files, inconsistent commits.
 
 | Mode | Argument | Checks |
 |------|----------|--------|
-| **scan** | `/git-hygiene` (default) | All 5 checks |
+| **scan** | `/git-hygiene` (default) | All 6 checks |
 | **branches** | `/git-hygiene branches` | Stale + unmerged branches only |
 | **history** | `/git-hygiene history` | Large files in history only |
 | **commits** | `/git-hygiene commits` | Conventional commit check only |
@@ -100,6 +100,24 @@ git branch --no-merged master 2>/dev/null || git branch --no-merged main
 - List with last commit date
 - Finding: `GIT-06: Branch {name} is not merged (last commit: {date})`
 
+### 6. Orphaned Worktrees
+
+Worktree entries that point to missing directories, or worktrees whose branches have been deleted.
+Relevant when using `superpowers:using-git-worktrees` for feature isolation — worktrees can become orphaned after branch cleanup.
+
+```bash
+git worktree list --porcelain
+# Look for worktrees where the branch no longer exists or the path is missing
+git worktree prune --dry-run
+# Shows what would be cleaned up
+```
+
+- Worktree path no longer exists: WARNING
+- Worktree branch has been deleted: WARNING
+- `git worktree prune --dry-run` reports entries: WARNING
+- Finding: `GIT-07: Orphaned worktree detected at {path} (branch: {branch})`
+- Fix: `git worktree remove {path}` or `git worktree prune`
+
 ## Output Format
 
 ```
@@ -125,8 +143,11 @@ git branch --no-merged master 2>/dev/null || git branch --no-merged main
 ### 5. Unmerged Branches
    OK: All branches merged
 
+### 6. Orphaned Worktrees
+   OK: No orphaned worktrees
+
 ---
-Result: 5 checks, 3 OK, 2 WARNING, 0 ERROR
+Result: 6 checks, 4 OK, 2 WARNING, 0 ERROR
 ```
 
 ## Rules

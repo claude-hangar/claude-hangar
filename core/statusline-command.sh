@@ -54,7 +54,7 @@ round() {
 
 # ===== Extract ALL fields from input JSON in one jq call (no eval) =====
 {
-    IFS=$'\t' read -r model_name size total_in total_out pct_used_json cwd total_cost total_duration_ms vim_mode session_name
+    IFS=$'\t' read -r model_name size total_in total_out pct_used_json cwd total_cost total_duration_ms vim_mode session_name native_5h_pct native_5h_reset native_7d_pct native_7d_reset
 } < <(echo "$input" | jq -r '[
     (.model.display_name // "Claude"),
     (.context_window.context_window_size // 0 | tostring),
@@ -65,8 +65,15 @@ round() {
     (.cost.total_cost_usd // 0 | tostring),
     (.cost.total_duration_ms // 0 | tostring),
     (.vim_mode // "" | tostring),
-    (.session.name // "")
+    (.session.name // ""),
+    (.rate_limits.five_hour.used_percentage // -1 | tostring),
+    (.rate_limits.five_hour.resets_at // -1 | tostring),
+    (.rate_limits.seven_day.used_percentage // -1 | tostring),
+    (.rate_limits.seven_day.resets_at // -1 | tostring)
 ] | @tsv' 2>/dev/null) || true
+
+# Strip parenthetical suffix from model name (e.g., "Opus 4.6 (1M context)" -> "Opus 4.6")
+model_name="${model_name% (*}"
 
 [ "${size:-0}" -eq 0 ] 2>/dev/null && size=1000000
 cumulative=$(( ${total_in:-0} + ${total_out:-0} ))
@@ -176,7 +183,27 @@ case "$effort_level" in
     *)      out+="${green}hi${rst}" ;;
 esac
 
-# ===== OAuth token resolution =====
+# ===== Rate limits: prefer native StatusJSON fields, fall back to OAuth API =====
+has_native_limits=false
+if [ "${native_5h_pct:-}" != "-1" ] && [ "${native_5h_pct:-}" != "" ] && [ "${native_7d_pct:-}" != "-1" ] && [ "${native_7d_pct:-}" != "" ]; then
+    has_native_limits=true
+    five_hour_pct=$(round "$native_5h_pct")
+    seven_day_pct=$(round "$native_7d_pct")
+
+    five_hour_color=$(usage_color "$five_hour_pct")
+    out+="${sep}${white}5h${rst} ${five_hour_color}${five_hour_pct}%${rst}"
+    if [ "${native_5h_reset:-}" != "-1" ] && [ "${native_5h_reset:-}" != "" ]; then
+        out+=" ${dim}@$(date -d "@${native_5h_reset}" +"%H:%M" 2>/dev/null)${rst}"
+    fi
+
+    seven_day_color=$(usage_color "$seven_day_pct")
+    out+="${sep}${white}7d${rst} ${seven_day_color}${seven_day_pct}%${rst}"
+    if [ "${native_7d_reset:-}" != "-1" ] && [ "${native_7d_reset:-}" != "" ]; then
+        out+=" ${dim}@$(date -d "@${native_7d_reset}" +"%b %-d, %H:%M" 2>/dev/null)${rst}"
+    fi
+fi
+
+# ===== OAuth token resolution (fallback for extra_usage + older Claude Code) =====
 get_oauth_token() {
     if [ -n "$CLAUDE_CODE_OAUTH_TOKEN" ]; then
         echo "$CLAUDE_CODE_OAUTH_TOKEN"
@@ -194,7 +221,8 @@ get_oauth_token() {
     echo ""
 }
 
-# ===== Usage limits with caching =====
+# ===== Usage limits via OAuth API (fallback + extra_usage) =====
+# Skip API call entirely if native limits are present and extra_usage not needed
 cache_file="${cache_dir}/usage-cache.json"
 cache_max_age=60
 
@@ -237,7 +265,7 @@ fi
 
 if [ -n "$usage_data" ]; then
     {
-        IFS=$'\t' read -r five_hour_pct five_hour_reset_iso seven_day_pct seven_day_reset_iso extra_enabled extra_pct extra_used_raw extra_limit_raw
+        IFS=$'\t' read -r api_five_hour_pct five_hour_reset_iso api_seven_day_pct seven_day_reset_iso extra_enabled extra_pct extra_used_raw extra_limit_raw
     } < <(echo "$usage_data" | jq -r '[
         (.five_hour.utilization // 0 | tostring),
         (.five_hour.resets_at // ""),
@@ -258,23 +286,28 @@ if [ -n "$usage_data" ]; then
             printf '%d' "$int_part" 2>/dev/null || printf '0'
         fi
     }
-    five_hour_pct=$(normalize_pct "$five_hour_pct")
-    seven_day_pct=$(normalize_pct "$seven_day_pct")
 
-    five_hour_color=$(usage_color "$five_hour_pct")
-    out+="${sep}${white}5h${rst} ${five_hour_color}${five_hour_pct}%${rst}"
-    if [ -n "$five_hour_reset_iso" ]; then
-        five_hr_epoch=$(date -d "${five_hour_reset_iso}" +%s 2>/dev/null)
-        [ -n "$five_hr_epoch" ] && out+=" ${dim}@$(date -d "@$five_hr_epoch" +"%H:%M" 2>/dev/null)${rst}"
+    # Only show OAuth-based rate limits if native fields were not available
+    if ! $has_native_limits; then
+        api_five_hour_pct=$(normalize_pct "$api_five_hour_pct")
+        api_seven_day_pct=$(normalize_pct "$api_seven_day_pct")
+
+        five_hour_color=$(usage_color "$api_five_hour_pct")
+        out+="${sep}${white}5h${rst} ${five_hour_color}${api_five_hour_pct}%${rst}"
+        if [ -n "$five_hour_reset_iso" ]; then
+            five_hr_epoch=$(date -d "${five_hour_reset_iso}" +%s 2>/dev/null)
+            [ -n "$five_hr_epoch" ] && out+=" ${dim}@$(date -d "@$five_hr_epoch" +"%H:%M" 2>/dev/null)${rst}"
+        fi
+
+        seven_day_color=$(usage_color "$api_seven_day_pct")
+        out+="${sep}${white}7d${rst} ${seven_day_color}${api_seven_day_pct}%${rst}"
+        if [ -n "$seven_day_reset_iso" ]; then
+            seven_d_epoch=$(date -d "${seven_day_reset_iso}" +%s 2>/dev/null)
+            [ -n "$seven_d_epoch" ] && out+=" ${dim}@$(date -d "@$seven_d_epoch" +"%b %-d, %H:%M" 2>/dev/null)${rst}"
+        fi
     fi
 
-    seven_day_color=$(usage_color "$seven_day_pct")
-    out+="${sep}${white}7d${rst} ${seven_day_color}${seven_day_pct}%${rst}"
-    if [ -n "$seven_day_reset_iso" ]; then
-        seven_d_epoch=$(date -d "${seven_day_reset_iso}" +%s 2>/dev/null)
-        [ -n "$seven_d_epoch" ] && out+=" ${dim}@$(date -d "@$seven_d_epoch" +"%b %-d, %H:%M" 2>/dev/null)${rst}"
-    fi
-
+    # Extra usage is only available via OAuth API (not in native fields)
     if [ "${extra_enabled:-false}" = "true" ]; then
         extra_pct=$(normalize_pct "$extra_pct")
         extra_used=$(awk "BEGIN {printf \"%.2f\", ${extra_used_raw:-0}/100}")

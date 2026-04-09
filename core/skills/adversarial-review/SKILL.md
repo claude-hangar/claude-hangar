@@ -16,6 +16,7 @@ argument_hint: "code|audit|plan"
 - **Goal-Backward:** Artifact exists? Substantial? Wired up?
 - **No praise** until at least 5 problems have been named
 - **Severity:** CRITICAL (~1-5%) > HIGH (~0.1-1%) > MEDIUM (~0.01%) > LOW (<0.01%)
+- **Large reviews (>50 files / >2000 lines):** Use wave-based review (Structural → Logic → Security → Integration)
 - **Output:** Findings list with failure mode + risk + overall assessment
 -->
 
@@ -114,6 +115,23 @@ Critical code review focused on real problems.
 | HIGH | Data corruption, security vulnerability | ~0.1-1% |
 | MEDIUM | Degraded UX/performance | ~0.01-0.1% |
 | LOW | Code smell, maintainability | <0.01% |
+
+### Wave-Based Review (Large Codebases)
+
+For large reviews (>50 files changed or >2000 lines), conduct the review in systematic waves rather than a single pass. This prevents reviewer fatigue and ensures thoroughness across all dimensions.
+
+| Wave | Focus | What to check |
+|------|-------|---------------|
+| **Wave 1: Structural** | File organization, naming, dead code, imports | Module boundaries, unused exports, circular dependencies |
+| **Wave 2: Logic** | Business logic correctness, edge cases, error handling | Off-by-one, null paths, state transitions, race conditions |
+| **Wave 3: Security** | OWASP checks, input validation, auth/authz | Injection, XSS, CSRF, secrets, privilege escalation |
+| **Wave 4: Integration** | Cross-file consistency, API contracts, test coverage | Interface mismatches, missing tests, contract violations |
+
+Each wave produces its own findings before proceeding to the next. The three parallel tracks (Adversarial, Catalog, Path Tracer) are applied within each wave's focus area.
+
+For smaller reviews (<50 files), the single-pass approach with all three tracks remains appropriate.
+
+Reference: gsd-v2 v2.66.0 uses multi-wave adversarial review.
 
 ### Finding Format
 
