@@ -18,6 +18,8 @@ Docker-spezifische Audit-Checks. Nur §-Sektionen laden die zur aktuellen Phase 
 - [ ] **Secrets:** Keine Secrets in Dockerfile/docker-compose.yml (ENV, ARG, COPY .env)
 - [ ] **Build-Secrets:** `--mount=type=secret` fuer Build-Time-Secrets?
 - [ ] **Image-Scanning:** `docker scout` oder `trivy` — bekannte CVEs?
+- [ ] **Docker Engine Version:** Minimum 29.3.1? (CVE-2026-34040: AuthZ-Plugin-Bypass bei >1MB Request-Body, CVSS 8.8)
+- [ ] **AuthZ Plugins:** Falls genutzt — Request-Size-Limits konfiguriert?
 - [ ] **Read-Only Filesystem:** `read_only: true` in Compose wo moeglich?
 - [ ] **Capabilities:** `cap_drop: ALL` + nur noetige zurueck? (`NET_BIND_SERVICE`)
 - [ ] **No-New-Privileges:** `security_opt: no-new-privileges:true`?

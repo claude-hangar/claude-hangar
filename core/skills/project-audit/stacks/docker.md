@@ -71,6 +71,8 @@ Erkennung: `Dockerfile` oder `docker-compose.*` vorhanden.
 - [ ] **Secrets:** Keine Secrets in Dockerfile (ENV, ARG, COPY .env)?
 - [ ] **Build-Secrets:** `--mount=type=secret` fuer Build-Time-Secrets?
 - [ ] **Image-Scanning:** `docker scout` / `trivy` — bekannte CVEs?
+- [ ] **Docker Engine Version:** Minimum 29.3.1? (CVE-2026-34040: AuthZ-Plugin-Bypass bei >1MB Request-Body, CVSS 8.8)
+- [ ] **AuthZ Plugins:** Falls genutzt — Request-Size-Limits konfiguriert?
 - [ ] **Read-Only:** `read_only: true` in Compose wo moeglich?
 - [ ] **Capabilities:** `cap_drop: ALL` + nur noetige zurueck?
 - [ ] **No-New-Privileges:** `security_opt: no-new-privileges:true`?
@@ -90,7 +92,7 @@ Erkennung: `Dockerfile` oder `docker-compose.*` vorhanden.
 ## §Maintenance
 
 - [ ] Base-Image Updates: Regelmaessig aktualisiert?
-- [ ] Docker-Version: Aktuell? (Docker Engine, Compose)
+- [ ] Docker-Version: Aktuell? (Docker Engine >= 29.3.1, Compose v2)
 - [ ] Pruning: `docker system prune` automatisiert?
 - [ ] Image-Groesse: Trend ueber Zeit? Wird groesser?
 - [ ] Deprecated Compose-Syntax: v2 statt v1?

@@ -42,6 +42,15 @@ docker compose config --quiet 2>&1
 - Verify service names, ports, volumes
 - Finding: `DEPLOY-01: Docker Compose syntax error`
 
+### 1b. Docker Engine Version
+
+```bash
+docker version --format '{{.Server.Version}}' 2>/dev/null
+```
+
+- Minimum: 29.3.1 (CVE-2026-34040 fix: AuthZ plugin bypass via >1MB request body, CVSS 8.8)
+- Finding: `DEPLOY-01b: Docker Engine {version} < 29.3.1 — critical security vulnerability`
+
 ### 2. Environment Comparison
 
 Compare `.env.example` with `.env` (or `.env.production`):
