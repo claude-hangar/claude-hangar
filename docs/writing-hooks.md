@@ -84,7 +84,7 @@ INPUT=$(cat 2>/dev/null) || true
 
 ### 3. Use Node.js for JSON, not jq
 
-Node.js is guaranteed (Claude Code dependency). jq may not be installed.
+Node.js is required by Hangar (hooks use `node -e` for JSON parsing). jq may not be installed.
 
 ```bash
 COMMAND=$(echo "$INPUT" | node -e "

@@ -23,7 +23,7 @@ Everything runs locally. No external services except Anthropic's API for your ow
 | Tool | Required | Install |
 |------|----------|---------|
 | **Git** | Yes | Bundled with Git Bash / `apt install git` / `brew install git` |
-| **Node.js** | Yes | [nodejs.org](https://nodejs.org/) (any LTS) |
+| **Node.js** | Yes | [nodejs.org](https://nodejs.org/) (any LTS) — required for Hangar hooks, not Claude Code itself |
 | **Bash 4.0+** | Yes | Linux: built-in. macOS: `brew install bash`. Windows: Git Bash. |
 | **jq** | Optional | `winget install jqlang.jq` / `apt install jq` / `brew install jq` |
 

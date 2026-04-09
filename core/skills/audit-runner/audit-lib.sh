@@ -238,7 +238,7 @@ check_prerequisites() {
 
   if ! command -v "$CLAUDE_BIN" &>/dev/null; then
     echo "  ERROR: Claude Code CLI not found ($CLAUDE_BIN)"
-    echo "    → npm install -g @anthropic-ai/claude-code"
+    echo "    → See https://docs.anthropic.com/en/docs/claude-code/getting-started"
     ok=false
   else
     echo "  Claude Code: OK ($($CLAUDE_BIN --version 2>/dev/null || echo 'version unknown'))"
