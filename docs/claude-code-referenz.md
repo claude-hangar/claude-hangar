@@ -1,6 +1,78 @@
 # Claude Code CLI – Vollstaendige Referenz
 
-## Stand: v2.1.92 (4. April 2026)
+## Stand: v2.1.98 (10. April 2026)
+
+> v2.1.100 ist ein Re-Release von v2.1.98 (identischer Code, npm dist-tag Promotion).
+> v2.1.99 wurde nicht veroeffentlicht.
+
+### Aenderungen v2.1.98
+
+#### Neue Features
+
+- **Google Vertex AI Setup Wizard** — Interaktiver Wizard im Login-Screen unter "3rd-party platform" (GCP Auth, Projekt/Region, Credentials, Model-Pinning)
+- **`CLAUDE_CODE_PERFORCE_MODE`** — Edit/Write/NotebookEdit schlagen fehl bei Read-only-Dateien mit `p4 edit`-Hinweis
+- **Monitor Tool** — Neues Tool zum Streamen von Events aus Background-Scripts
+- **Subprocess Sandboxing** — PID-Namespace-Isolation auf Linux via `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB`, neuer `CLAUDE_CODE_SCRIPT_CAPS` Env-Var
+- **`--exclude-dynamic-system-prompt-sections`** — Neues Print-Mode Flag fuer besseres Cross-User Prompt-Caching
+- **`workspace.git_worktree`** — Neues Feld im StatusLine JSON-Input bei Git-Worktree-Verzeichnissen
+- **`TRACEPARENT` in Bash** — W3C-Tracing-Header wird an Subprozesse uebergeben wenn OTEL aktiv
+- **LSP `clientInfo`** — Claude Code identifiziert sich bei Language Servern via Initialize-Request
+
+#### Security-Fixes
+
+- **CRITICAL:** Bash-Tool Permission-Bypass via Backslash-escaped Flags (arbitrary code execution)
+- **CRITICAL:** Compound Bash-Commands umgehen forced Permission-Prompts in Auto/Bypass-Modes
+- **HIGH:** Read-only Commands mit Env-Var-Prefixen prompten nicht (nur bekannte safe vars: `LANG`, `TZ`, `NO_COLOR`)
+- **HIGH:** Redirects zu `/dev/tcp/...` oder `/dev/udp/...` werden nicht auto-allowed
+- **HIGH:** `grep -f FILE` / `rg -f FILE` prompten nicht bei Pattern-Files ausserhalb Working-Dir
+- **HIGH:** `--dangerously-skip-permissions` still downgraded nach Protected-Path-Write
+- **HIGH:** Agent-Team-Members erben nicht den Permission-Mode des Leaders
+
+#### Hooks
+
+- **Stop/SubagentStop Hooks** schlagen nicht mehr fehl bei langen Sessions
+- **Hook-Evaluator API-Errors** zeigen jetzt echte Fehlermeldung statt "JSON validation failed"
+- **Hook-Errors im Transcript** enthalten erste Zeile von stderr fuer Self-Diagnosis
+
+#### MCP
+
+- **OAuth:** `oauth.authServerMetadataUrl` wird bei Token-Refresh nach Restart beachtet (ADFS-Fix)
+- **MCP Tools** mit `_meta["anthropic/maxResultSizeChars"]` bypassen Token-based Persist-Layer
+- **Crash behoben** beim Hover ueber MCP-Tool-Results im Fullscreen-Mode
+
+#### Agents & Skills
+
+- **`/agents`** hat Tabbed Layout: Running-Tab zeigt Live-Subagents, Library-Tab hat "Run agent" und "View running instance"
+- **Background Subagents** reporten bei Fehler Partial-Progress zum Parent
+- **Stale Subagent-Worktree Cleanup** entfernt keine Worktrees mit Untracked Files mehr
+- **`/reload-plugins`** laedt Plugin-Skills ohne Restart (Hot-Reload)
+- **Slash-Command-Picker** crasht nicht mehr bei YAML-Boolean-Keywords in Plugin-Frontmatter
+
+#### Settings & Permissions
+
+- **`permissions.additionalDirectories`** wirkt Mid-Session (sofortiger Entzug/Zugriff)
+- **`Bash(cmd:*)` und `Bash(git commit *)`** Wildcard-Rules matchen bei Extra-Spaces/Tabs
+- **`Bash(...)` Deny-Rules** werden nicht zu Prompt downgraded bei Piped-Commands mit `cd`
+- **Managed-Settings Allow-Rules** bleiben nicht aktiv nach Admin-Entfernung
+- **Permission-Rules mit JS-Prototype-Namen** (z.B. `toString`) ignorieren nicht mehr settings.json
+
+#### UI/UX
+
+- **Vim Mode:** `j`/`k` in NORMAL navigieren History und Footer-Pill
+- **Accept Edits Mode:** Auto-Approve fuer Filesystem-Commands mit safe Env-Vars
+- **`/resume` Picker:** Filter-Hints, Project/Worktree/Branch-Names, diverse Fixes
+- **`/export`:** Akzeptiert absolute Pfade und `~`, keine Zwangs-.txt-Extension
+- **`/effort max`:** Funktioniert mit unbekannten/zukuenftigen Model-IDs
+- **Transcript-Entries** tragen finale Token-Usage statt Streaming-Placeholders
+
+#### Weitere Fixes
+
+- Streaming-Responses fallen auf Non-Streaming zurueck statt Timeout
+- 429-Retries nutzen Exponential-Backoff statt alle Attempts in ~13s
+- Capital-Letters werden nicht zu Lowercase auf xterm/VSCode bei Kitty-Protocol
+- Memory-Leak bei Remote-Control Permission-Handlers behoben
+- `DISABLE_AUTOUPDATER` unterdrueckt vollstaendig den npm-Version-Check
+- **[VSCode]** False-Positive "requires git-bash" auf Windows behoben wenn `CLAUDE_CODE_GIT_BASH_PATH` gesetzt
 
 ### Aenderungen v2.1.92
 

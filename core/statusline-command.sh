@@ -54,7 +54,7 @@ round() {
 
 # ===== Extract ALL fields from input JSON in one jq call (no eval) =====
 {
-    IFS=$'\t' read -r model_name size total_in total_out pct_used_json cwd total_cost total_duration_ms vim_mode session_name native_5h_pct native_5h_reset native_7d_pct native_7d_reset
+    IFS=$'\t' read -r model_name size total_in total_out pct_used_json cwd total_cost total_duration_ms vim_mode session_name native_5h_pct native_5h_reset native_7d_pct native_7d_reset git_worktree
 } < <(echo "$input" | jq -r '[
     (.model.display_name // "Claude"),
     (.context_window.context_window_size // 0 | tostring),
@@ -69,7 +69,8 @@ round() {
     (.rate_limits.five_hour.used_percentage // -1 | tostring),
     (.rate_limits.five_hour.resets_at // -1 | tostring),
     (.rate_limits.seven_day.used_percentage // -1 | tostring),
-    (.rate_limits.seven_day.resets_at // -1 | tostring)
+    (.rate_limits.seven_day.resets_at // -1 | tostring),
+    (.workspace.git_worktree // "" | tostring)
 ] | @tsv' 2>/dev/null) || true
 
 # Strip parenthetical suffix from model name (e.g., "Opus 4.6 (1M context)" -> "Opus 4.6")
@@ -157,6 +158,10 @@ if [ -n "$cwd" ]; then
     cwd="${cwd//\\//}"
     display_dir=$(printf '%s' "${cwd##*/}" | tr -d '\000-\037\177')
     out+=" ${dim}|${rst} "
+    # Worktree indicator (v2.1.98+: workspace.git_worktree)
+    if [ -n "$git_worktree" ] && [ "$git_worktree" != "null" ] && [ "$git_worktree" != "false" ] && [ "$git_worktree" != "" ]; then
+        out+="${yellow}wt:${rst}"
+    fi
     out+="${cyan}${display_dir}${rst}"
     git_branch=$(git -C "${cwd}" rev-parse --abbrev-ref HEAD 2>/dev/null)
     if [ -n "$git_branch" ]; then
