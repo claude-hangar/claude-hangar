@@ -434,13 +434,52 @@ deploy_all() {
   should_deploy "learning" && init_learning_system || info "Skipped: learning (filtered out)"
 
   # Settings: merge or deploy template
-  if [ ! -f "$CLAUDE_DIR/settings.json" ]; then
-    # First install: deploy template (strip {{LANGUAGE}} placeholder)
-    sed 's/{{LANGUAGE}}/English/' "$SCRIPT_DIR/core/settings.json.template" > "$CLAUDE_DIR/settings.json"
+  local template_file="$SCRIPT_DIR/core/settings.json.template"
+  local settings_file="$CLAUDE_DIR/settings.json"
+  local processed_template
+  processed_template=$(mktemp)
+  sed 's/{{LANGUAGE}}/English/' "$template_file" > "$processed_template"
+
+  if [ ! -f "$settings_file" ]; then
+    # First install: deploy template directly
+    cp "$processed_template" "$settings_file"
     success "Deployed: settings.json (from template)"
   else
-    info "settings.json exists — skipping (manual merge recommended)"
+    # Existing config: deep-merge (add missing hooks/servers, preserve user config)
+    local merge_script="$SCRIPT_DIR/core/lib/merge-settings.js"
+    if [ -f "$merge_script" ]; then
+      local merged_file
+      merged_file=$(mktemp)
+      local merge_stats
+      merge_stats=$(node "$merge_script" "$settings_file" "$processed_template" "$merged_file" 2>/dev/null) || {
+        warn "Settings merge failed — keeping existing settings.json"
+        rm -f "$merged_file" "$processed_template"
+        return 0
+      }
+
+      # Check if anything changed
+      local hooks_added mcp_added env_added scalars_added
+      hooks_added=$(node -e "console.log(JSON.parse(process.argv[1]).hooks.added)" "$merge_stats" 2>/dev/null || echo "0")
+      mcp_added=$(node -e "console.log(JSON.parse(process.argv[1]).mcpServers.added)" "$merge_stats" 2>/dev/null || echo "0")
+      env_added=$(node -e "console.log(JSON.parse(process.argv[1]).env.added)" "$merge_stats" 2>/dev/null || echo "0")
+      scalars_added=$(node -e "console.log(JSON.parse(process.argv[1]).scalars.added)" "$merge_stats" 2>/dev/null || echo "0")
+
+      local total_added=$((hooks_added + mcp_added + env_added + scalars_added))
+
+      if [ "$total_added" -gt 0 ]; then
+        # Backup existing settings before overwriting
+        cp "$settings_file" "$settings_file.pre-merge-$(date +%Y%m%d-%H%M%S)"
+        cp "$merged_file" "$settings_file"
+        success "Merged settings.json (+${hooks_added} hooks, +${mcp_added} MCP servers, +${env_added} env vars, +${scalars_added} settings)"
+      else
+        info "settings.json already up-to-date — no changes needed"
+      fi
+      rm -f "$merged_file"
+    else
+      info "settings.json exists — skipping (merge script not found)"
+    fi
   fi
+  rm -f "$processed_template"
 
   # Write version info
   local version_hash
