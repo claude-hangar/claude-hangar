@@ -29,6 +29,16 @@ echo 'export HANGAR_HOOK_PROFILE=standard' >> ~/.bashrc
 export HANGAR_DISABLED_HOOKS=token-warning,desktop-notify
 ```
 
+## Token-Efficient Mode
+
+```bash
+# Reduce hook output verbosity by ~60% (shorter suggestions, minimal messages)
+export HANGAR_TERSE=1
+```
+
+When enabled, hooks that produce user-facing messages (skill-suggest, model-router)
+use abbreviated output to conserve context tokens.
+
 ## How It Works
 
 Each hook includes a 3-line gate at the top:
