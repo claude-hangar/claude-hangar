@@ -9,6 +9,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+#### Full Audit & Upgrade (2026-04-11)
+- **`.claude-plugin/plugin.json`** — Plugin manifest enabling installation via `/plugin install`. Declares 32 skills (6 paths including stacks), 21 agents, hooks config.
+- **`hooks/hooks.json`** — Centralized hook event mapping for plugin system. Maps all 27 hooks across 14 event types with `${CLAUDE_PLUGIN_ROOT}` paths.
+- **`AUDIT.md`** — Complete inventory of all 100+ components with status, versions, and issues
+- **`RESEARCH.md`** — External findings: CLI v2.1.101, MCP spec 2025-11-25, SDK updates, 20+ competitor analyses
+- **`TODO.md`** — 5 Must + 10 Should + 14 Nice-to-have prioritized upgrade tasks
+
+### Changed
+
+#### Full Audit & Upgrade (2026-04-11)
+- **All 14 Sonnet agents → Opus** — `build-resolver-go`, `build-resolver-python`, `build-resolver-typescript`, `commit-reviewer`, `dependency-checker`, `doc-updater`, `explorer`, `go-reviewer`, `loop-operator`, `plan-reviewer`, `python-reviewer`, `tdd-guide`, `test-writer`, `typescript-reviewer`
+- **GitHub MCP** — Replaced deprecated `@modelcontextprotocol/server-github` (archived) with remote HTTP `https://api.githubcopilot.com/mcp/` (OAuth). Updated `core/mcp/registry.json` + `stacks/github/mcp.json`
+- **PostgreSQL MCP** — Replaced broken `@crystaldba/postgres-mcp` (npm not found) with `@bytebase/dbhub`. Updated `core/mcp/registry.json` + `stacks/database/mcp.json`
+
+### Fixed
+
+#### Full Audit & Upgrade (2026-04-11)
+- **Deprecated hook output format** — Migrated `bash-guard.sh` (5 outputs) and `secret-leak-check.sh` (1 output) from `{"decision":"block","reason":"..."}` to `{"hookSpecificOutput":{"permissionDecision":"block","permissionDecisionReason":"..."}}` (deprecated since v2.1.77+)
+
+---
+
 #### ECC Integration Phase 2c — Skills, Agents, Hooks (2026-04-05)
 - **safety-guard** skill — 3-mode write protection (Careful/Freeze/Guard) for autonomous agent runs
 - **rules-distill** skill — Meta-governance: scans skills to extract cross-cutting principles as shared rules
