@@ -1,10 +1,10 @@
 {
   "name": "claude-hangar",
-  "description": "Production-grade Claude Code environment with 32 skills, 21 agents, 27 hooks, and 10 framework stacks",
-  "version": "1.0.0",
+  "description": "Production-grade Claude Code environment with 34 skills, 21 agents, 30 hooks, and 10 framework stacks",
+  "version": "1.1.0",
   "author": {
     "name": "Claude Hangar Contributors",
-    "url": "https://github.com/lazaridis-com/claude-hangar"
+    "email": "kontakt@lazaridis.me"
   },
   "homepage": "https://github.com/lazaridis-com/claude-hangar",
   "repository": "https://github.com/lazaridis-com/claude-hangar",
@@ -20,16 +20,7 @@
     "tdd",
     "code-review",
     "deployment",
-    "configuration"
-  ],
-  "skills": [
-    "./core/skills/",
-    "./stacks/astro/",
-    "./stacks/auth/",
-    "./stacks/database/",
-    "./stacks/nextjs/",
-    "./stacks/sveltekit/"
-  ],
-  "agents": "./core/agents/",
-  "hooks": "./hooks/hooks.json"
+    "configuration",
+    "team-presets"
+  ]
 }
