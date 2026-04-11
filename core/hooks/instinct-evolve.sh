@@ -50,16 +50,59 @@ RECOVERY_COUNT=$(node -e "
 
 # Create instinct entry
 node -e "
+  const fs = require('fs');
+  const path = require('path');
+  const instinctsFile = process.argv[4];
+  const newCount = parseInt(process.argv[2]);
+  const newConfidence = Math.min(10, newCount + 2);
+
+  // Check for existing instinct of same type to accumulate confidence
+  let existingConfidence = 0;
+  let existingOccurrences = 0;
+  try {
+    const lines = fs.readFileSync(instinctsFile, 'utf8').trim().split('\n');
+    for (const line of lines) {
+      try {
+        const e = JSON.parse(line);
+        if (e.type === 'recovery') {
+          existingConfidence = Math.max(existingConfidence, e.confidence || 0);
+          existingOccurrences += (e.count || 1);
+        }
+      } catch {}
+    }
+  } catch {}
+
+  const totalOccurrences = existingOccurrences + newCount;
+  // Confidence grows with repeated observation: base + log2(occurrences)
+  const confidence = Math.min(10, Math.round(newConfidence + Math.log2(Math.max(1, totalOccurrences))));
+
   const entry = {
     timestamp: process.argv[1],
     type: 'recovery',
-    count: parseInt(process.argv[2]),
-    confidence: Math.min(10, parseInt(process.argv[2]) + 2),
+    count: newCount,
+    total_occurrences: totalOccurrences,
+    confidence: confidence,
     session_date: process.argv[3],
     project: process.cwd()
   };
-  const fs = require('fs');
-  fs.appendFileSync(process.argv[4], JSON.stringify(entry) + '\n');
+  fs.appendFileSync(instinctsFile, JSON.stringify(entry) + '\n');
+
+  // Auto-promote to rule candidate when confidence >= 8
+  if (confidence >= 8 && existingConfidence < 8) {
+    const candidatesDir = path.join(process.env.HOME || '', '.claude', '.instincts', 'candidates');
+    try { fs.mkdirSync(candidatesDir, { recursive: true }); } catch {}
+    const candidate = {
+      promoted_at: process.argv[1],
+      type: entry.type,
+      total_occurrences: totalOccurrences,
+      confidence: confidence,
+      suggestion: 'Recovery patterns detected ' + totalOccurrences + ' times — consider adding error handling rules.'
+    };
+    fs.writeFileSync(
+      path.join(candidatesDir, entry.type + '.json'),
+      JSON.stringify(candidate, null, 2) + '\n'
+    );
+  }
 " "$TIMESTAMP" "$RECOVERY_COUNT" "$(date +%Y-%m-%d)" "$INSTINCTS_FILE" 2>/dev/null
 
 exit 0
