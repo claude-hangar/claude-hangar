@@ -4,7 +4,7 @@ description: >
   TDD enforcement specialist. Use PROACTIVELY when developing new features
   or fixing bugs. Ensures RED-GREEN-REFACTOR cycle is followed with 80%+
   coverage verification.
-model: sonnet
+model: opus
 tools: Read, Grep, Glob, Bash, Edit, Write
 maxTurns: 30
 ---

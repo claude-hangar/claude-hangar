@@ -3,7 +3,7 @@ name: build-resolver-go
 description: >
   Resolves Go build, test, and dependency errors. Use when go build, go test,
   or go mod commands fail.
-model: sonnet
+model: opus
 tools: Read, Grep, Glob, Bash, Edit, Write
 maxTurns: 20
 ---

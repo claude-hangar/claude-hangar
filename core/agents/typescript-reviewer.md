@@ -3,7 +3,7 @@ name: typescript-reviewer
 description: >
   TypeScript-specific code reviewer. Use when reviewing TypeScript/JavaScript code
   for type safety, patterns, and best practices.
-model: sonnet
+model: opus
 tools: Read, Grep, Glob, Bash
 disallowedTools: Write, Edit, NotebookEdit
 maxTurns: 15

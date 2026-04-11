@@ -3,7 +3,7 @@ name: build-resolver-typescript
 description: >
   Resolves TypeScript/JavaScript build errors. Use when tsc, webpack, vite,
   esbuild, or other TS/JS build tools fail.
-model: sonnet
+model: opus
 tools: Read, Grep, Glob, Bash, Edit, Write
 maxTurns: 20
 ---

@@ -3,7 +3,7 @@ name: build-resolver-python
 description: >
   Resolves Python build, import, and runtime errors. Use when pip, poetry,
   pytest, or Python scripts fail.
-model: sonnet
+model: opus
 tools: Read, Grep, Glob, Bash, Edit, Write
 maxTurns: 20
 ---

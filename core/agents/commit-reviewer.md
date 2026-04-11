@@ -5,7 +5,7 @@ description: >
   secrets, missing tests and unintended files.
   Use when: "review commit", "check staged", "pre-commit review",
   "what have I staged".
-model: sonnet
+model: opus
 effort: low
 tools: Bash, Read, Grep, Glob
 disallowedTools: Write, Edit, NotebookEdit

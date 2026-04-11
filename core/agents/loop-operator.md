@@ -4,7 +4,7 @@ description: >
   Manages autonomous execution workflows with safety guardrails.
   Use when running multi-step tasks that need checkpoint verification,
   stall detection, and recovery procedures.
-model: sonnet
+model: opus
 tools: Read, Grep, Glob, Bash, Edit, Write, Agent
 maxTurns: 50
 ---
