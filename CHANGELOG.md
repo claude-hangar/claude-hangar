@@ -10,12 +10,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 #### Full Audit & Upgrade — Session 2 (2026-04-11)
-- **3 team preset skills** — `/review-team` (code-reviewer + security-reviewer + lang-reviewer), `/debug-team` (explorer-deep + build-resolver + tdd-guide), `/security-team` (security-reviewer + dependency-checker + explorer-deep) — all launch agents in parallel with unified reports
+- **5 new skills** — `/review-team`, `/debug-team`, `/security-team` (team presets with parallel agents), `/hook-gen` (natural language to hook configs), `/export-rules` (Cursor/Windsurf/Copilot format export)
 - **`core/lib/merge-settings.js`** — Deep-merge engine for settings.json: appends missing hooks per event (deduplicates by command), adds missing MCP servers, preserves all user configuration
-- **`tests/hangar-lint.sh`** — Configuration linter validating 171 checks across 7 categories: skill frontmatter, agent definitions, hook scripts, JSON validity, cross-references, profile consistency, settings template structure
+- **`tests/hangar-lint.sh`** — Configuration linter validating 180+ checks across 7 categories
+- **`--lite` install mode** — 5-minute setup with safety essentials only (5 hooks, 3 skills, 1 MCP)
 - **4 remote HTTP MCP servers** — Notion (`mcp.notion.com/mcp`), Sentry (`mcp.sentry.dev/mcp`), Stripe (`mcp.stripe.com`), Linear (`mcp.linear.app/mcp`) — all OAuth, zero local install
 - **`.claude-plugin/marketplace.json`** — Marketplace descriptor compatible with `obra/superpowers-marketplace`
-- **8 hook profile switching tests** — Validates gate integration, env var override, disabled hooks, profile distribution
+- **`AGENTS.md`** template — Cross-tool agent configuration (Cursor, Windsurf, Copilot)
+- **`DESIGN.md`** template — Comprehensive design system documentation
+- **`HANGAR_TERSE`** env var — Token-efficient hook output mode (~60% savings)
+- **`session-dashboard.sh`** — Session metrics summary (costs, subagents, patterns, instincts)
+- **`memory-optimization.md`** — 3-layer retrieval strategy guide
+- **Instinct confidence scoring** — Accumulative confidence with auto-promotion at threshold
+- **8 hook profile switching tests** + HTTP server validation in MCP tests
 
 #### Full Audit & Upgrade — Session 1 (2026-04-11)
 - **`.claude-plugin/plugin.json`** — Plugin manifest enabling installation via `/plugin install`. Declares 34 skills (6 paths including stacks), 21 agents, hooks config.
@@ -30,12 +37,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 #### Full Audit & Upgrade — Session 2 (2026-04-11)
-- **setup.sh** — Smart settings merge: detects existing `~/.claude/settings.json`, backs up, deep-merges Hangar hooks/servers/env without overwriting user config
-- **`plugin.json`** — Updated to superpowers-marketplace schema (removed internal fields, added author.email, bumped to v1.1.0)
-- **hook-profiles.md** — Updated counts (24 standard, 30 total), added 3 new hooks to standard profile listing
-- **`batch-format-collector.sh` + `stop-batch-format.sh`** — Profile corrected from `strict` to `standard` (matching documentation)
-- **`skills_index.json`** — Added 3 team skills (34 total), new "teams" category
-- **`skill-rules.json`** — Added trigger rules for review-team, debug-team, security-team
+- **setup.sh** — Smart settings merge + `--lite` install mode
+- **`plugin.json`** — Updated to superpowers-marketplace schema (v1.1.0)
+- **hook-profiles.md** — Updated counts, added HANGAR_TERSE documentation
+- **`batch-format-collector.sh` + `stop-batch-format.sh`** — Profile corrected strict → standard
+- **`skills_index.json`** — 36 skills total, new categories (teams, cross-ide, devops)
+- **`skill-rules.json`** — Trigger rules for 5 new skills
+- **`skill-suggest.sh` + `model-router.sh`** — Terse output mode support
+- **`instinct-evolve.sh`** — Confidence scoring + auto-promotion
+- **`test-mcp.sh`** — HTTP server validation, fixed stack config test
+- **`writing-skills.md`** — Skill-scoped hooks documentation
 
 #### Full Audit & Upgrade — Session 1 (2026-04-11)
 - **All 14 Sonnet agents → Opus** — build-resolver-go/python/typescript, commit-reviewer, dependency-checker, doc-updater, explorer, go-reviewer, loop-operator, plan-reviewer, python-reviewer, tdd-guide, test-writer, typescript-reviewer

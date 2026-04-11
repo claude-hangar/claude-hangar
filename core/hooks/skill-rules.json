@@ -141,6 +141,16 @@
       "skill": "/security-team",
       "triggers": ["security team", "security audit team", "vulnerability scan", "team security", "pentest", "full security"],
       "exclude": ["security scan", "secret check"]
+    },
+    {
+      "skill": "/hook-gen",
+      "triggers": ["create hook", "add hook", "hook for", "generate hook", "when this happens", "new hook"],
+      "exclude": ["hookify", "writing hooks"]
+    },
+    {
+      "skill": "/export-rules",
+      "triggers": ["export rules", "cursor rules", "windsurf rules", "copilot instructions", "convert rules", "mdc rules"],
+      "exclude": ["rules distill"]
     }
   ]
 }

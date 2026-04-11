@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "generated": "2026-04-06",
-  "skillCount": 34,
+  "skillCount": 36,
   "categories": {
     "design": ["design-system", "polish"],
     "quality": ["adversarial-review", "inline-review", "review-team"],
@@ -13,7 +13,8 @@
     "workflow": ["capture-pdf", "codebase-map", "consult", "handoff", "lesson-learned", "scan", "debug-team"],
     "documentation": ["doctor", "error-analyzer", "meta-tags", "favicon-check"],
     "git": ["git-hygiene"],
-    "devops": ["freshness-check"],
+    "devops": ["freshness-check", "hook-gen"],
+    "cross-ide": ["export-rules"],
     "learning": ["pattern-extractor"],
     "governance": ["prompt-optimizer", "rules-distill", "safety-guard", "skill-stocktake"]
   },
@@ -289,6 +290,22 @@
       "risk": "safe",
       "description": "Launch parallel security analysis agents for comprehensive vulnerability assessment.",
       "triggers": ["security team", "security audit team", "vulnerability scan", "team security"]
+    },
+    {
+      "id": "hook-gen",
+      "path": "core/skills/hook-gen",
+      "category": "devops",
+      "risk": "safe",
+      "description": "Generate Claude Code hook configurations from natural language descriptions.",
+      "triggers": ["create hook", "add hook", "hook for", "generate hook", "hook-gen"]
+    },
+    {
+      "id": "export-rules",
+      "path": "core/skills/export-rules",
+      "category": "cross-ide",
+      "risk": "safe",
+      "description": "Export Hangar rules to Cursor .mdc, Windsurf, and GitHub Copilot formats.",
+      "triggers": ["export rules", "cursor rules", "windsurf rules", "copilot instructions", "convert rules"]
     }
   ]
 }

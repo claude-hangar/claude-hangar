@@ -114,58 +114,44 @@ Implemented merge-settings.js deep-merge engine. Preserves all user config.
 ### ~~N1: Agent team presets~~ DONE
 Created /review-team, /debug-team, /security-team with parallel agent execution.
 
-### N2: Natural language to hook generation
-- **What:** Skill that converts plain English to hook configurations
-- **Example:** "Run tests when test files change" → PostToolUse hook with file matching
-- **Inspiration:** zxdxjtu/claudecode-rule2hook (403 stars)
+### ~~N2: Natural language to hook generation~~ DONE
+Created /hook-gen skill that converts plain English to hook configurations.
 
-### N3: AGENTS.md generation
-- **What:** Generate AGENTS.md alongside CLAUDE.md for cross-tool compatibility
-- **Where:** `setup.sh`, `templates/project/`
-- **Inspiration:** agentsmd/agents.md (20K stars)
+### ~~N3: AGENTS.md generation~~ DONE
+Created templates/project/AGENTS.md with all 21 agents and team presets.
 
 ### ~~N4: Configuration linter~~ DONE
 Created hangar-lint.sh with 171 checks across 7 categories.
 
-### N5: "Lite" install mode
-- **What:** Minimal 5-minute setup with just essentials (bash-guard, secret-leak, 3 core skills)
-- **Inspiration:** jarrodwatts/claude-code-config (1K stars)
+### ~~N5: "Lite" install mode~~ DONE
+Added --lite flag to setup.sh: 5 safety hooks + 3 skills + lite settings template.
 
-### N6: Instinct confidence scoring
-- **What:** Score captured patterns 0.0-1.0, auto-promote when threshold reached
-- **Where:** `core/hooks/instinct-capture.sh`, `instinct-evolve.sh`
-- **Inspiration:** affaan-m/everything-claude-code (150K stars)
+### ~~N6: Instinct confidence scoring~~ DONE
+Added accumulative confidence scoring to instinct-evolve.sh with auto-promotion at threshold 8+.
 
-### N7: Progressive memory retrieval
-- **What:** 3-layer memory: index → summary → full details (10x token savings)
-- **Inspiration:** thedotmack/claude-mem (47K stars)
+### ~~N7: Progressive memory retrieval~~ DONE
+Created docs/memory-optimization.md with 3-layer strategy and token budgets.
 
-### N8: Observability dashboard
-- **What:** Real-time monitoring of sessions, costs, subagents
-- **Inspiration:** disler/claude-code-hooks-multi-agent-observability (1.3K stars)
+### ~~N8: Observability dashboard~~ DONE
+Created core/lib/session-dashboard.sh parsing cost, subagent, pattern, and instinct logs.
 
-### N9: Token-efficient hook profile
-- **What:** Terse output mode reducing token usage by ~60%
-- **Inspiration:** drona23/claude-token-efficient (3.8K stars), JuliusBrussee/caveman (15K stars)
+### ~~N9: Token-efficient hook profile~~ DONE
+Added HANGAR_TERSE env var to hook-gate.sh, applied to skill-suggest and model-router.
 
-### N10: Cross-IDE skill generation
-- **What:** Auto-generate Cursor .mdc and Windsurf .md rules from Claude Hangar skills
-- **Inspiration:** FrancyJGLisboa/agent-skill-creator (690 stars), iannuttall/dotagents (666 stars)
+### ~~N10: Cross-IDE skill generation~~ DONE
+Created /export-rules skill for Cursor .mdc, Windsurf, and GitHub Copilot formats.
 
-### N11: MCP Inspector in test pipeline
-- **What:** Add `npx @modelcontextprotocol/inspector` to `tests/test-mcp.sh`
-- **Why:** Programmatic MCP server validation
+### ~~N11: MCP Inspector in test pipeline~~ DONE
+Enhanced test-mcp.sh with HTTP server validation (url, auth, HTTPS checks).
 
-### N12: Skill-scoped hooks
-- **What:** Use new `hooks` frontmatter field to attach hooks directly to skills
-- **Example:** `verification-loop` skill could have its own pre-check hook
+### ~~N12: Skill-scoped hooks~~ DONE
+Added documentation with example in docs/writing-skills.md.
 
 ### ~~N13: Publish to superpowers-marketplace~~ DONE (prepared)
 Updated plugin.json to marketplace schema, created marketplace.json. Ready for submission PR.
 
-### N14: DESIGN.md integration
-- **What:** Bundle DESIGN.md templates in design-system skill
-- **Inspiration:** VoltAgent/awesome-design-md (42K stars)
+### ~~N14: DESIGN.md integration~~ DONE
+Created templates/project/DESIGN.md with colors, typography, spacing, components, accessibility.
 
 ---
 
@@ -176,5 +162,5 @@ Phase 4a: M1, M2, M3, M4, M5              ✓ DONE (session 1)
 Phase 4b: S1, S2, S3, S4, S5, S6, S7      ✓ DONE (session 1)
 Phase 4c: S8, S9, S10                      ✓ DONE (session 2)
 Phase 5a: N1, N4, N13                      ✓ DONE (session 2)
-Phase 5b: N2, N3, N5-N12, N14             → Next (prioritize by adoption impact)
+Phase 5b: N2, N3, N5-N12, N14              ✓ DONE (session 2 continued)
 ```

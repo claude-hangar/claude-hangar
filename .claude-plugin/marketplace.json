@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "claude-hangar",
-      "description": "Production-grade Claude Code environment with 34 skills, 21 agents, 30 hooks, and 10 framework stacks",
+      "description": "Production-grade Claude Code environment with 36 skills, 21 agents, 30 hooks, and 10 framework stacks",
       "version": "1.1.0",
       "source": "./"
     }
