@@ -16,7 +16,7 @@ source "${HOME}/.claude/lib/hook-gate.sh" 2>/dev/null || true
 INPUT=$(cat 2>/dev/null) || true
 [ -z "$INPUT" ] && INPUT='{}'
 
-SESSION_ID="${CLAUDE_SESSION_ID:-$$}"
+export SESSION_ID="${CLAUDE_SESSION_ID:-$$}"
 
 # Pass input as environment variable
 export HOOK_INPUT="$INPUT"

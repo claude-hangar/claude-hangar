@@ -15,6 +15,7 @@ PATTERNS_DIR="$HOME/.claude/.patterns"
 INSTINCTS_DIR="$HOME/.claude/.instincts"
 
 DATE="${2:-$(date +%Y-%m-%d)}"
+# shellcheck disable=SC2034  # MODE reserved for future filtering
 MODE="${1:---latest}"
 
 echo "============================================================"
