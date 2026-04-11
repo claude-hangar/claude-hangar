@@ -98,35 +98,21 @@
   - Explorer: `maxTurns: 10`
 - **Why:** Prevents runaway agent execution, enforces read-only for reviewers
 
-### S8: Implement runtime hook profile switching
-- **What:** Add actual runtime switching via `HANGAR_HOOK_PROFILE` env var
-- **Where:** `core/lib/hook-gate.sh`, settings.json template
-- **Details:**
-  - `minimal` — bash-guard, secret-leak-check only
-  - `standard` — + quality hooks (design-quality, continuous-learning, etc.)
-  - `strict` — everything enabled, blocking mode
-- **Why:** Currently documented but not implemented. Competitors have this (ECC).
+### ~~S8: Implement runtime hook profile switching~~ DONE
+Fixed profile mismatch (batch-format strict→standard), added 8 tests. hook-gate.sh was already implemented.
 
-### S9: Add remote HTTP MCP servers to registry
-- **What:** Add OAuth-based remote servers that need no local install
-- **Where:** `core/mcp/registry.json`
-- **Servers:** GitHub (HTTP), Notion, Sentry, Stripe, Linear
-- **Why:** Remote HTTP is the recommended transport, reduces install friction
+### ~~S9: Add remote HTTP MCP servers to registry~~ DONE
+Added Notion, Sentry, Stripe, Linear as remote HTTP servers with OAuth.
 
-### S10: Smart settings merge in setup.sh
-- **What:** Detect and merge existing `~/.claude/` configuration instead of overwrite
-- **Where:** `setup.sh`
-- **Why:** Critical for adoption — users fear losing existing configs
-- **Action:** Backup existing, deep-merge settings.json, preserve user hooks
+### ~~S10: Smart settings merge in setup.sh~~ DONE
+Implemented merge-settings.js deep-merge engine. Preserves all user config.
 
 ---
 
 ## NICE-TO-HAVE — Inspiration & Future
 
-### N1: Agent team presets
-- **What:** Named team configurations that activate parallel agents
-- **Examples:** `/review-team` → code-reviewer + security-reviewer + typescript-reviewer, `/debug-team` → error-analyzer + explorer-deep + tdd-guide
-- **Inspiration:** wshobson/agents (33K stars) has 7 presets
+### ~~N1: Agent team presets~~ DONE
+Created /review-team, /debug-team, /security-team with parallel agent execution.
 
 ### N2: Natural language to hook generation
 - **What:** Skill that converts plain English to hook configurations
@@ -138,9 +124,8 @@
 - **Where:** `setup.sh`, `templates/project/`
 - **Inspiration:** agentsmd/agents.md (20K stars)
 
-### N4: Configuration linter
-- **What:** `hangar lint` command validating SKILL.md frontmatter, hook JSON, agent markdown
-- **Inspiration:** agent-sh/agentsys `agnix` linter (385 rules)
+### ~~N4: Configuration linter~~ DONE
+Created hangar-lint.sh with 171 checks across 7 categories.
 
 ### N5: "Lite" install mode
 - **What:** Minimal 5-minute setup with just essentials (bash-guard, secret-leak, 3 core skills)
@@ -175,9 +160,8 @@
 - **What:** Use new `hooks` frontmatter field to attach hooks directly to skills
 - **Example:** `verification-loop` skill could have its own pre-check hook
 
-### N13: Publish to superpowers-marketplace
-- **What:** List Claude Hangar in `obra/superpowers-marketplace` (817 stars)
-- **Requires:** M5 (plugin.json) first
+### ~~N13: Publish to superpowers-marketplace~~ DONE (prepared)
+Updated plugin.json to marketplace schema, created marketplace.json. Ready for submission PR.
 
 ### N14: DESIGN.md integration
 - **What:** Bundle DESIGN.md templates in design-system skill
@@ -188,8 +172,9 @@
 ## Execution Order
 
 ```
-Phase 4a (this session): M1, M2, M3, M4, M5
-Phase 4b (next session): S1, S2, S3, S4, S5
-Phase 4c (following):    S6, S7, S8, S9, S10
-Phase 5 (backlog):       N1-N14 (prioritize by user demand)
+Phase 4a: M1, M2, M3, M4, M5              ✓ DONE (session 1)
+Phase 4b: S1, S2, S3, S4, S5, S6, S7      ✓ DONE (session 1)
+Phase 4c: S8, S9, S10                      ✓ DONE (session 2)
+Phase 5a: N1, N4, N13                      ✓ DONE (session 2)
+Phase 5b: N2, N3, N5-N12, N14             → Next (prioritize by adoption impact)
 ```

@@ -9,9 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-#### Full Audit & Upgrade (2026-04-11)
-- **`.claude-plugin/plugin.json`** — Plugin manifest enabling installation via `/plugin install`. Declares 32 skills (6 paths including stacks), 21 agents, hooks config.
-- **`hooks/hooks.json`** — Centralized hook event mapping for plugin system. Maps all 27 hooks across 14 event types with `${CLAUDE_PLUGIN_ROOT}` paths.
+#### Full Audit & Upgrade — Session 2 (2026-04-11)
+- **3 team preset skills** — `/review-team` (code-reviewer + security-reviewer + lang-reviewer), `/debug-team` (explorer-deep + build-resolver + tdd-guide), `/security-team` (security-reviewer + dependency-checker + explorer-deep) — all launch agents in parallel with unified reports
+- **`core/lib/merge-settings.js`** — Deep-merge engine for settings.json: appends missing hooks per event (deduplicates by command), adds missing MCP servers, preserves all user configuration
+- **`tests/hangar-lint.sh`** — Configuration linter validating 171 checks across 7 categories: skill frontmatter, agent definitions, hook scripts, JSON validity, cross-references, profile consistency, settings template structure
+- **4 remote HTTP MCP servers** — Notion (`mcp.notion.com/mcp`), Sentry (`mcp.sentry.dev/mcp`), Stripe (`mcp.stripe.com`), Linear (`mcp.linear.app/mcp`) — all OAuth, zero local install
+- **`.claude-plugin/marketplace.json`** — Marketplace descriptor compatible with `obra/superpowers-marketplace`
+- **8 hook profile switching tests** — Validates gate integration, env var override, disabled hooks, profile distribution
+
+#### Full Audit & Upgrade — Session 1 (2026-04-11)
+- **`.claude-plugin/plugin.json`** — Plugin manifest enabling installation via `/plugin install`. Declares 34 skills (6 paths including stacks), 21 agents, hooks config.
+- **`hooks/hooks.json`** — Centralized hook event mapping for plugin system. Maps all 30 hooks across 14 event types with `${CLAUDE_PLUGIN_ROOT}` paths.
 - **`AUDIT.md`** — Complete inventory of all 100+ components with status, versions, and issues
 - **`RESEARCH.md`** — External findings: CLI v2.1.101, MCP spec 2025-11-25, SDKs, 20+ competitor analyses
 - **`TODO.md`** — 5 Must + 10 Should + 14 Nice-to-have prioritized upgrade tasks
@@ -21,7 +29,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-#### Full Audit & Upgrade (2026-04-11)
+#### Full Audit & Upgrade — Session 2 (2026-04-11)
+- **setup.sh** — Smart settings merge: detects existing `~/.claude/settings.json`, backs up, deep-merges Hangar hooks/servers/env without overwriting user config
+- **`plugin.json`** — Updated to superpowers-marketplace schema (removed internal fields, added author.email, bumped to v1.1.0)
+- **hook-profiles.md** — Updated counts (24 standard, 30 total), added 3 new hooks to standard profile listing
+- **`batch-format-collector.sh` + `stop-batch-format.sh`** — Profile corrected from `strict` to `standard` (matching documentation)
+- **`skills_index.json`** — Added 3 team skills (34 total), new "teams" category
+- **`skill-rules.json`** — Added trigger rules for review-team, debug-team, security-team
+
+#### Full Audit & Upgrade — Session 1 (2026-04-11)
 - **All 14 Sonnet agents → Opus** — build-resolver-go/python/typescript, commit-reviewer, dependency-checker, doc-updater, explorer, go-reviewer, loop-operator, plan-reviewer, python-reviewer, tdd-guide, test-writer, typescript-reviewer
 - **GitHub MCP** — Deprecated `@modelcontextprotocol/server-github` → remote HTTP `https://api.githubcopilot.com/mcp/` (OAuth)
 - **PostgreSQL MCP** — Broken `@crystaldba/postgres-mcp` → `@bytebase/dbhub` (supports PostgreSQL, MySQL, SQLite)
@@ -33,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Full Audit & Upgrade (2026-04-11)
 - **Deprecated hook output format** — Migrated `bash-guard.sh` (5 outputs) and `secret-leak-check.sh` (1 output) from `{"decision":"block","reason":"..."}` to `{"hookSpecificOutput":{"permissionDecision":"block","permissionDecisionReason":"..."}}` (deprecated since v2.1.77+)
+- **Hook profile mismatch** — `batch-format-collector` and `stop-batch-format` had `HOOK_MIN_PROFILE="strict"` but belonged to standard profile per documentation
 
 ---
 
