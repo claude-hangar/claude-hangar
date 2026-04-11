@@ -3,8 +3,9 @@ name: project-audit
 description: >
   Repository audit for non-website projects (CLI, libs, backend, monorepo).
   Use when: "project-audit", "project audit", "repo audit", "code audit".
-user_invocable: true
-argument_hint: "start|continue|report"
+effort: high
+user-invocable: true
+argument-hint: "start|continue|report"
 ---
 
 <!-- AI-QUICK-REF

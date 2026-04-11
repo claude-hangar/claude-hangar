@@ -3,8 +3,8 @@ name: error-analyzer
 description: >
   Systematic root-cause analysis for build failures, test errors, and runtime issues.
   Use when: "error", "failed", "broken", "debug", "why did this fail", "root cause".
-user_invocable: true
-argument_hint: ""
+user-invocable: true
+argument-hint: ""
 ---
 
 <!-- AI-QUICK-REF

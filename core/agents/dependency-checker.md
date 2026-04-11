@@ -5,7 +5,7 @@ description: >
   and CVE research.
   Use when: "dependency check", "check deps", "npm audit",
   "outdated packages", "check dependencies", "vulnerabilities".
-model: sonnet
+model: opus
 effort: low
 tools: Bash, Read, Grep, Glob, WebSearch
 disallowedTools: Write, Edit, NotebookEdit

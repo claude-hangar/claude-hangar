@@ -4,7 +4,7 @@ description: >
   Documentation maintenance specialist. Use after code changes to keep
   docs, README, API references, and inline comments up to date.
   Proactively finds stale documentation.
-model: sonnet
+model: opus
 tools: Read, Grep, Glob, Bash, Edit, Write
 maxTurns: 20
 ---

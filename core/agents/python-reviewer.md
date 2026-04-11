@@ -3,7 +3,7 @@ name: python-reviewer
 description: >
   Python-specific code reviewer. Use when reviewing Python code
   for type hints, patterns, and best practices.
-model: sonnet
+model: opus
 tools: Read, Grep, Glob, Bash
 disallowedTools: Write, Edit, NotebookEdit
 maxTurns: 15

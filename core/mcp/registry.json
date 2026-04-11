@@ -24,8 +24,10 @@
       "stack": "github",
       "description": "GitHub repos, PRs, issues, code search",
       "source": "https://github.com/github/github-mcp-server",
-      "package": "@modelcontextprotocol/server-github",
-      "credentials": ["GITHUB_TOKEN"]
+      "transport": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "auth": "oauth",
+      "note": "Remote HTTP server with OAuth — no local install needed. Alternative: Go binary from github/github-mcp-server"
     },
     "playwright": {
       "name": "Playwright",
@@ -36,13 +38,14 @@
       "package": "@playwright/mcp"
     },
     "postgres": {
-      "name": "PostgreSQL Pro",
+      "name": "PostgreSQL (DBHub)",
       "category": "stack",
       "stack": "database",
       "description": "Database schema inspection, queries, performance analysis",
-      "source": "https://github.com/crystaldba/postgres-mcp",
-      "package": "@crystaldba/postgres-mcp",
-      "credentials": ["POSTGRES_URL"]
+      "source": "https://github.com/bytebase/dbhub",
+      "package": "@bytebase/dbhub",
+      "credentials": ["POSTGRES_URL"],
+      "note": "Replaced @crystaldba/postgres-mcp (npm package unavailable). DBHub supports PostgreSQL, MySQL, SQLite via DSN."
     },
     "snyk": {
       "name": "Snyk",
@@ -51,6 +54,46 @@
       "description": "Security scanning for dependencies, code, IaC, and containers",
       "source": "https://docs.snyk.io/integrations/snyk-studio-agentic-integrations",
       "package": "snyk"
+    },
+    "notion": {
+      "name": "Notion",
+      "category": "optional",
+      "description": "Access and manage Notion workspaces — search, create/update pages and databases",
+      "source": "https://github.com/makenotion/notion-mcp-server",
+      "transport": "http",
+      "url": "https://mcp.notion.com/mcp",
+      "auth": "oauth",
+      "note": "Remote HTTP server with OAuth — no local install needed. Official Notion-hosted server."
+    },
+    "sentry": {
+      "name": "Sentry",
+      "category": "optional",
+      "description": "AI-powered error debugging — query issues, traces, replays, and release data",
+      "source": "https://github.com/getsentry/sentry-mcp",
+      "transport": "http",
+      "url": "https://mcp.sentry.dev/mcp",
+      "auth": "oauth",
+      "note": "Remote HTTP server with OAuth — zero local install required."
+    },
+    "stripe": {
+      "name": "Stripe",
+      "category": "optional",
+      "description": "Payment lifecycle management — customers, products, invoices, subscriptions, refunds",
+      "source": "https://github.com/stripe/ai",
+      "transport": "http",
+      "url": "https://mcp.stripe.com",
+      "auth": "oauth",
+      "note": "Remote HTTP server with OAuth. Also supports API key for local mode (@stripe/mcp)."
+    },
+    "linear": {
+      "name": "Linear",
+      "category": "optional",
+      "description": "Project management — find, create, update issues, projects, initiatives in Linear",
+      "source": "https://linear.app/docs/mcp",
+      "transport": "http",
+      "url": "https://mcp.linear.app/mcp",
+      "auth": "oauth",
+      "note": "Remote HTTP server with OAuth 2.1. Also supports API key via Bearer token header."
     }
   }
 }

@@ -155,7 +155,10 @@ date +%s > "$COOLDOWN_FILE"
 # Output suggestion as non-blocking message
 # ============================================================
 
-if [ "$TIER" = "haiku" ]; then
+if [ "${HOOK_TERSE:-0}" = "1" ]; then
+  # Terse mode: minimal output to save tokens
+  node -e "console.log(JSON.stringify({result:'message',message:'→ /model '+process.argv[1]}))" "$TIER"
+elif [ "$TIER" = "haiku" ]; then
   node -e "console.log(JSON.stringify({
     result: 'message',
     message: 'Model hint: This looks like a quick/mechanical task. Haiku could handle it faster and cheaper. Switch with /model haiku.'

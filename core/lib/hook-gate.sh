@@ -103,5 +103,14 @@ fi
 
 unset _HG_MANIFEST
 
+# ─────────────────────────────────────────────────────────────────────────
+# Terse Mode (optional)
+# ─────────────────────────────────────────────────────────────────────────
+# When HANGAR_TERSE=1, hooks should minimize their stdout output to reduce
+# token consumption (~60% savings). Export HOOK_TERSE for hooks to check.
+if [ "${HANGAR_TERSE:-0}" = "1" ]; then
+  export HOOK_TERSE=1
+fi
+
 # Clean up temp variables
 unset _HG_PROFILE _HG_CURRENT _HG_REQUIRED

@@ -1,6 +1,6 @@
 ---
 name: test-writer
-model: sonnet
+model: opus
 description: Test generation agent. Analyzes code and generates appropriate tests in an isolated worktree.
 isolation: worktree
 maxTurns: 20

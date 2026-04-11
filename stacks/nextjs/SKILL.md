@@ -3,8 +3,9 @@ name: nextjs-audit
 description: >
   Next.js App Router Best-Practice Audit with state persistence.
   Use when: "nextjs-audit", "nextjs upgrade", "next check", "nextjs version", "app router".
-user_invocable: true
-argument_hint: "start|continue"
+effort: high
+user-invocable: true
+argument-hint: "start|continue"
 ---
 
 <!-- AI-QUICK-REF

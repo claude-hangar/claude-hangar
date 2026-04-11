@@ -3,8 +3,9 @@ name: design-system
 description: >
   Context-aware design intelligence with curated databases for styles, palettes, typography, UX rules, and wow effects.
   Use when: "design", "colors", "typography", "component", "card", "button", "hero", "ui", "palette", "tailwind pattern", "style", "wow", "font".
-user_invocable: true
-argument_hint: "[component|palette|typography]"
+effort: high
+user-invocable: true
+argument-hint: "[component|palette|typography]"
 ---
 
 <!-- AI-QUICK-REF

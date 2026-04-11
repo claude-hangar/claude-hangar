@@ -5,7 +5,7 @@ description: >
   finds patterns and answers questions about the project — without changing anything.
   Use when user mentions "explain", "how does", "show me", "where is", "find",
   or wants to understand code without modifying it.
-model: sonnet
+model: opus
 effort: low
 tools: Read, Glob, Grep, Bash, WebFetch
 disallowedTools: Write, Edit, NotebookEdit

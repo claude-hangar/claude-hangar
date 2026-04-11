@@ -4,7 +4,7 @@ description: >
   Spec/plan compliance reviewer. Verifies implementation matches the plan —
   nothing more, nothing less. Two-stage review: spec compliance + quality.
   Use when: implementation task completed, before merge, after feature work.
-model: sonnet
+model: opus
 effort: high
 tools: Read, Glob, Grep, Bash
 disallowedTools: Write, Edit, NotebookEdit

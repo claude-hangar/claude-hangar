@@ -434,13 +434,52 @@ deploy_all() {
   should_deploy "learning" && init_learning_system || info "Skipped: learning (filtered out)"
 
   # Settings: merge or deploy template
-  if [ ! -f "$CLAUDE_DIR/settings.json" ]; then
-    # First install: deploy template (strip {{LANGUAGE}} placeholder)
-    sed 's/{{LANGUAGE}}/English/' "$SCRIPT_DIR/core/settings.json.template" > "$CLAUDE_DIR/settings.json"
+  local template_file="$SCRIPT_DIR/core/settings.json.template"
+  local settings_file="$CLAUDE_DIR/settings.json"
+  local processed_template
+  processed_template=$(mktemp)
+  sed 's/{{LANGUAGE}}/English/' "$template_file" > "$processed_template"
+
+  if [ ! -f "$settings_file" ]; then
+    # First install: deploy template directly
+    cp "$processed_template" "$settings_file"
     success "Deployed: settings.json (from template)"
   else
-    info "settings.json exists — skipping (manual merge recommended)"
+    # Existing config: deep-merge (add missing hooks/servers, preserve user config)
+    local merge_script="$SCRIPT_DIR/core/lib/merge-settings.js"
+    if [ -f "$merge_script" ]; then
+      local merged_file
+      merged_file=$(mktemp)
+      local merge_stats
+      merge_stats=$(node "$merge_script" "$settings_file" "$processed_template" "$merged_file" 2>/dev/null) || {
+        warn "Settings merge failed — keeping existing settings.json"
+        rm -f "$merged_file" "$processed_template"
+        return 0
+      }
+
+      # Check if anything changed
+      local hooks_added mcp_added env_added scalars_added
+      hooks_added=$(node -e "console.log(JSON.parse(process.argv[1]).hooks.added)" "$merge_stats" 2>/dev/null || echo "0")
+      mcp_added=$(node -e "console.log(JSON.parse(process.argv[1]).mcpServers.added)" "$merge_stats" 2>/dev/null || echo "0")
+      env_added=$(node -e "console.log(JSON.parse(process.argv[1]).env.added)" "$merge_stats" 2>/dev/null || echo "0")
+      scalars_added=$(node -e "console.log(JSON.parse(process.argv[1]).scalars.added)" "$merge_stats" 2>/dev/null || echo "0")
+
+      local total_added=$((hooks_added + mcp_added + env_added + scalars_added))
+
+      if [ "$total_added" -gt 0 ]; then
+        # Backup existing settings before overwriting
+        cp "$settings_file" "$settings_file.pre-merge-$(date +%Y%m%d-%H%M%S)"
+        cp "$merged_file" "$settings_file"
+        success "Merged settings.json (+${hooks_added} hooks, +${mcp_added} MCP servers, +${env_added} env vars, +${scalars_added} settings)"
+      else
+        info "settings.json already up-to-date — no changes needed"
+      fi
+      rm -f "$merged_file"
+    else
+      info "settings.json exists — skipping (merge script not found)"
+    fi
   fi
+  rm -f "$processed_template"
 
   # Write version info
   local version_hash
@@ -514,6 +553,10 @@ main() {
         SKILL_MODE="none"
         shift
         ;;
+      --lite)
+        mode="lite"
+        shift
+        ;;
       --list-categories)
         mode="list-categories"
         shift
@@ -532,6 +575,49 @@ main() {
   done
 
   case "${mode:-}" in
+    lite)
+      info "Lite install — safety essentials only (~5 minute setup)"
+      check_prerequisites || exit 1
+      mkdir -p "$CLAUDE_DIR"
+
+      # Deploy only safety hooks (minimal profile)
+      mkdir -p "$CLAUDE_DIR/hooks"
+      for hook in bash-guard.sh secret-leak-check.sh config-protection.sh \
+                  session-start.sh session-stop.sh hook-profiles.md; do
+        [ -f "$SCRIPT_DIR/core/hooks/$hook" ] && \
+          cp "$SCRIPT_DIR/core/hooks/$hook" "$CLAUDE_DIR/hooks/" 2>/dev/null || true
+      done
+      success "Deployed: 5 safety hooks"
+
+      # Deploy lib (required for hook-gate.sh)
+      deploy_component "$SCRIPT_DIR/core/lib" "$CLAUDE_DIR/lib" "Shared lib"
+
+      # Deploy 3 essential skills
+      for skill in scan consult handoff; do
+        [ -d "$SCRIPT_DIR/core/skills/$skill" ] && \
+          deploy_component "$SCRIPT_DIR/core/skills/$skill" "$CLAUDE_DIR/skills/$skill" "Skill: $skill"
+      done
+      success "Deployed: 3 essential skills (scan, consult, handoff)"
+
+      # Deploy lite settings template
+      if [ ! -f "$CLAUDE_DIR/settings.json" ]; then
+        sed 's/{{LANGUAGE}}/English/' "$SCRIPT_DIR/core/settings-lite.json.template" > "$CLAUDE_DIR/settings.json"
+        success "Deployed: settings.json (lite)"
+      else
+        info "settings.json exists — keeping your configuration"
+      fi
+
+      # Write version info
+      local version_hash
+      version_hash=$(git -C "$SCRIPT_DIR" rev-parse --short HEAD 2>/dev/null || echo "unknown")
+      echo "{\"hash\":\"$version_hash\",\"date\":\"$(date '+%Y-%m-%d')\",\"source\":\"$SCRIPT_DIR\",\"mode\":\"lite\"}" > "$CLAUDE_DIR/.hangar-version"
+
+      echo ""
+      success "Lite install complete!"
+      info "You have: bash-guard + secret-leak + config-protection + 3 skills"
+      info "For the full experience: bash setup.sh"
+      ;;
+
     list-categories)
       list_categories
       ;;
@@ -725,7 +811,8 @@ main() {
       echo "Usage: bash setup.sh [MODE] [OPTIONS]"
       echo ""
       echo "Modes:"
-      echo "  (no args)           Interactive wizard (first run) or sync"
+      echo "  (no args)           Full install (first run) or sync"
+      echo "  --lite              Lite install: 5 safety hooks + 3 skills (~5 min)"
       echo "  --check             Dry-run validation"
       echo "  --verify            Verify existing installation"
       echo "  --sync              Remove orphaned files + redeploy"

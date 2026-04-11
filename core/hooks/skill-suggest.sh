@@ -135,9 +135,13 @@ MATCH=$(RULES_FILE="$RULES_FILE" node -e "
 [ -z "$MATCH" ] && exit 0
 
 # Match found → suggest as non-blocking message
-node -e "console.log(JSON.stringify({
-  result: 'message',
-  message: 'Skill suggestion: ' + process.argv[1] + ' matches this request. Use the skill for better results.'
-}))" "$MATCH"
+if [ "${HOOK_TERSE:-0}" = "1" ]; then
+  node -e "console.log(JSON.stringify({result:'message',message:'→ '+process.argv[1]}))" "$MATCH"
+else
+  node -e "console.log(JSON.stringify({
+    result: 'message',
+    message: 'Skill suggestion: ' + process.argv[1] + ' matches this request. Use the skill for better results.'
+  }))" "$MATCH"
+fi
 
 exit 0

@@ -3,8 +3,9 @@ name: lesson-learned
 description: >
   Extract learnings and save as memory files (file-based memory system).
   Use when: "lesson learned", "what did we learn", "learning", "remember".
-user_invocable: true
-argument_hint: "session|review"
+effort: low
+user-invocable: true
+argument-hint: "session|review"
 ---
 
 <!-- AI-QUICK-REF

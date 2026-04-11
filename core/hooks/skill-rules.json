@@ -126,6 +126,41 @@
       "skill": "/auth",
       "triggers": ["auth audit", "auth check", "auth security", "login audit", "session audit", "password audit", "authentication check"],
       "exclude": ["website audit", "project audit"]
+    },
+    {
+      "skill": "/review-team",
+      "triggers": ["review team", "full review", "multi-review", "team review", "parallel review", "comprehensive review"],
+      "exclude": ["code review", "plan review", "audit review"]
+    },
+    {
+      "skill": "/debug-team",
+      "triggers": ["debug team", "help me debug", "find the bug", "team debug", "debug this", "why is this broken"],
+      "exclude": ["debug mode", "debug log"]
+    },
+    {
+      "skill": "/security-team",
+      "triggers": ["security team", "security audit team", "vulnerability scan", "team security", "pentest", "full security"],
+      "exclude": ["security scan", "secret check"]
+    },
+    {
+      "skill": "/hook-gen",
+      "triggers": ["create hook", "add hook", "hook for", "generate hook", "when this happens", "new hook"],
+      "exclude": ["hookify", "writing hooks"]
+    },
+    {
+      "skill": "/export-rules",
+      "triggers": ["export rules", "cursor rules", "windsurf rules", "copilot instructions", "convert rules", "mdc rules"],
+      "exclude": ["rules distill"]
+    },
+    {
+      "skill": "/refactor-team",
+      "triggers": ["refactor team", "safe refactor", "restructure", "refactor this", "clean up code", "extract module"],
+      "exclude": ["review team", "code review"]
+    },
+    {
+      "skill": "/docs-team",
+      "triggers": ["docs team", "update docs", "documentation sweep", "stale docs", "docs outdated", "fix documentation"],
+      "exclude": ["doc-updater", "write docs"]
     }
   ]
 }

@@ -3,7 +3,7 @@ name: go-reviewer
 description: >
   Go-specific code reviewer. Use when reviewing Go code
   for idioms, error handling, and best practices.
-model: sonnet
+model: opus
 tools: Read, Grep, Glob, Bash
 disallowedTools: Write, Edit, NotebookEdit
 maxTurns: 15

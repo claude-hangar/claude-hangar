@@ -1,10 +1,7 @@
 {
   "github": {
-    "type": "stdio",
-    "command": "npx",
-    "args": ["-y", "@modelcontextprotocol/server-github"],
-    "env": {
-      "GITHUB_PERSONAL_ACCESS_TOKEN": "{{GITHUB_TOKEN}}"
-    }
+    "type": "http",
+    "url": "https://api.githubcopilot.com/mcp/",
+    "note": "Remote HTTP server with OAuth — authenticate via: claude mcp add --transport http github https://api.githubcopilot.com/mcp/"
   }
 }

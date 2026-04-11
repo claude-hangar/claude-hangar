@@ -1,0 +1,60 @@
+# CI — Claude Code PR Review
+# Uses the official anthropics/claude-code-action to automatically
+# review pull requests and suggest improvements.
+#
+# Prerequisites:
+# - Set ANTHROPIC_API_KEY as a repository secret
+# - Optionally customize the review prompt below
+#
+# See: https://github.com/anthropics/claude-code-action
+
+name: Claude Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: claude-review-${{ github.event.pull_request.number || github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    # Run on PR events, or on issue comments that mention @claude
+    if: |
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'issue_comment' &&
+       contains(github.event.comment.body, '@claude'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Claude Code Review
+        uses: anthropics/claude-code-action@main
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+
+          # Optional: customize the review prompt
+          # direct_prompt: "Review this PR for security issues and code quality"
+
+          # Optional: use a specific model (default: claude-sonnet-4-5-20250514)
+          # model: "claude-sonnet-4-6-20260424"
+
+          # Optional: set max turns for the review
+          # max_turns: 10
+
+          # Optional: allowed tools (default: all safe tools)
+          # allowed_tools: "Read,Glob,Grep,WebFetch"
+
+          # Optional: disallowed tools
+          # disallowed_tools: "Bash,Write,Edit"
+
+          # Optional: path to custom CLAUDE.md for review context
+          # claude_md: ".github/CLAUDE_REVIEW.md"

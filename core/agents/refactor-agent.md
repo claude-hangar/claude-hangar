@@ -1,6 +1,7 @@
 ---
 name: refactor-agent
 model: opus
+effort: high
 description: Systematic code refactoring agent. Plans transformations, executes in isolated worktree, produces structured diffs for review.
 isolation: worktree
 maxTurns: 40

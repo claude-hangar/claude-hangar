@@ -5,8 +5,8 @@ description: >
   Use when: "favicon", "icon check", "app icon", "icons".
 effort: low
 allowed-tools: Read, Glob, Grep, Bash
-user_invocable: true
-argument_hint: "[url]"
+user-invocable: true
+argument-hint: "[url]"
 ---
 
 <!-- AI-QUICK-REF

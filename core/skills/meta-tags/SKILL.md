@@ -5,8 +5,8 @@ description: >
   Use when: "meta tags", "open graph", "og tags", "twitter card", "structured data", "seo meta".
 effort: low
 allowed-tools: Read, Glob, Grep, Bash
-user_invocable: true
-argument_hint: "[url]"
+user-invocable: true
+argument-hint: "[url]"
 ---
 
 <!-- AI-QUICK-REF

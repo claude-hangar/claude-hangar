@@ -9,6 +9,61 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+#### Full Audit & Upgrade — Session 2 (2026-04-11)
+- **5 new skills** — `/review-team`, `/debug-team`, `/security-team` (team presets with parallel agents), `/hook-gen` (natural language to hook configs), `/export-rules` (Cursor/Windsurf/Copilot format export)
+- **`core/lib/merge-settings.js`** — Deep-merge engine for settings.json: appends missing hooks per event (deduplicates by command), adds missing MCP servers, preserves all user configuration
+- **`tests/hangar-lint.sh`** — Configuration linter validating 180+ checks across 7 categories
+- **`--lite` install mode** — 5-minute setup with safety essentials only (5 hooks, 3 skills, 1 MCP)
+- **4 remote HTTP MCP servers** — Notion (`mcp.notion.com/mcp`), Sentry (`mcp.sentry.dev/mcp`), Stripe (`mcp.stripe.com`), Linear (`mcp.linear.app/mcp`) — all OAuth, zero local install
+- **`.claude-plugin/marketplace.json`** — Marketplace descriptor compatible with `obra/superpowers-marketplace`
+- **`AGENTS.md`** template — Cross-tool agent configuration (Cursor, Windsurf, Copilot)
+- **`DESIGN.md`** template — Comprehensive design system documentation
+- **`HANGAR_TERSE`** env var — Token-efficient hook output mode (~60% savings)
+- **`session-dashboard.sh`** — Session metrics summary (costs, subagents, patterns, instincts)
+- **`memory-optimization.md`** — 3-layer retrieval strategy guide
+- **Instinct confidence scoring** — Accumulative confidence with auto-promotion at threshold
+- **8 hook profile switching tests** + HTTP server validation in MCP tests
+
+#### Full Audit & Upgrade — Session 1 (2026-04-11)
+- **`.claude-plugin/plugin.json`** — Plugin manifest enabling installation via `/plugin install`. Declares 34 skills (6 paths including stacks), 21 agents, hooks config.
+- **`hooks/hooks.json`** — Centralized hook event mapping for plugin system. Maps all 30 hooks across 14 event types with `${CLAUDE_PLUGIN_ROOT}` paths.
+- **`AUDIT.md`** — Complete inventory of all 100+ components with status, versions, and issues
+- **`RESEARCH.md`** — External findings: CLI v2.1.101, MCP spec 2025-11-25, SDKs, 20+ competitor analyses
+- **`TODO.md`** — 5 Must + 10 Should + 14 Nice-to-have prioritized upgrade tasks
+- **3 new hooks** — `post-tool-failure.sh` (PostToolUseFailure), `session-end.sh` (SessionEnd), `pre-compact.sh` (PreCompact) for recently added Claude Code lifecycle events
+- **CI template** — `ci-claude-review.yml` using official `anthropics/claude-code-action` for automated PR reviews
+- **`effort` field** — Added to 29 skills and 10 agents (low for quick checks, high for deep analysis)
+
+### Changed
+
+#### Full Audit & Upgrade — Session 2 (2026-04-11)
+- **setup.sh** — Smart settings merge + `--lite` install mode
+- **`plugin.json`** — Updated to superpowers-marketplace schema (v1.1.0)
+- **hook-profiles.md** — Updated counts, added HANGAR_TERSE documentation
+- **`batch-format-collector.sh` + `stop-batch-format.sh`** — Profile corrected strict → standard
+- **`skills_index.json`** — 36 skills total, new categories (teams, cross-ide, devops)
+- **`skill-rules.json`** — Trigger rules for 5 new skills
+- **`skill-suggest.sh` + `model-router.sh`** — Terse output mode support
+- **`instinct-evolve.sh`** — Confidence scoring + auto-promotion
+- **`test-mcp.sh`** — HTTP server validation, fixed stack config test
+- **`writing-skills.md`** — Skill-scoped hooks documentation
+
+#### Full Audit & Upgrade — Session 1 (2026-04-11)
+- **All 14 Sonnet agents → Opus** — build-resolver-go/python/typescript, commit-reviewer, dependency-checker, doc-updater, explorer, go-reviewer, loop-operator, plan-reviewer, python-reviewer, tdd-guide, test-writer, typescript-reviewer
+- **GitHub MCP** — Deprecated `@modelcontextprotocol/server-github` → remote HTTP `https://api.githubcopilot.com/mcp/` (OAuth)
+- **PostgreSQL MCP** — Broken `@crystaldba/postgres-mcp` → `@bytebase/dbhub` (supports PostgreSQL, MySQL, SQLite)
+- **Skill frontmatter** — Standardized 35 SKILL.md files to official hyphenated format (`user-invocable`, `argument-hint`, `disable-model-invocation`)
+- **settings.json.template** — Added PostToolUseFailure, PreCompact, SessionEnd hook events
+- **Documentation** — Updated writing-skills.md (9 new fields, variables), writing-hooks.md (7 new events, hookSpecificOutput format), writing-agents.md (new fields, model table), mcp-guide.md (HTTP transport, OAuth, .mcp.json, scopes)
+
+### Fixed
+
+#### Full Audit & Upgrade (2026-04-11)
+- **Deprecated hook output format** — Migrated `bash-guard.sh` (5 outputs) and `secret-leak-check.sh` (1 output) from `{"decision":"block","reason":"..."}` to `{"hookSpecificOutput":{"permissionDecision":"block","permissionDecisionReason":"..."}}` (deprecated since v2.1.77+)
+- **Hook profile mismatch** — `batch-format-collector` and `stop-batch-format` had `HOOK_MIN_PROFILE="strict"` but belonged to standard profile per documentation
+
+---
+
 #### ECC Integration Phase 2c — Skills, Agents, Hooks (2026-04-05)
 - **safety-guard** skill — 3-mode write protection (Careful/Freeze/Guard) for autonomous agent runs
 - **rules-distill** skill — Meta-governance: scans skills to extract cross-cutting principles as shared rules

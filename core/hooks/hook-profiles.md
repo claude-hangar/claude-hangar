@@ -9,8 +9,8 @@ are silently skipped at runtime via `hook-gate.sh`.
 | Profile | Behavior | Use When |
 |---------|----------|----------|
 | `minimal` | Safety hooks only (3 hooks) | Quick prototyping, minimal overhead |
-| `standard` | Safety + quality hooks (21 hooks, **default**) | Normal development |
-| `strict` | All hooks active (27 hooks) | Production/CI, learning enabled |
+| `standard` | Safety + quality hooks (24 hooks, **default**) | Normal development |
+| `strict` | All hooks active (30 hooks) | Production/CI, learning enabled |
 
 ## Usage
 
@@ -28,6 +28,16 @@ echo 'export HANGAR_HOOK_PROFILE=standard' >> ~/.bashrc
 # Comma-separated list of hooks to disable (overrides profile)
 export HANGAR_DISABLED_HOOKS=token-warning,desktop-notify
 ```
+
+## Token-Efficient Mode
+
+```bash
+# Reduce hook output verbosity by ~60% (shorter suggestions, minimal messages)
+export HANGAR_TERSE=1
+```
+
+When enabled, hooks that produce user-facing messages (skill-suggest, model-router)
+use abbreviated output to conserve context tokens.
 
 ## How It Works
 
@@ -53,7 +63,7 @@ The gate script (`core/lib/hook-gate.sh`) checks:
 | `secret-leak-check` | PreToolUse/Write,Edit | Block secret leaks |
 | `config-protection` | PreToolUse/Write,Edit | Block config weakening |
 
-### standard (18 additional hooks — default)
+### standard (21 additional hooks — default)
 
 | Hook | Event | Purpose |
 |------|-------|---------|
@@ -75,6 +85,9 @@ The gate script (`core/lib/hook-gate.sh`) checks:
 | `task-created-init` | TaskCreated | Initialize task metadata |
 | `token-warning` | PostToolUse | Alert at 70%/80% context |
 | `worktree-init` | WorktreeCreate | Initialize worktree |
+| `post-tool-failure` | PostToolUseFailure | Capture tool failure patterns |
+| `pre-compact` | PreCompact | Save critical state before compaction |
+| `session-end` | SessionEnd | Rich session end data (duration, reason) |
 
 ### strict (6 additional hooks — everything)
 

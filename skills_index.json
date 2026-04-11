@@ -1,18 +1,20 @@
 {
   "version": "1.0",
   "generated": "2026-04-06",
-  "skillCount": 31,
+  "skillCount": 38,
   "categories": {
     "design": ["design-system", "polish"],
-    "quality": ["adversarial-review", "inline-review"],
+    "quality": ["adversarial-review", "inline-review", "review-team"],
+    "teams": ["review-team", "debug-team", "security-team", "refactor-team", "docs-team"],
     "audit": ["audit", "audit-orchestrator", "audit-runner", "project-audit"],
     "performance": ["lighthouse-quick", "context-budget", "strategic-compact"],
     "quality-gates": ["verification-loop"],
-    "security": ["deploy-check", "security-scan"],
-    "workflow": ["capture-pdf", "codebase-map", "consult", "handoff", "lesson-learned", "scan"],
+    "security": ["deploy-check", "security-scan", "security-team"],
+    "workflow": ["capture-pdf", "codebase-map", "consult", "handoff", "lesson-learned", "scan", "debug-team"],
     "documentation": ["doctor", "error-analyzer", "meta-tags", "favicon-check"],
     "git": ["git-hygiene"],
-    "devops": ["freshness-check"],
+    "devops": ["freshness-check", "hook-gen"],
+    "cross-ide": ["export-rules"],
     "learning": ["pattern-extractor"],
     "governance": ["prompt-optimizer", "rules-distill", "safety-guard", "skill-stocktake"]
   },
@@ -264,6 +266,62 @@
       "risk": "safe",
       "description": "Audits skill quality across four dimensions (actionability, scope fit, uniqueness, currency).",
       "triggers": ["skill audit", "stocktake", "skill quality", "audit skills"]
+    },
+    {
+      "id": "review-team",
+      "path": "core/skills/review-team",
+      "category": "teams",
+      "risk": "safe",
+      "description": "Launch parallel code review agents for comprehensive multi-perspective review.",
+      "triggers": ["review team", "full review", "multi-review", "team review"]
+    },
+    {
+      "id": "debug-team",
+      "path": "core/skills/debug-team",
+      "category": "teams",
+      "risk": "safe",
+      "description": "Launch parallel debugging agents for systematic root-cause analysis.",
+      "triggers": ["debug team", "help me debug", "find the bug", "team debug"]
+    },
+    {
+      "id": "security-team",
+      "path": "core/skills/security-team",
+      "category": "teams",
+      "risk": "safe",
+      "description": "Launch parallel security analysis agents for comprehensive vulnerability assessment.",
+      "triggers": ["security team", "security audit team", "vulnerability scan", "team security"]
+    },
+    {
+      "id": "hook-gen",
+      "path": "core/skills/hook-gen",
+      "category": "devops",
+      "risk": "safe",
+      "description": "Generate Claude Code hook configurations from natural language descriptions.",
+      "triggers": ["create hook", "add hook", "hook for", "generate hook", "hook-gen"]
+    },
+    {
+      "id": "export-rules",
+      "path": "core/skills/export-rules",
+      "category": "cross-ide",
+      "risk": "safe",
+      "description": "Export Hangar rules to Cursor .mdc, Windsurf, and GitHub Copilot formats.",
+      "triggers": ["export rules", "cursor rules", "windsurf rules", "copilot instructions", "convert rules"]
+    },
+    {
+      "id": "refactor-team",
+      "path": "core/skills/refactor-team",
+      "category": "teams",
+      "risk": "safe",
+      "description": "Parallel refactoring: restructure in worktree + characterization tests + code review.",
+      "triggers": ["refactor team", "safe refactor", "restructure code", "refactor-team"]
+    },
+    {
+      "id": "docs-team",
+      "path": "core/skills/docs-team",
+      "category": "teams",
+      "risk": "safe",
+      "description": "Parallel documentation sweep: change analysis + doc updates + completeness verification.",
+      "triggers": ["docs team", "update docs", "documentation sweep", "stale docs", "docs-team"]
     }
   ]
 }
