@@ -36,24 +36,28 @@ maxTurns: 10
 |-------|----------|-------------|
 | `name` | Yes | Matches filename without `.md` |
 | `description` | Yes | What it does + trigger phrases |
-| `model` | Yes | `sonnet` (fast/cheap) or `opus` (deep analysis) |
-| `effort` | No | `low`, `medium`, `high` |
+| `model` | Yes | `opus` (recommended), `sonnet`, or `haiku` |
+| `effort` | No | `low`, `medium` (default), `high` — controls model reasoning depth |
 | `tools` | Yes | Comma-separated allowed tools |
 | `disallowedTools` | No | Explicitly blocked tools |
 | `isolation` | No | `none` (default) or `worktree` |
 | `memory` | No | `project` for persistent MEMORY.md |
-| `maxTurns` | No | Max conversation turns |
+| `maxTurns` | No | Max conversation turns (recommended for all agents) |
+| `initialPrompt` | No | Auto-submit prompt on agent start |
+| `skills` | No | Comma-separated skills available to the agent |
+| `background` | No | `true` to run agent in background |
 
 ---
 
 ## Model Selection
 
-| Model | Best For |
-|-------|----------|
-| `sonnet` | Quick searches, simple checks, read-only analysis |
-| `opus` | Deep analysis, multi-file reasoning, security review |
+| Model | Best For | Context | Max Output |
+|-------|----------|---------|------------|
+| `opus` | Deep analysis, multi-file reasoning, security review | 1M | 128K |
+| `sonnet` | Quick searches, simple checks, read-only analysis | 1M | 64K |
+| `haiku` | Simple, repetitive tasks | 200K | 64K |
 
-Guidelines: read-only tasks use `sonnet` with `effort: low`. Analysis tasks use `opus` with `effort: high`. Write tasks use `opus` with `isolation: worktree`.
+Guidelines: Use `opus` for all agents (project default). Pair with `effort: low` for quick tasks, `effort: high` for deep analysis. Use `isolation: worktree` for write tasks that need rollback safety.
 
 ---
 
@@ -61,11 +65,11 @@ Guidelines: read-only tasks use `sonnet` with `effort: low`. Analysis tasks use 
 
 | Agent | Model | Effort | Tools | Isolation | maxTurns |
 |-------|-------|--------|-------|-----------|----------|
-| `explorer` | sonnet | low | Read, Glob, Grep, Bash, WebFetch | none | 15 |
+| `explorer` | opus | low | Read, Glob, Grep, Bash, WebFetch | none | 15 |
 | `explorer-deep` | opus | high | All + Write/Edit | worktree | 35 |
 | `security-reviewer` | opus | high | All + Write/Edit | worktree | 25 |
-| `commit-reviewer` | sonnet | low | Bash, Read, Grep, Glob | none | 10 |
-| `dependency-checker` | sonnet | low | Bash, Read, Grep, Glob, WebSearch | none | 10 |
+| `commit-reviewer` | opus | low | Bash, Read, Grep, Glob | none | 10 |
+| `dependency-checker` | opus | low | Bash, Read, Grep, Glob, WebSearch | none | 10 |
 
 ---
 

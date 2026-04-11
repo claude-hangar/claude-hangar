@@ -56,7 +56,26 @@ The `paths` field accepts a YAML list of globs. When set, the skill only activat
 |-------|----------|---------|
 | `name` | Yes | Matches directory name |
 | `description` | Yes | What it does + trigger phrases for skill-suggest hook |
+| `user-invocable` | No | `true` if the skill can be invoked via `/skill-name` (default: false) |
+| `argument-hint` | No | Hint text shown after the skill name (e.g. `"code\|audit\|plan"`) |
+| `effort` | No | Model effort level: `low`, `medium` (default), `high`. Use `low` for quick checks, `high` for deep analysis |
 | `paths` | No | YAML list of globs — skill only activates when matching files exist |
+| `allowed-tools` | No | Restrict which tools the skill can use (e.g. `Read, Glob, Grep`) |
+| `disable-model-invocation` | No | `true` to prevent the model from auto-invoking this skill |
+| `hooks` | No | Skill-scoped hooks — hooks that only fire when this skill is active |
+| `shell` | No | Preferred shell: `bash` (default) or `powershell` |
+| `context` | No | `fork` to run the skill in a subagent context |
+| `agent` | No | Agent name to delegate execution to |
+
+**Note:** Use hyphenated field names (`user-invocable`, not `user_invocable`). This is the official format.
+
+#### Skill Variables
+
+| Variable | Available In | Purpose |
+|----------|-------------|---------|
+| `${CLAUDE_SKILL_DIR}` | Skill body | Absolute path to the skill's own directory |
+| `${CLAUDE_SESSION_ID}` | Skill body | Current session identifier |
+| `$ARGUMENTS` / `$0`, `$1`, ... | Skill body | Arguments passed to the skill |
 
 ### Quick Reference (Optional)
 

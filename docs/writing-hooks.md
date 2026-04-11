@@ -16,17 +16,24 @@ A hook is a shell script that Claude Code executes at specific lifecycle events.
 |-------|---------------|-------------|
 | `PreToolUse` | Before a tool executes | Block dangerous commands, catch secrets |
 | `PostToolUse` | After a tool completes | Token tracking, context warnings |
+| `PostToolUseFailure` | When a tool call fails | Error pattern capture, recovery context |
 | `UserPromptSubmit` | User sends a prompt | Skill suggestions, model routing, input validation |
+| `PreCompact` | Before context compaction | Save critical state before context loss |
 | `PostCompact` | After `/compact` runs | Reset tracking, re-inject context |
 | `ConfigChange` | Settings modified | Warn on critical changes |
 | `SessionStart` | Session begins | Load project state |
 | `Stop` | Session ends normally | Cleanup, save state |
+| `SessionEnd` | Session terminates (any reason) | Rich cleanup with `end_reason`, `session_duration_seconds` |
 | `StopFailure` | Session ends with error | Log errors, cleanup |
+| `PermissionDenied` | User denies a tool | Auto-retry with alternative approach |
+| `PermissionRequest` | Permission dialog appears | Auto-approve/deny programmatically |
 | `TaskCompleted` | Task marked as done | Quality gates, validation checks |
 | `TaskCreated` | Task created via TaskCreate | Logging, task policies, naming conventions |
 | `SubagentStart` | Subagent spawned | Observability, resource tracking |
 | `SubagentStop` | Subagent finished | Observability, completion tracking |
 | `WorktreeCreate` | Git worktree created | Path control, setup (supports `type: "http"`) |
+| `CwdChanged` | Working directory changes | Environment adaptation |
+| `InstructionsLoaded` | CLAUDE.md/rules loaded | Observability |
 
 ---
 
@@ -46,12 +53,25 @@ Always use fallback defaults — never assume a field exists.
 
 | Action | JSON | Exit Code |
 |--------|------|-----------|
-| Block | `{"decision":"block","reason":"..."}` | 2 |
+| Block (PreToolUse) | `{"hookSpecificOutput":{"permissionDecision":"block","permissionDecisionReason":"..."}}` | 2 |
 | Reject (TaskCompleted) | `{"result":"reject","reason":"..."}` | 2 |
 | Inject context | `{"additionalContext":"..."}` | 0 |
 | Suggest (UserPromptSubmit) | `{"result":"message","message":"..."}` | 0 |
-| Answer AskUserQuestion | `{"permissionDecision":"allow","updatedInput":"answer"}` | 0 |
+| Set session title | `{"hookSpecificOutput":{"sessionTitle":"..."}}` | 0 |
 | Allow silently | No output | 0 |
+
+**Important:** The top-level `{"decision":"block","reason":"..."}` format is **deprecated** since v2.1.77. Always use the `hookSpecificOutput` wrapper for PreToolUse blocking decisions.
+
+### Hook Definition Fields (settings.json)
+
+| Field | Type | Purpose |
+|-------|------|---------|
+| `type` | `"command"` / `"http"` / `"prompt"` / `"agent"` | Hook execution type |
+| `command` | string | Shell command to execute (for `type: "command"`) |
+| `matcher` | string | Tool name pattern to match (e.g. `"Bash"`, `"Write\|Edit"`) |
+| `if` | string | Conditional using permission rule syntax (e.g. `"Bash(rm *)"`, `"Bash(git push *)"`) — more granular than `matcher` |
+| `once` | boolean | Run hook once per session only |
+| `async` | boolean | Non-blocking background execution |
 
 ---
 
