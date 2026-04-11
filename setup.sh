@@ -553,6 +553,10 @@ main() {
         SKILL_MODE="none"
         shift
         ;;
+      --lite)
+        mode="lite"
+        shift
+        ;;
       --list-categories)
         mode="list-categories"
         shift
@@ -571,6 +575,49 @@ main() {
   done
 
   case "${mode:-}" in
+    lite)
+      info "Lite install — safety essentials only (~5 minute setup)"
+      check_prerequisites || exit 1
+      mkdir -p "$CLAUDE_DIR"
+
+      # Deploy only safety hooks (minimal profile)
+      mkdir -p "$CLAUDE_DIR/hooks"
+      for hook in bash-guard.sh secret-leak-check.sh config-protection.sh \
+                  session-start.sh session-stop.sh hook-profiles.md; do
+        [ -f "$SCRIPT_DIR/core/hooks/$hook" ] && \
+          cp "$SCRIPT_DIR/core/hooks/$hook" "$CLAUDE_DIR/hooks/" 2>/dev/null || true
+      done
+      success "Deployed: 5 safety hooks"
+
+      # Deploy lib (required for hook-gate.sh)
+      deploy_component "$SCRIPT_DIR/core/lib" "$CLAUDE_DIR/lib" "Shared lib"
+
+      # Deploy 3 essential skills
+      for skill in scan consult handoff; do
+        [ -d "$SCRIPT_DIR/core/skills/$skill" ] && \
+          deploy_component "$SCRIPT_DIR/core/skills/$skill" "$CLAUDE_DIR/skills/$skill" "Skill: $skill"
+      done
+      success "Deployed: 3 essential skills (scan, consult, handoff)"
+
+      # Deploy lite settings template
+      if [ ! -f "$CLAUDE_DIR/settings.json" ]; then
+        sed 's/{{LANGUAGE}}/English/' "$SCRIPT_DIR/core/settings-lite.json.template" > "$CLAUDE_DIR/settings.json"
+        success "Deployed: settings.json (lite)"
+      else
+        info "settings.json exists — keeping your configuration"
+      fi
+
+      # Write version info
+      local version_hash
+      version_hash=$(git -C "$SCRIPT_DIR" rev-parse --short HEAD 2>/dev/null || echo "unknown")
+      echo "{\"hash\":\"$version_hash\",\"date\":\"$(date '+%Y-%m-%d')\",\"source\":\"$SCRIPT_DIR\",\"mode\":\"lite\"}" > "$CLAUDE_DIR/.hangar-version"
+
+      echo ""
+      success "Lite install complete!"
+      info "You have: bash-guard + secret-leak + config-protection + 3 skills"
+      info "For the full experience: bash setup.sh"
+      ;;
+
     list-categories)
       list_categories
       ;;
@@ -764,7 +811,8 @@ main() {
       echo "Usage: bash setup.sh [MODE] [OPTIONS]"
       echo ""
       echo "Modes:"
-      echo "  (no args)           Interactive wizard (first run) or sync"
+      echo "  (no args)           Full install (first run) or sync"
+      echo "  --lite              Lite install: 5 safety hooks + 3 skills (~5 min)"
       echo "  --check             Dry-run validation"
       echo "  --verify            Verify existing installation"
       echo "  --sync              Remove orphaned files + redeploy"
