@@ -1,11 +1,11 @@
 {
   "version": "1.0",
   "generated": "2026-04-06",
-  "skillCount": 36,
+  "skillCount": 38,
   "categories": {
     "design": ["design-system", "polish"],
     "quality": ["adversarial-review", "inline-review", "review-team"],
-    "teams": ["review-team", "debug-team", "security-team"],
+    "teams": ["review-team", "debug-team", "security-team", "refactor-team", "docs-team"],
     "audit": ["audit", "audit-orchestrator", "audit-runner", "project-audit"],
     "performance": ["lighthouse-quick", "context-budget", "strategic-compact"],
     "quality-gates": ["verification-loop"],
@@ -306,6 +306,22 @@
       "risk": "safe",
       "description": "Export Hangar rules to Cursor .mdc, Windsurf, and GitHub Copilot formats.",
       "triggers": ["export rules", "cursor rules", "windsurf rules", "copilot instructions", "convert rules"]
+    },
+    {
+      "id": "refactor-team",
+      "path": "core/skills/refactor-team",
+      "category": "teams",
+      "risk": "safe",
+      "description": "Parallel refactoring: restructure in worktree + characterization tests + code review.",
+      "triggers": ["refactor team", "safe refactor", "restructure code", "refactor-team"]
+    },
+    {
+      "id": "docs-team",
+      "path": "core/skills/docs-team",
+      "category": "teams",
+      "risk": "safe",
+      "description": "Parallel documentation sweep: change analysis + doc updates + completeness verification.",
+      "triggers": ["docs team", "update docs", "documentation sweep", "stale docs", "docs-team"]
     }
   ]
 }

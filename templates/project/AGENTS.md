@@ -63,6 +63,18 @@ Comprehensive security assessment:
 - `dependency-checker` — Supply chain vulnerabilities
 - `explorer-deep` — Architecture attack surface
 
+### /refactor-team
+Safe parallel refactoring with behavior locking:
+- `refactor-agent` — Restructures code in isolated worktree
+- `test-writer` — Writes characterization tests to lock current behavior
+- `code-reviewer` — Reviews refactored code for regressions
+
+### /docs-team
+Documentation sweep with completeness verification:
+- `explorer-deep` — Maps code changes to documentation impact
+- `doc-updater` — Updates stale docs, fixes references, adds missing API docs
+- `plan-reviewer` — Verifies every public API change has a doc update
+
 ## Rules
 
 - All agents use the project's CLAUDE.md for context

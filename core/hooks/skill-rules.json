@@ -151,6 +151,16 @@
       "skill": "/export-rules",
       "triggers": ["export rules", "cursor rules", "windsurf rules", "copilot instructions", "convert rules", "mdc rules"],
       "exclude": ["rules distill"]
+    },
+    {
+      "skill": "/refactor-team",
+      "triggers": ["refactor team", "safe refactor", "restructure", "refactor this", "clean up code", "extract module"],
+      "exclude": ["review team", "code review"]
+    },
+    {
+      "skill": "/docs-team",
+      "triggers": ["docs team", "update docs", "documentation sweep", "stale docs", "docs outdated", "fix documentation"],
+      "exclude": ["doc-updater", "write docs"]
     }
   ]
 }
