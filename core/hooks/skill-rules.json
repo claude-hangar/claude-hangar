@@ -126,6 +126,21 @@
       "skill": "/auth",
       "triggers": ["auth audit", "auth check", "auth security", "login audit", "session audit", "password audit", "authentication check"],
       "exclude": ["website audit", "project audit"]
+    },
+    {
+      "skill": "/review-team",
+      "triggers": ["review team", "full review", "multi-review", "team review", "parallel review", "comprehensive review"],
+      "exclude": ["code review", "plan review", "audit review"]
+    },
+    {
+      "skill": "/debug-team",
+      "triggers": ["debug team", "help me debug", "find the bug", "team debug", "debug this", "why is this broken"],
+      "exclude": ["debug mode", "debug log"]
+    },
+    {
+      "skill": "/security-team",
+      "triggers": ["security team", "security audit team", "vulnerability scan", "team security", "pentest", "full security"],
+      "exclude": ["security scan", "secret check"]
     }
   ]
 }

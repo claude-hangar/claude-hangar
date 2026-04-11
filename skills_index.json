@@ -1,15 +1,16 @@
 {
   "version": "1.0",
   "generated": "2026-04-06",
-  "skillCount": 31,
+  "skillCount": 34,
   "categories": {
     "design": ["design-system", "polish"],
-    "quality": ["adversarial-review", "inline-review"],
+    "quality": ["adversarial-review", "inline-review", "review-team"],
+    "teams": ["review-team", "debug-team", "security-team"],
     "audit": ["audit", "audit-orchestrator", "audit-runner", "project-audit"],
     "performance": ["lighthouse-quick", "context-budget", "strategic-compact"],
     "quality-gates": ["verification-loop"],
-    "security": ["deploy-check", "security-scan"],
-    "workflow": ["capture-pdf", "codebase-map", "consult", "handoff", "lesson-learned", "scan"],
+    "security": ["deploy-check", "security-scan", "security-team"],
+    "workflow": ["capture-pdf", "codebase-map", "consult", "handoff", "lesson-learned", "scan", "debug-team"],
     "documentation": ["doctor", "error-analyzer", "meta-tags", "favicon-check"],
     "git": ["git-hygiene"],
     "devops": ["freshness-check"],
@@ -264,6 +265,30 @@
       "risk": "safe",
       "description": "Audits skill quality across four dimensions (actionability, scope fit, uniqueness, currency).",
       "triggers": ["skill audit", "stocktake", "skill quality", "audit skills"]
+    },
+    {
+      "id": "review-team",
+      "path": "core/skills/review-team",
+      "category": "teams",
+      "risk": "safe",
+      "description": "Launch parallel code review agents for comprehensive multi-perspective review.",
+      "triggers": ["review team", "full review", "multi-review", "team review"]
+    },
+    {
+      "id": "debug-team",
+      "path": "core/skills/debug-team",
+      "category": "teams",
+      "risk": "safe",
+      "description": "Launch parallel debugging agents for systematic root-cause analysis.",
+      "triggers": ["debug team", "help me debug", "find the bug", "team debug"]
+    },
+    {
+      "id": "security-team",
+      "path": "core/skills/security-team",
+      "category": "teams",
+      "risk": "safe",
+      "description": "Launch parallel security analysis agents for comprehensive vulnerability assessment.",
+      "triggers": ["security team", "security audit team", "vulnerability scan", "team security"]
     }
   ]
 }
