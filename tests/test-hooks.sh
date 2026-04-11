@@ -1128,7 +1128,7 @@ fi
 # Test: minimal profile skips standard hooks
 TOTAL=$((TOTAL + 1))
 PROFILE_EXIT=0
-HANGAR_HOOK_PROFILE=minimal echo '{"tool_name":"Bash","tool_input":{"command":"echo hello"}}' | bash "$HOOKS_DIR/token-warning.sh" >/dev/null 2>&1 || PROFILE_EXIT=$?
+(export HANGAR_HOOK_PROFILE=minimal; echo '{"tool_name":"Bash","tool_input":{"command":"echo hello"}}' | bash "$HOOKS_DIR/token-warning.sh" >/dev/null 2>&1) || PROFILE_EXIT=$?
 if [ "$PROFILE_EXIT" -eq 0 ]; then
   echo "  PASS  minimal profile skips standard hook (token-warning)"
   PASS=$((PASS + 1))
@@ -1140,7 +1140,7 @@ fi
 # Test: minimal profile runs minimal hooks (bash-guard allows safe command)
 TOTAL=$((TOTAL + 1))
 PROFILE_EXIT=0
-HANGAR_HOOK_PROFILE=minimal echo '{"tool_name":"Bash","tool_input":{"command":"echo hello"}}' | bash "$HOOKS_DIR/bash-guard.sh" >/dev/null 2>&1 || PROFILE_EXIT=$?
+(export HANGAR_HOOK_PROFILE=minimal; echo '{"tool_name":"Bash","tool_input":{"command":"echo hello"}}' | bash "$HOOKS_DIR/bash-guard.sh" >/dev/null 2>&1) || PROFILE_EXIT=$?
 if [ "$PROFILE_EXIT" -eq 0 ]; then
   echo "  PASS  minimal profile runs minimal hook (bash-guard)"
   PASS=$((PASS + 1))
@@ -1152,7 +1152,7 @@ fi
 # Test: standard profile skips strict hooks
 TOTAL=$((TOTAL + 1))
 PROFILE_EXIT=0
-HANGAR_HOOK_PROFILE=standard echo '{"tool_name":"Bash","tool_input":{"command":"echo hello"}}' | bash "$HOOKS_DIR/cost-tracker.sh" >/dev/null 2>&1 || PROFILE_EXIT=$?
+(export HANGAR_HOOK_PROFILE=standard; echo '{"tool_name":"Bash","tool_input":{"command":"echo hello"}}' | bash "$HOOKS_DIR/cost-tracker.sh" >/dev/null 2>&1) || PROFILE_EXIT=$?
 if [ "$PROFILE_EXIT" -eq 0 ]; then
   echo "  PASS  standard profile skips strict hook (cost-tracker)"
   PASS=$((PASS + 1))
@@ -1164,7 +1164,7 @@ fi
 # Test: HANGAR_DISABLED_HOOKS skips named hook
 TOTAL=$((TOTAL + 1))
 PROFILE_EXIT=0
-HANGAR_DISABLED_HOOKS=bash-guard echo '{"tool_name":"Bash","tool_input":{"command":"rm -rf /"}}' | bash "$HOOKS_DIR/bash-guard.sh" >/dev/null 2>&1 || PROFILE_EXIT=$?
+(export HANGAR_DISABLED_HOOKS=bash-guard; echo '{"tool_name":"Bash","tool_input":{"command":"rm -rf /"}}' | bash "$HOOKS_DIR/bash-guard.sh" >/dev/null 2>&1) || PROFILE_EXIT=$?
 if [ "$PROFILE_EXIT" -eq 0 ]; then
   echo "  PASS  HANGAR_DISABLED_HOOKS skips named hook"
   PASS=$((PASS + 1))
