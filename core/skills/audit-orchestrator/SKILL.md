@@ -3,6 +3,7 @@ name: audit-orchestrator
 description: >
   Orchestrates /audit + /project-audit + /astro-audit + /sveltekit-audit + /db-audit + /auth-audit combinations.
   Use when: "full audit", "audit everything", "complete audit".
+effort: high
 user-invocable: true
 argument-hint: "report"
 ---

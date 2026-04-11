@@ -5,6 +5,7 @@ description: >
   Use PROACTIVELY when users request feature implementation, architectural
   changes, or complex refactoring. Automatically activated for planning tasks.
 model: opus
+effort: high
 tools: Read, Grep, Glob
 disallowedTools: Write, Edit, NotebookEdit
 maxTurns: 20

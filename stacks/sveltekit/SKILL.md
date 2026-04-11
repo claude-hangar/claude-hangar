@@ -3,6 +3,7 @@ name: sveltekit-audit
 description: >
   SvelteKit & Svelte 5 Migration, Best-Practice Audit with state persistence.
   Use when: "sveltekit-audit", "sveltekit upgrade", "svelte migration", "svelte check", "sveltekit version", "svelte 5 runes".
+effort: high
 user-invocable: true
 argument-hint: "start|continue"
 ---

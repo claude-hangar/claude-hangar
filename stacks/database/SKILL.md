@@ -3,6 +3,7 @@ name: db-audit
 description: >
   Database audit for Drizzle ORM + PostgreSQL with state persistence.
   Use when: "db-audit", "database audit", "drizzle check", "db check", "schema audit", "migration check", "postgresql audit".
+effort: high
 user-invocable: true
 argument-hint: "start|continue"
 ---

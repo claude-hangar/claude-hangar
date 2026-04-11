@@ -3,6 +3,7 @@ name: codebase-map
 description: >
   Generate a structural overview of the codebase for context recovery.
   Use when: "map", "codebase map", "overview", "orient", "what is this project", or after /compact.
+effort: low
 user-invocable: true
 argument-hint: ""
 ---

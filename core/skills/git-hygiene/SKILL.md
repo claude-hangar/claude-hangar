@@ -4,6 +4,7 @@ description: >
   Git repository hygiene check. Stale branches, large files, commit conventions.
   Use when: "git cleanup", "git hygiene", "clean up branches",
   "git-hygiene", "stale branches", "git cleanup".
+effort: low
 user-invocable: true
 argument-hint: ""
 ---

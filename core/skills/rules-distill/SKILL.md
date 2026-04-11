@@ -1,6 +1,7 @@
 ---
 name: rules-distill
 description: Scans all skills and rules to extract cross-cutting principles that should become shared rules. Meta-governance tool for keeping rules synchronized with growing skill collections.
+effort: high
 user-invocable: true
 argument-hint: ""
 ---

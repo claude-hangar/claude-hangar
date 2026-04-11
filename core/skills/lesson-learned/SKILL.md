@@ -3,6 +3,7 @@ name: lesson-learned
 description: >
   Extract learnings and save as memory files (file-based memory system).
   Use when: "lesson learned", "what did we learn", "learning", "remember".
+effort: low
 user-invocable: true
 argument-hint: "session|review"
 ---

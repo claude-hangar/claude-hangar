@@ -1,6 +1,7 @@
 ---
 name: prompt-optimizer
 description: Analyzes draft prompts, identifies gaps, matches available skills/agents, and recommends optimal workflows. Advisory only — never executes, only optimizes. Use when unsure which skills or approach to use for a task.
+effort: low
 user-invocable: true
 argument-hint: ""
 ---

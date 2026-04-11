@@ -1,6 +1,7 @@
 ---
 name: context-budget
 description: Analyzes where context tokens are being spent and identifies optimization opportunities. Use when sessions feel slow or context is running out.
+effort: low
 user-invocable: true
 argument-hint: ""
 ---

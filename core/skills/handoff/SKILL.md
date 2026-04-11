@@ -1,6 +1,7 @@
 ---
 name: handoff
 description: Structured session handoff — preserves context for seamless continuation across sessions.
+effort: low
 user-invocable: true
 argument-hint: "create|read|clean"
 ---

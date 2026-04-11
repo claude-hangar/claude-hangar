@@ -3,6 +3,7 @@ name: audit
 description: >
   Systematic website audit (stack detection, 9 phases).
   Use when: "audit", "website audit", "site audit", "check website".
+effort: high
 user-invocable: true
 argument-hint: "start|continue|report"
 ---

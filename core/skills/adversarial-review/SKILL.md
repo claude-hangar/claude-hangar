@@ -3,6 +3,7 @@ name: adversarial-review
 description: >
   Critical review (min. 5 findings). Modes: code, audit, plan.
   Use when: "review", "critical review", "code review", "plan review", "audit review".
+effort: high
 user-invocable: true
 argument-hint: "code|audit|plan"
 ---

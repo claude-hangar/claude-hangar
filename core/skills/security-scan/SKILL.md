@@ -3,6 +3,7 @@ name: security-scan
 description: >
   Security scan for Claude Code projects (secrets, MCP permissions, hook safety, dependencies).
   Use when: "security scan", "check security", "is this secure", "before deploy security", "scan for secrets".
+effort: high
 user-invocable: true
 argument-hint: "mcp|hooks|full"
 ---

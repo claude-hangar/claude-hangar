@@ -5,6 +5,7 @@ description: >
   decisions. Use PROACTIVELY when planning new features, refactoring large systems,
   or making architectural decisions.
 model: opus
+effort: high
 tools: Read, Grep, Glob, WebSearch, WebFetch
 disallowedTools: Write, Edit, NotebookEdit
 maxTurns: 25
