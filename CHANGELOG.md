@@ -13,15 +13,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`.claude-plugin/plugin.json`** — Plugin manifest enabling installation via `/plugin install`. Declares 32 skills (6 paths including stacks), 21 agents, hooks config.
 - **`hooks/hooks.json`** — Centralized hook event mapping for plugin system. Maps all 27 hooks across 14 event types with `${CLAUDE_PLUGIN_ROOT}` paths.
 - **`AUDIT.md`** — Complete inventory of all 100+ components with status, versions, and issues
-- **`RESEARCH.md`** — External findings: CLI v2.1.101, MCP spec 2025-11-25, SDK updates, 20+ competitor analyses
+- **`RESEARCH.md`** — External findings: CLI v2.1.101, MCP spec 2025-11-25, SDKs, 20+ competitor analyses
 - **`TODO.md`** — 5 Must + 10 Should + 14 Nice-to-have prioritized upgrade tasks
+- **3 new hooks** — `post-tool-failure.sh` (PostToolUseFailure), `session-end.sh` (SessionEnd), `pre-compact.sh` (PreCompact) for recently added Claude Code lifecycle events
+- **CI template** — `ci-claude-review.yml` using official `anthropics/claude-code-action` for automated PR reviews
+- **`effort` field** — Added to 29 skills and 10 agents (low for quick checks, high for deep analysis)
 
 ### Changed
 
 #### Full Audit & Upgrade (2026-04-11)
-- **All 14 Sonnet agents → Opus** — `build-resolver-go`, `build-resolver-python`, `build-resolver-typescript`, `commit-reviewer`, `dependency-checker`, `doc-updater`, `explorer`, `go-reviewer`, `loop-operator`, `plan-reviewer`, `python-reviewer`, `tdd-guide`, `test-writer`, `typescript-reviewer`
-- **GitHub MCP** — Replaced deprecated `@modelcontextprotocol/server-github` (archived) with remote HTTP `https://api.githubcopilot.com/mcp/` (OAuth). Updated `core/mcp/registry.json` + `stacks/github/mcp.json`
-- **PostgreSQL MCP** — Replaced broken `@crystaldba/postgres-mcp` (npm not found) with `@bytebase/dbhub`. Updated `core/mcp/registry.json` + `stacks/database/mcp.json`
+- **All 14 Sonnet agents → Opus** — build-resolver-go/python/typescript, commit-reviewer, dependency-checker, doc-updater, explorer, go-reviewer, loop-operator, plan-reviewer, python-reviewer, tdd-guide, test-writer, typescript-reviewer
+- **GitHub MCP** — Deprecated `@modelcontextprotocol/server-github` → remote HTTP `https://api.githubcopilot.com/mcp/` (OAuth)
+- **PostgreSQL MCP** — Broken `@crystaldba/postgres-mcp` → `@bytebase/dbhub` (supports PostgreSQL, MySQL, SQLite)
+- **Skill frontmatter** — Standardized 35 SKILL.md files to official hyphenated format (`user-invocable`, `argument-hint`, `disable-model-invocation`)
+- **settings.json.template** — Added PostToolUseFailure, PreCompact, SessionEnd hook events
+- **Documentation** — Updated writing-skills.md (9 new fields, variables), writing-hooks.md (7 new events, hookSpecificOutput format), writing-agents.md (new fields, model table), mcp-guide.md (HTTP transport, OAuth, .mcp.json, scopes)
 
 ### Fixed
 
