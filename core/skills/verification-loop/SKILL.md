@@ -1,8 +1,8 @@
 ---
 name: verification-loop
 description: Pre-PR verification pipeline with plan validation, build, types, lint, test, security, diff review, and consistency checks. Verification gate — use before creating a PR or merging.
-user_invocable: true
-argument_hint: ""
+user-invocable: true
+argument-hint: ""
 ---
 
 # /verify — Pre-PR Verification Loop

@@ -3,8 +3,8 @@ name: astro-audit
 description: >
   Astro Migration & Best-Practice Audit with state persistence.
   Use when: "astro-audit", "astro upgrade", "astro migration", "astro check", "astro version".
-user_invocable: true
-argument_hint: "start|continue"
+user-invocable: true
+argument-hint: "start|continue"
 ---
 
 <!-- AI-QUICK-REF

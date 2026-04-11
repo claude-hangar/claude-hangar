@@ -1,8 +1,8 @@
 ---
 name: handoff
 description: Structured session handoff — preserves context for seamless continuation across sessions.
-user_invocable: true
-argument_hint: "create|read|clean"
+user-invocable: true
+argument-hint: "create|read|clean"
 ---
 
 # /handoff — Structured Session Handoff

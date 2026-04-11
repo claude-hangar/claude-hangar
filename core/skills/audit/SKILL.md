@@ -3,8 +3,8 @@ name: audit
 description: >
   Systematic website audit (stack detection, 9 phases).
   Use when: "audit", "website audit", "site audit", "check website".
-user_invocable: true
-argument_hint: "start|continue|report"
+user-invocable: true
+argument-hint: "start|continue|report"
 ---
 
 <!-- AI-QUICK-REF

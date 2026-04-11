@@ -3,8 +3,8 @@ name: doctor
 description: >
   Project health check meta-skill. Runs git-hygiene, deploy-check, and freshness-check in sequence.
   Use when: "doctor", "health check", "project health", "is everything ok", "check project".
-user_invocable: true
-argument_hint: ""
+user-invocable: true
+argument-hint: ""
 ---
 
 <!-- AI-QUICK-REF

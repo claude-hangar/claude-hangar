@@ -1,8 +1,8 @@
 ---
 name: skill-stocktake
 description: Audits skill quality across four dimensions (actionability, scope fit, uniqueness, currency). Quick Scan for changed skills, Full Stocktake for complete audit. Use for maintenance as the skill collection grows.
-user_invocable: true
-argument_hint: "quick|full"
+user-invocable: true
+argument-hint: "quick|full"
 ---
 
 # /skill-stocktake — Skill Quality Audit

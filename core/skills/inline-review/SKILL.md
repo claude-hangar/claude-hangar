@@ -3,8 +3,8 @@ name: inline-review
 description: >
   Quick self-review checklist after code changes. Lightweight alternative to adversarial-review.
   Use when: "review my changes", "self-review", "quick review", "check my work", or automatically after significant edits.
-user_invocable: true
-argument_hint: ""
+user-invocable: true
+argument-hint: ""
 ---
 
 <!-- AI-QUICK-REF

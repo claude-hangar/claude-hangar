@@ -3,8 +3,8 @@ name: auth-audit
 description: >
   Custom auth security audit (bcryptjs + sessions, no OAuth/external provider).
   Use when: "auth-audit", "auth check", "auth security", "login audit", "session audit", "password audit".
-user_invocable: true
-argument_hint: "start|continue"
+user-invocable: true
+argument-hint: "start|continue"
 ---
 
 <!-- AI-QUICK-REF

@@ -3,8 +3,8 @@ name: polish
 description: >
   Frontend quick wins to wow effects (6 dimensions).
   Use when: "polish", "beautify", "improve", "wow", "improve design", "enhance", "quick wins".
-user_invocable: true
-argument_hint: "scan|fix|wow"
+user-invocable: true
+argument-hint: "scan|fix|wow"
 ---
 
 <!-- AI-QUICK-REF
