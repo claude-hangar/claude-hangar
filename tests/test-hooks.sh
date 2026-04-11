@@ -1109,6 +1109,123 @@ else
 fi
 
 # ============================================================
+# Hook Profile Switching (hook-gate.sh)
+# ============================================================
+
+echo ""
+echo "--- Hook Profile Switching ---"
+
+HOOK_GATE="$REPO_ROOT/core/lib/hook-gate.sh"
+TOTAL=$((TOTAL + 1))
+if [ -f "$HOOK_GATE" ]; then
+  echo "  PASS  hook-gate.sh exists"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  hook-gate.sh not found"
+  FAIL=$((FAIL + 1))
+fi
+
+# Test: minimal profile skips standard hooks
+TOTAL=$((TOTAL + 1))
+PROFILE_EXIT=0
+HANGAR_HOOK_PROFILE=minimal echo '{"tool_name":"Bash","tool_input":{"command":"echo hello"}}' | bash "$HOOKS_DIR/token-warning.sh" >/dev/null 2>&1 || PROFILE_EXIT=$?
+if [ "$PROFILE_EXIT" -eq 0 ]; then
+  echo "  PASS  minimal profile skips standard hook (token-warning)"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  minimal profile should skip standard hook (exit $PROFILE_EXIT)"
+  FAIL=$((FAIL + 1))
+fi
+
+# Test: minimal profile runs minimal hooks (bash-guard allows safe command)
+TOTAL=$((TOTAL + 1))
+PROFILE_EXIT=0
+HANGAR_HOOK_PROFILE=minimal echo '{"tool_name":"Bash","tool_input":{"command":"echo hello"}}' | bash "$HOOKS_DIR/bash-guard.sh" >/dev/null 2>&1 || PROFILE_EXIT=$?
+if [ "$PROFILE_EXIT" -eq 0 ]; then
+  echo "  PASS  minimal profile runs minimal hook (bash-guard)"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  minimal profile should run minimal hook (exit $PROFILE_EXIT)"
+  FAIL=$((FAIL + 1))
+fi
+
+# Test: standard profile skips strict hooks
+TOTAL=$((TOTAL + 1))
+PROFILE_EXIT=0
+HANGAR_HOOK_PROFILE=standard echo '{"tool_name":"Bash","tool_input":{"command":"echo hello"}}' | bash "$HOOKS_DIR/cost-tracker.sh" >/dev/null 2>&1 || PROFILE_EXIT=$?
+if [ "$PROFILE_EXIT" -eq 0 ]; then
+  echo "  PASS  standard profile skips strict hook (cost-tracker)"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  standard profile should skip strict hook (exit $PROFILE_EXIT)"
+  FAIL=$((FAIL + 1))
+fi
+
+# Test: HANGAR_DISABLED_HOOKS skips named hook
+TOTAL=$((TOTAL + 1))
+PROFILE_EXIT=0
+HANGAR_DISABLED_HOOKS=bash-guard echo '{"tool_name":"Bash","tool_input":{"command":"rm -rf /"}}' | bash "$HOOKS_DIR/bash-guard.sh" >/dev/null 2>&1 || PROFILE_EXIT=$?
+if [ "$PROFILE_EXIT" -eq 0 ]; then
+  echo "  PASS  HANGAR_DISABLED_HOOKS skips named hook"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  HANGAR_DISABLED_HOOKS should skip named hook (exit $PROFILE_EXIT)"
+  FAIL=$((FAIL + 1))
+fi
+
+# Test: Every hook declares HOOK_NAME and HOOK_MIN_PROFILE
+TOTAL=$((TOTAL + 1))
+MISSING_GATE=0
+for hook_file in "$HOOKS_DIR"/*.sh; do
+  [ -f "$hook_file" ] || continue
+  hook_name=$(basename "$hook_file")
+  if ! grep -q 'HOOK_NAME=.*HOOK_MIN_PROFILE=' "$hook_file"; then
+    echo "    WARN  $hook_name missing hook-gate integration"
+    MISSING_GATE=$((MISSING_GATE + 1))
+  fi
+done
+if [ "$MISSING_GATE" -eq 0 ]; then
+  echo "  PASS  all hooks declare HOOK_NAME and HOOK_MIN_PROFILE"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  $MISSING_GATE hooks missing hook-gate integration"
+  FAIL=$((FAIL + 1))
+fi
+
+# Test: Every hook sources hook-gate.sh
+TOTAL=$((TOTAL + 1))
+MISSING_SOURCE=0
+for hook_file in "$HOOKS_DIR"/*.sh; do
+  [ -f "$hook_file" ] || continue
+  if ! grep -q 'source.*hook-gate\.sh' "$hook_file"; then
+    echo "    WARN  $(basename "$hook_file") does not source hook-gate.sh"
+    MISSING_SOURCE=$((MISSING_SOURCE + 1))
+  fi
+done
+if [ "$MISSING_SOURCE" -eq 0 ]; then
+  echo "  PASS  all hooks source hook-gate.sh"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  $MISSING_SOURCE hooks do not source hook-gate.sh"
+  FAIL=$((FAIL + 1))
+fi
+
+# Test: Profile counts match documentation
+TOTAL=$((TOTAL + 1))
+MINIMAL_COUNT=$(grep -l 'HOOK_MIN_PROFILE="minimal"' "$HOOKS_DIR"/*.sh 2>/dev/null | wc -l)
+STANDARD_COUNT=$(grep -l 'HOOK_MIN_PROFILE="standard"' "$HOOKS_DIR"/*.sh 2>/dev/null | wc -l)
+STRICT_COUNT=$(grep -l 'HOOK_MIN_PROFILE="strict"' "$HOOKS_DIR"/*.sh 2>/dev/null | wc -l)
+PROFILE_TOTAL=$((MINIMAL_COUNT + STANDARD_COUNT + STRICT_COUNT))
+HOOK_FILE_COUNT=$(find "$HOOKS_DIR" -name '*.sh' | wc -l)
+if [ "$PROFILE_TOTAL" -eq "$HOOK_FILE_COUNT" ] && [ "$MINIMAL_COUNT" -eq 3 ] && [ "$STRICT_COUNT" -eq 6 ]; then
+  echo "  PASS  profile distribution: $MINIMAL_COUNT minimal, $STANDARD_COUNT standard, $STRICT_COUNT strict (total: $PROFILE_TOTAL)"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  profile distribution mismatch: $MINIMAL_COUNT minimal, $STANDARD_COUNT standard, $STRICT_COUNT strict (total: $PROFILE_TOTAL, files: $HOOK_FILE_COUNT)"
+  FAIL=$((FAIL + 1))
+fi
+
+# ============================================================
 # Summary
 # ============================================================
 

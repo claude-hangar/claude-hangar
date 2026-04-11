@@ -14,7 +14,7 @@
 # No set -euo pipefail — hooks must be resilient on Windows
 
 # Hook profile gate
-export HOOK_NAME="stop-batch-format"; export HOOK_MIN_PROFILE="strict"
+export HOOK_NAME="stop-batch-format"; export HOOK_MIN_PROFILE="standard"
 source "${HOME}/.claude/lib/hook-gate.sh" 2>/dev/null || true
 
 COLLECT_FILE="$HOME/.claude/.batch-format/edited-files.txt"
