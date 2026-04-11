@@ -55,7 +55,7 @@ test_assert \
   "registry.json is valid JSON" \
   "node -e \"JSON.parse(require('fs').readFileSync('$REGISTRY_PATH','utf8'))\" 2>/dev/null"
 
-# Check required fields in registry
+# Check required fields in registry (package OR url required)
 REGISTRY_FIELDS=$(node -e "
   const r = JSON.parse(require('fs').readFileSync('$REGISTRY_PATH','utf8'));
   const s = r.servers || {};
@@ -64,14 +64,14 @@ REGISTRY_FIELDS=$(node -e "
     if (!srv.name) errors.push(id + ': missing name');
     if (!srv.category) errors.push(id + ': missing category');
     if (!srv.description) errors.push(id + ': missing description');
-    if (!srv.package) errors.push(id + ': missing package');
+    if (!srv.package && !srv.url) errors.push(id + ': missing package or url');
   }
   if (errors.length) { console.log(errors.join('; ')); process.exit(1); }
   console.log('OK');
 " 2>&1) || true
 
 test_assert \
-  "registry entries have required fields (name, category, description, package)" \
+  "registry entries have required fields (name, category, description, package/url)" \
   "[ '$REGISTRY_FIELDS' = 'OK' ]"
 
 # Check core servers are marked required
@@ -112,20 +112,24 @@ while IFS= read -r mcp_file; do
     "stacks/$stack_name/mcp.json is valid JSON" \
     "node -e \"JSON.parse(require('fs').readFileSync('$np','utf8'))\" 2>/dev/null"
 
-  # Check MCP config structure (each key must have command + args)
+  # Check MCP config structure (stdio needs command+args, http needs url)
   STRUCT=$(node -e "
     const cfg = JSON.parse(require('fs').readFileSync('$np','utf8'));
     const errors = [];
     for (const [id, srv] of Object.entries(cfg)) {
-      if (!srv.command) errors.push(id + ': missing command');
-      if (!Array.isArray(srv.args)) errors.push(id + ': missing or invalid args');
+      if (srv.type === 'http') {
+        if (!srv.url) errors.push(id + ': HTTP server missing url');
+      } else {
+        if (!srv.command) errors.push(id + ': missing command');
+        if (!Array.isArray(srv.args)) errors.push(id + ': missing or invalid args');
+      }
     }
     if (errors.length) { console.log(errors.join('; ')); process.exit(1); }
     console.log('OK');
   " 2>&1) || true
 
   test_assert \
-    "stacks/$stack_name/mcp.json servers have command + args" \
+    "stacks/$stack_name/mcp.json servers have valid config" \
     "[ '$STRUCT' = 'OK' ]"
 done < <(find "$REPO_ROOT/stacks" -name 'mcp.json' 2>/dev/null)
 
@@ -236,7 +240,50 @@ test_assert \
   "[ '$CONSISTENCY' = 'OK' ]"
 
 # ============================================================
-# 6. Install script exists
+# 6. Remote HTTP Server Validation
+# ============================================================
+
+echo ""
+echo "--- Remote HTTP Servers ---"
+
+HTTP_SERVERS=$(node -e "
+  const r = JSON.parse(require('fs').readFileSync('$REGISTRY_PATH','utf8'));
+  const s = r.servers || {};
+  const httpServers = Object.entries(s).filter(([,v]) => v.transport === 'http');
+  const errors = [];
+  for (const [id, srv] of httpServers) {
+    if (!srv.url) errors.push(id + ': HTTP server missing url');
+    if (!srv.auth) errors.push(id + ': HTTP server missing auth type');
+    if (srv.url && !srv.url.startsWith('https://')) errors.push(id + ': URL must use HTTPS');
+  }
+  console.log(JSON.stringify({ count: httpServers.length, errors }));
+" 2>&1) || true
+
+HTTP_COUNT=$(echo "$HTTP_SERVERS" | node -e "const d=JSON.parse(require('fs').readFileSync(0,'utf8'));console.log(d.count)" 2>/dev/null || echo "0")
+HTTP_ERRORS=$(echo "$HTTP_SERVERS" | node -e "const d=JSON.parse(require('fs').readFileSync(0,'utf8'));console.log(d.errors.length)" 2>/dev/null || echo "0")
+
+test_assert \
+  "at least 1 remote HTTP server in registry" \
+  "[ '$HTTP_COUNT' -gt 0 ]"
+
+test_assert \
+  "all HTTP servers have url + auth + HTTPS ($HTTP_COUNT servers)" \
+  "[ '$HTTP_ERRORS' -eq 0 ]"
+
+# Verify specific expected HTTP servers
+for expected in github notion sentry stripe linear; do
+  HAS_SERVER=$(node -e "
+    const r = JSON.parse(require('fs').readFileSync('$REGISTRY_PATH','utf8'));
+    console.log(r.servers['$expected'] ? 'yes' : 'no');
+  " 2>/dev/null || echo "no")
+
+  test_assert \
+    "registry has '$expected' server" \
+    "[ '$HAS_SERVER' = 'yes' ]"
+done
+
+# ============================================================
+# 7. Install script exists
 # ============================================================
 
 echo ""
