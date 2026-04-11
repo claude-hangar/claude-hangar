@@ -158,6 +158,30 @@ Break large workflows into phase files under `phases/` with an orchestrator SKIL
 
 Skills accept arguments: `/skill docker` runs Docker checks only. Define modes as a table in your SKILL.md.
 
+### Skill-Scoped Hooks
+
+The `hooks` frontmatter field lets you attach hooks that only fire when a specific skill is active. This keeps the global hook configuration clean while adding skill-specific behavior.
+
+```yaml
+---
+name: verification-loop
+description: Pre-PR verification pipeline
+hooks:
+  - event: PreToolUse
+    matcher: "Bash"
+    command: "bash ${CLAUDE_SKILL_DIR}/hooks/verify-before-run.sh"
+  - event: Stop
+    command: "bash ${CLAUDE_SKILL_DIR}/hooks/save-verification-report.sh"
+---
+```
+
+Use `${CLAUDE_SKILL_DIR}` to reference hook scripts stored alongside the skill. This keeps skill-specific hooks co-located with the skill they belong to, rather than in the global hooks directory.
+
+**When to use skill-scoped hooks:**
+- The hook only makes sense in the context of this skill
+- The hook needs access to skill-specific data or state
+- You want to avoid polluting the global hook list
+
 ---
 
 ## Trigger Integration
