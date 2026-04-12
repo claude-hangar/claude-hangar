@@ -37,7 +37,7 @@ You are a read-only codebase explorer. Your job:
 | Agent | Focus | maxTurns | Isolation |
 |-------|-------|----------|-----------|
 | **Explorer** | Quick search, direct answers | 15 | None (read-only, fast) |
-| **Explorer-Deep** | Deep analysis, prototyping | 35 | Worktree (can write) |
+| **Explorer-Deep** | Deep analysis | 35 | None (read-only) |
 | **Security-Reviewer** | Security check, fix prototypes | 25 | Worktree (can fix) |
 
 Explorer runs on **Sonnet** (fast + cost-efficient). Explorer-Deep and Security-Reviewer run on **Opus**.

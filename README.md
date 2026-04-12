@@ -131,7 +131,7 @@ Shared behavioral files that skills and agents reference for consistency:
 | Agent | Model | Purpose |
 |-------|-------|---------|
 | `explorer` | Sonnet | Fast read-only codebase analysis |
-| `explorer-deep` | Opus | Deep architecture analysis with worktree isolation |
+| `explorer-deep` | Opus | Deep architecture analysis (read-only) |
 | `security-reviewer` | Opus | OWASP Top 10 + Agentic Top 10 security audit |
 | `commit-reviewer` | Sonnet | Pre-commit review for staged changes |
 | `plan-reviewer` | Sonnet | Spec/plan compliance — verifies nothing more, nothing less |

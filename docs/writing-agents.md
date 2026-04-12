@@ -66,7 +66,7 @@ Guidelines: Use `opus` for all agents (project default). Pair with `effort: low`
 | Agent | Model | Effort | Tools | Isolation | maxTurns |
 |-------|-------|--------|-------|-----------|----------|
 | `explorer` | opus | low | Read, Glob, Grep, Bash, WebFetch | none | 15 |
-| `explorer-deep` | opus | high | All + Write/Edit | worktree | 35 |
+| `explorer-deep` | opus | high | Read, Glob, Grep, Bash, WebFetch, WebSearch | none | 35 |
 | `security-reviewer` | opus | high | All + Write/Edit | worktree | 25 |
 | `commit-reviewer` | opus | low | Bash, Read, Grep, Glob | none | 10 |
 | `dependency-checker` | opus | low | Bash, Read, Grep, Glob, WebSearch | none | 10 |

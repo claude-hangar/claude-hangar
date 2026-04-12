@@ -408,7 +408,28 @@ Claude Hangar ships with **27 hooks** across all lifecycle events:
 | TaskCompleted | 1 | task-completed-gate |
 | TaskCreated | 1 | task-created-init |
 | SubagentStart/Stop | 1 | subagent-tracker |
-| WorktreeCreate | 1 | worktree-init |
+| WorktreeCreate | 1 | worktree-init (async) |
+
+---
+
+## WorktreeCreate: Must Be Async
+
+`WorktreeCreate` hooks **must** use `"async": true`. Claude Code's runtime expects synchronous hooks to produce stdout output confirming success. A silent `exit 0` (the standard allow pattern) is interpreted as "no successful output", which **blocks all agents with `isolation: worktree`**.
+
+```json
+{
+  "WorktreeCreate": [{
+    "matcher": "",
+    "hooks": [{
+      "type": "command",
+      "command": "bash ~/.claude/hooks/worktree-init.sh",
+      "async": true
+    }]
+  }]
+}
+```
+
+Async hooks run in the background and cannot block worktree creation. This is the only safe pattern for WorktreeCreate hooks.
 
 ---
 

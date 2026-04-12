@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 # Hook: Worktree Init (WorktreeCreate event, Claude Code 2.1.89+)
 # Trigger: WorktreeCreate
+# Mode: async (MUST be registered with "async": true)
 #
 # When a git worktree is created for an agent:
 # 1. Logs the worktree path and branch for observability
-# 2. Provides context about the project to the agent
 #
-# IMPORTANT: No stdout output on the "allow" path!
-# Git Bash redirects stdout to stderr (Issue #20034).
+# IMPORTANT: This hook MUST run async. Synchronous WorktreeCreate hooks
+# that produce no stdout cause "no successful output" failures in Claude Code,
+# blocking all agents with isolation: worktree.
 
 # No set -euo pipefail — hooks must be resilient on Windows
 
@@ -20,7 +21,7 @@ INPUT=$(cat 2>/dev/null) || true
 
 export HOOK_INPUT="$INPUT"
 
-# Log and provide context
+# Log for observability (stderr only — no stdout to avoid Git Bash Issue #20034)
 node -e "
 const input = (() => {
   try { return JSON.parse(process.env.HOOK_INPUT || '{}'); }
@@ -31,8 +32,7 @@ const worktreePath = input.worktree_path || input.path || '';
 const branch = input.branch || '';
 
 if (worktreePath) {
-  // Log for observability (stderr, not stdout)
-  process.stderr.write('WorktreeCreate: ' + worktreePath + (branch ? ' (' + branch + ')' : '') + '\\n');
+  process.stderr.write('WorktreeCreate: ' + worktreePath + (branch ? ' (' + branch + ')' : '') + '\n');
 }
 " 2>/dev/null || true
 

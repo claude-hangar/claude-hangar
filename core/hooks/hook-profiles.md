@@ -84,7 +84,7 @@ The gate script (`core/lib/hook-gate.sh`) checks:
 | `task-completed-gate` | TaskCompleted | 4-level quality gate |
 | `task-created-init` | TaskCreated | Initialize task metadata |
 | `token-warning` | PostToolUse | Alert at 70%/80% context |
-| `worktree-init` | WorktreeCreate | Initialize worktree |
+| `worktree-init` | WorktreeCreate | Initialize worktree (async) |
 | `post-tool-failure` | PostToolUseFailure | Capture tool failure patterns |
 | `pre-compact` | PreCompact | Save critical state before compaction |
 | `session-end` | SessionEnd | Rich session end data (duration, reason) |

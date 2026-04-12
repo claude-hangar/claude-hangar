@@ -253,7 +253,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/core/hooks/worktree-init.sh"
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/core/hooks/worktree-init.sh",
+            "async": true
           }
         ]
       }

@@ -212,7 +212,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ~/.claude/hooks/worktree-init.sh"
+            "command": "bash ~/.claude/hooks/worktree-init.sh",
+            "async": true
           }
         ]
       }

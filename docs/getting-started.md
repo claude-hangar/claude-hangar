@@ -94,7 +94,7 @@ Setup copies files from the repo into `~/.claude/`:
     worktree-init.sh           #   WorktreeInit — initializes worktree environment
   agents/                          # 21 agent definitions
     explorer.md                    #   Quick codebase search (Sonnet, read-only)
-    explorer-deep.md               #   Deep analysis (Opus, worktree isolation)
+    explorer-deep.md               #   Deep analysis (Opus, read-only)
     security-reviewer.md           #   Security review (Opus, OWASP Top 10)
     commit-reviewer.md             #   Pre-commit review (Sonnet, read-only)
     plan-reviewer.md               #   Spec/plan compliance (Sonnet, read-only)
