@@ -191,24 +191,41 @@ claude install thedotmack/claude-mem
 | Codebase Intel | v1.34 | Queryable `.planning/intel/` JSON store |
 | Execution Profiles | v1.34 | dev/research/review context modes |
 
-**Install (local only — avoids global conflicts):**
+**Install — two modes:**
 
 ```bash
+# Option A: local per-project (safest default)
 cd your-project
 npx get-shit-done-cc --claude --local
+
+# Option B: global alongside Hangar (verified working with v1.34.2)
+npx get-shit-done-cc --claude --global
 ```
 
-**Compatibility:** GSD v1 installed locally (`.claude/`) does not conflict with Hangar's global `~/.claude/` config. All GSD files use `gsd-` prefix. **Do NOT install globally** — this would conflict with Hangar's statusline and hooks. Requires Node.js >= 22.
+**Compatibility (verified on v1.34.2 + Hangar):**
+- All GSD files use `gsd-` prefix — no namespace collision with Hangar skills/agents/commands
+- GSD installer auto-detects existing statusline and skips it (pass `--force-statusline` to override)
+- GSD's 8 hooks (4 PreToolUse, 2 PostToolUse, 2 SessionStart) coexist with Hangar's hooks — Claude Code runs all registered hooks independently
+- Requires Node.js >= 22
 
-**Conflict zones (global install only):**
+**Global install conflict zones (know before you run):**
 
 | Area | Risk | Detail |
 |------|------|--------|
-| statusLine | HIGH | Only one active — GSD would replace Hangar's |
-| settings.json hooks | MEDIUM | Both register SessionStart, PostToolUse, PreToolUse |
-| package.json | MEDIUM | GSD writes `{"type":"commonjs"}` |
+| statusLine | LOW | GSD detects existing and skips (`--force-statusline` to override) |
+| settings.json hooks | LOW | Coexist as independent entries — both fire |
+| package.json | MEDIUM | GSD writes `{"type":"commonjs"}` to `~/.claude/package.json` |
 
-**Recommendation:** Always use `--local` when combining with Hangar.
+**Pre-install safety:** Always back up before a global install:
+
+```bash
+tar -czf ~/.claude/backups/pre-gsd/skills-agents-commands-$(date +%Y%m%d).tar.gz \
+  -C ~/.claude skills agents commands
+```
+
+**Recommendation:** Local (`--local`) is safest for most users. Use `--global` if you want GSD available across all projects and have backed up your Hangar config.
+
+**Automation layer — `/gsd-orchestrate`:** Hangar ships a dedicated skill that drives GSD v1 through its full lifecycle (map → milestone → discuss → plan → execute → verify) with three intelligence modes (checkpoint / full-auto / assisted), Opus-only subagent delegation, evidence-first answer protocol, and overnight batch runs across multiple projects. See [Tutorial: GSD Orchestrator](tutorials/gsd-orchestrate.md).
 
 ---
 

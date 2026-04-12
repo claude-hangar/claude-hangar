@@ -15,6 +15,7 @@
 | Skills | [Astro-Audit](skills/astro-audit.md) | Astro-spezifisch — Upgrade-Entscheidung? |
 | Skills | [Capture-PDF](skills/capture-pdf.md) | Website als PDF — alle Seiten + interaktive Zustaende |
 | Skills | [Explorer](skills/explorer.md) | Agent: Wofuer? Wie starten? |
+| Skills | [GSD Orchestrator](gsd-orchestrate.md) | GSD v1 automatisiert — Checkpoint, Full-Auto, Overnight-Batch |
 | Meta | [Neue Projekte](neue-projekte.md) | Neues Projekt/Skill/Agent hinzufuegen |
 
 ---

@@ -180,6 +180,7 @@ Shared behavioral files that skills and agents reference for consistency:
 | `/lesson-learned` | Extract and persist learnings |
 | `/audit-orchestrator` | Multi-audit coordination |
 | `/audit-runner` | Autonomous batch audit execution |
+| `/gsd-orchestrate` | GSD v1 end-to-end automation (checkpoint/full-auto/assisted, batch overnight runs) |
 | `/handoff` | Structured session handoff for seamless context continuity |
 | `/codebase-map` | Structural overview for context recovery after /compact |
 | `/doctor` | Project health check (git-hygiene + deploy-check + freshness) |
