@@ -271,7 +271,7 @@ D:/backupblu/github/api-service  ;  --token-budget=1500000 --to=3
 # D:/backupblu/github/admin-panel
 ```
 
-**Per-project option syntax:** Append `  ;  <options>` after the path. Overrides the run-level options for that one project.
+**Per-project option syntax:** Append `; <options>` after the path (e.g. `path ; --to=3`). Overrides the run-level options for that one project.
 
 Run:
 
@@ -415,42 +415,6 @@ Per-project rollback:
 ```
 
 Uses `/gsd-undo` internally for each commit. Safe — checks dependency order before reverting.
-
-## Batch Mode (Overnight Runs)
-
-Create a file `projects.txt`:
-
-```
-D:/backupblu/github/my-site
-D:/backupblu/github/api-service
-D:/backupblu/github/admin-panel
-```
-
-Run:
-
-```
-/gsd-orchestrate "Optimize performance and security" --batch=projects.txt --mode=full-auto
-```
-
-Per-project loop:
-
-```
-for project in batch:
-    cd project
-    verify git clean
-    run /gsd-orchestrate <goal> --mode=full-auto
-    collect report → ~/.claude/orchestrator-batch/<date>/<project>.md
-    on failure: log, continue
-cd back to starting directory
-generate batch summary → ~/.claude/orchestrator-batch/<date>/SUMMARY.md
-```
-
-Batch summary contains:
-- Projects completed / failed / skipped
-- Total tokens used
-- Per-project decision count (auto-decided vs. gap-flagged)
-- Commits created per project
-- Next-steps list for user review
 
 ## State File (`.gsd-orchestrate-state.json`)
 
