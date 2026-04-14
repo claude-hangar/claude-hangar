@@ -17,17 +17,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`tests/test-hooks.sh`** — 3 neue Tests fuer pre-compact Block-Gate (default disabled, empty input, enabled without wip markers).
 - **`TODO.md`** — Neuer Nice-to-have N1: Migration continuous-poll-Hooks zu Plugin-Monitors sobald Schema stabilisiert.
 
-### Changed
-
-#### Freshness Sync — Claude Code v2.1.105 + Astro 6.1.6 + SvelteKit 2.57.1 (2026-04-14)
-- **`docs/claude-code-referenz.md`** — Header auf v2.1.105 (13. April 2026) aktualisiert; neue Abschnitte fuer v2.1.101 und v2.1.105 (EnterWorktree path-Param, blockierende PreCompact-Hooks, `monitors` Plugin-Manifest-Feld, `/proactive` Alias, `/team-onboarding`, OS-CA-Store-Trust, CRITICAL command-injection fix im LSP `which`-Fallback, zahlreiche Resume/Permission/MCP/Plugin-Fixes)
-- **`stacks/astro/versions/v6-beta/changelog.md`** — Eintrag fuer Astro 6.1.6 ergaenzt (Actions `ActionsWithoutServerOutputError` bei `output: 'static'` + Adapter, Special-Chars in inline `<script>`, SCSS/CSS-Module HMR statt Full-Reload); As-of-Date auf 2026-04-14 gesetzt
-- **`stacks/astro/versions/v6-beta/reference-links.md`** + **`stacks/astro/versions/v6-stable/checklist.md`** + **`stacks/astro/versions/v6-stable/reference-links.md`** — As-of auf 2026-04-14 (Astro 6.1.6)
-- **`stacks/sveltekit/versions/kit2-svelte5/checklist.md`** — As-of auf 2026-04-14 (SvelteKit 2.57.1 Patch: strictere `redirect()`-Validation, `BODY_SIZE_LIMIT` auf chunked requests, Default-Values als Fallbacks, Form-Typings fuer Union-Types relaxed; Svelte 5.55.3 Patch: HMR fuer dynamische Components, @const-Blockers, Derived-Freeze nach Effect-Destroy, deferred Error-Boundary in Forks, Reactivity-Loss-False-Positives reduziert)
-- **`core/skills/design-system/SKILL.md`** — Description erweitert um spezifischere Trigger-Terms (layout, spacing, shadow, gradient, animation, theme, dark mode, cta, section, landing page, hero section). Profitiert vom neuen v2.1.105 Skill-Description-Cap (250 -> 1536 Zeichen).
-
-### Added
-
 #### Full Audit & Upgrade — Session 2 (2026-04-11)
 - **5 new skills** — `/review-team`, `/debug-team`, `/security-team` (team presets with parallel agents), `/hook-gen` (natural language to hook configs), `/export-rules` (Cursor/Windsurf/Copilot format export)
 - **`core/lib/merge-settings.js`** — Deep-merge engine for settings.json: appends missing hooks per event (deduplicates by command), adds missing MCP servers, preserves all user configuration
@@ -55,6 +44,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+#### Freshness Sync — Claude Code v2.1.105 + Astro 6.1.6 + SvelteKit 2.57.1 (2026-04-14)
+- **`docs/claude-code-referenz.md`** — Header auf v2.1.105 (13. April 2026) aktualisiert; neue Abschnitte fuer v2.1.101 und v2.1.105 (EnterWorktree path-Param, blockierende PreCompact-Hooks, `monitors` Plugin-Manifest-Feld, `/proactive` Alias, `/team-onboarding`, OS-CA-Store-Trust, CRITICAL command-injection fix im LSP `which`-Fallback, zahlreiche Resume/Permission/MCP/Plugin-Fixes)
+- **`stacks/astro/versions/v6-beta/changelog.md`** — Eintrag fuer Astro 6.1.6 ergaenzt (Actions `ActionsWithoutServerOutputError` bei `output: 'static'` + Adapter, Special-Chars in inline `<script>`, SCSS/CSS-Module HMR statt Full-Reload); As-of-Date auf 2026-04-14 gesetzt
+- **`stacks/astro/versions/v6-beta/reference-links.md`** + **`stacks/astro/versions/v6-stable/checklist.md`** + **`stacks/astro/versions/v6-stable/reference-links.md`** — As-of auf 2026-04-14 (Astro 6.1.6)
+- **`stacks/sveltekit/versions/kit2-svelte5/checklist.md`** — As-of auf 2026-04-14 (SvelteKit 2.57.1 Patch: strictere `redirect()`-Validation, `BODY_SIZE_LIMIT` auf chunked requests, Default-Values als Fallbacks, Form-Typings fuer Union-Types relaxed; Svelte 5.55.3 Patch: HMR fuer dynamische Components, @const-Blockers, Derived-Freeze nach Effect-Destroy, deferred Error-Boundary in Forks, Reactivity-Loss-False-Positives reduziert)
+- **`core/skills/design-system/SKILL.md`** — Description erweitert um spezifischere Trigger-Terms (layout, spacing, shadow, gradient, animation, theme, dark mode, cta, section, landing page, hero section). Profitiert vom neuen v2.1.105 Skill-Description-Cap (250 -> 1536 Zeichen).
+
 #### Full Audit & Upgrade — Session 2 (2026-04-11)
 - **setup.sh** — Smart settings merge + `--lite` install mode
 - **`plugin.json`** — Updated to superpowers-marketplace schema (v1.1.0)
@@ -75,11 +71,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **settings.json.template** — Added PostToolUseFailure, PreCompact, SessionEnd hook events
 - **Documentation** — Updated writing-skills.md (9 new fields, variables), writing-hooks.md (7 new events, hookSpecificOutput format), writing-agents.md (new fields, model table), mcp-guide.md (HTTP transport, OAuth, .mcp.json, scopes)
 
+#### Freshness Check & Community Sync (2026-04-08)
+
+| Package | Previous | Current |
+|---------|----------|---------|
+| Vite | 8.0.3 | 8.0.7 |
+| Svelte | 5.55.1 | 5.55.2 |
+| Lighthouse | 13.0.3 | 13.1.0 |
+| Claude Code | 2.1.92 | 2.1.94 |
+| Anthropic SDK | 0.82.0 | 0.85.0 |
+| GSD v1 | 1.33.0 | 1.34.2 |
+| GSD v2 | 2.64.0 | 2.65.0 |
+| oh-my-opencode | 3.15.2 | 3.15.3 |
+
+- All 37 freshness sources current, 19 community repos synced
+- New docs: capability-surface-guide.md, skill-adaptation-policy.md, troubleshooting.md (upstream bugs)
+
+#### Astro Stack Updates (2026-04-07)
+- **v6-stable/checklist.md** — Updated for Astro 6.1.4 (Cloudflare miniflare restart, React 19 Float fix, dotted filenames, barrel file cleanup)
+- **v6-stable/reference-links.md** — Version bump to 6.1.4
+- **v6-beta/changelog.md** — Added full 6.1.x section (6.1.0–6.1.4)
+- **SKILL.md** — Updated latest version reference (6.0.8 → 6.1.4, checklist count 28 → 31)
+- **docs/companion-tools.md** — GSD v1 section rewritten for v1.34
+
 ### Fixed
 
 #### Full Audit & Upgrade (2026-04-11)
 - **Deprecated hook output format** — Migrated `bash-guard.sh` (5 outputs) and `secret-leak-check.sh` (1 output) from `{"decision":"block","reason":"..."}` to `{"hookSpecificOutput":{"permissionDecision":"block","permissionDecisionReason":"..."}}` (deprecated since v2.1.77+)
 - **Hook profile mismatch** — `batch-format-collector` and `stop-batch-format` had `HOOK_MIN_PROFILE="strict"` but belonged to standard profile per documentation
+
+#### Infrastructure Fixes (2026-04-08)
+- **settings.json.template** — Synced with hook-profiles.md: added 5 missing standard hooks (db-query-guard, design-quality-check, mcp-health-check, batch-format-collector, stop-batch-format), removed 2 strict-only hooks from standard template
+- **skill.json** — Added missing metadata files for 4 governance skills (prompt-optimizer, rules-distill, safety-guard, skill-stocktake)
+- **README.md** — Corrected Node.js minimum version from >= 22.12.0 to >= 18 LTS
 
 ---
 
@@ -109,38 +133,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 9 new agents: planner, architect, loop-operator, 3 language reviewers, 3 build resolvers
 - **Learning system** — continuous-learning hook, instinct-evolve hook, pattern-extractor skill
 - **Enhanced hooks** — cost-tracker, desktop-notify, hook-profiles (minimal/standard/strict)
-
-### Changed
-
-#### Astro Stack Updates (2026-04-07)
-- **v6-stable/checklist.md** — Updated for Astro 6.1.4 (Cloudflare miniflare restart, React 19 Float fix, dotted filenames, barrel file cleanup)
-- **v6-stable/reference-links.md** — Version bump to 6.1.4
-- **v6-beta/changelog.md** — Added full 6.1.x section (6.1.0–6.1.4)
-- **SKILL.md** — Updated latest version reference (6.0.8 → 6.1.4, checklist count 28 → 31)
-- **docs/companion-tools.md** — GSD v1 section rewritten for v1.34
-
-#### Freshness Check & Community Sync (2026-04-08)
-
-| Package | Previous | Current |
-|---------|----------|---------|
-| Vite | 8.0.3 | 8.0.7 |
-| Svelte | 5.55.1 | 5.55.2 |
-| Lighthouse | 13.0.3 | 13.1.0 |
-| Claude Code | 2.1.92 | 2.1.94 |
-| Anthropic SDK | 0.82.0 | 0.85.0 |
-| GSD v1 | 1.33.0 | 1.34.2 |
-| GSD v2 | 2.64.0 | 2.65.0 |
-| oh-my-opencode | 3.15.2 | 3.15.3 |
-
-- All 37 freshness sources current, 19 community repos synced
-- New docs: capability-surface-guide.md, skill-adaptation-policy.md, troubleshooting.md (upstream bugs)
-
-### Fixed
-
-#### Infrastructure Fixes (2026-04-08)
-- **settings.json.template** — Synced with hook-profiles.md: added 5 missing standard hooks (db-query-guard, design-quality-check, mcp-health-check, batch-format-collector, stop-batch-format), removed 2 strict-only hooks from standard template
-- **skill.json** — Added missing metadata files for 4 governance skills (prompt-optimizer, rules-distill, safety-guard, skill-stocktake)
-- **README.md** — Corrected Node.js minimum version from >= 22.12.0 to >= 18 LTS
 
 ### Inspired By
 - [Everything Claude Code](https://github.com/affaan-m/everything-claude-code)

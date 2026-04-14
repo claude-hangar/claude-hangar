@@ -1189,9 +1189,19 @@ else
 fi
 
 # Test: HANGAR_DISABLED_HOOKS skips named hook
+# Hooks source ~/.claude/lib/hook-gate.sh. In CI the lib is not deployed yet,
+# so we stage a temp HOME with the gate lib for this test only.
 TOTAL=$((TOTAL + 1))
 PROFILE_EXIT=0
-(export HANGAR_DISABLED_HOOKS=bash-guard; echo '{"tool_name":"Bash","tool_input":{"command":"rm -rf /"}}' | bash "$HOOKS_DIR/bash-guard.sh" >/dev/null 2>&1) || PROFILE_EXIT=$?
+TEST_HOME="$REPO_ROOT/.tmp-test-home-$$"
+mkdir -p "$TEST_HOME/.claude/lib"
+cp "$REPO_ROOT/core/lib/hook-gate.sh" "$TEST_HOME/.claude/lib/"
+(
+  export HOME="$TEST_HOME"
+  export HANGAR_DISABLED_HOOKS=bash-guard
+  echo '{"tool_name":"Bash","tool_input":{"command":"rm -rf /"}}' | bash "$HOOKS_DIR/bash-guard.sh" >/dev/null 2>&1
+) || PROFILE_EXIT=$?
+rm -rf "$TEST_HOME"
 if [ "$PROFILE_EXIT" -eq 0 ]; then
   echo "  PASS  HANGAR_DISABLED_HOOKS skips named hook"
   PASS=$((PASS + 1))
