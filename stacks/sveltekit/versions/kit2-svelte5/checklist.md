@@ -313,4 +313,4 @@ Finding prefix: `SKT-NN` (SvelteKit), `BP-NN` (Best Practice)
 
 ---
 
-As of: 2026-04-08 (updated for SvelteKit 2.57.0, Svelte 5.55.2 — 2.57.0: submit() returns boolean, CSP trusted-types required, treeshaking reimplemented, Vite 8 code-splitting warnings fixed, Chrome DevTools workspace requests silently 404'd)
+As of: 2026-04-14 (updated for SvelteKit 2.57.1, Svelte 5.55.3 — 2.57.1 patch: stricter redirect() input validation, BODY_SIZE_LIMIT enforced on chunked requests, default values as fallbacks, relaxed form typings for union types; Svelte 5.55.3 patch: HMR updates for dynamic components, correct @const blockers, freeze deriveds after effect destroy, defer error boundary rendering in forks, fewer false positives in reactivity loss warnings. 2.57.0: submit() returns boolean, CSP trusted-types required, treeshaking reimplemented, Vite 8 code-splitting warnings fixed, Chrome DevTools workspace requests silently 404'd)

@@ -1,9 +1,113 @@
 # Claude Code CLI – Vollstaendige Referenz
 
-## Stand: v2.1.98 (10. April 2026)
+## Stand: v2.1.105 (13. April 2026)
 
 > v2.1.100 ist ein Re-Release von v2.1.98 (identischer Code, npm dist-tag Promotion).
-> v2.1.99 wurde nicht veroeffentlicht.
+> v2.1.99, v2.1.102, v2.1.103 wurden nicht veroeffentlicht.
+
+### Aenderungen v2.1.105
+
+#### Neue Features
+
+- **`EnterWorktree` `path`-Parameter** — Wechsel in einen bestehenden Worktree des aktuellen Repos via Tool-Parameter statt manuellem `cd`
+- **PreCompact Hook blockierend** — Hooks koennen Compaction jetzt verhindern: Exit-Code 2 oder `{"decision":"block"}` abbrechen den Kompaktierungs-Vorgang
+- **`monitors` Plugin-Manifest** — Top-Level-Feld `monitors` in plugin.json; Background-Monitore werden bei Session-Start oder Skill-Invoke automatisch armed
+- **`/proactive` Alias fuer `/loop`** — zusaetzlicher Einstiegsname fuer den Loop-Operator
+
+#### Verbesserungen
+
+- **Stalled-Stream-Handling** — Streams brechen nach 5 Minuten ohne Daten ab und retryen non-streaming statt haengen zu bleiben
+- **Netzwerk-Fehlermeldungen** — Connection-Errors zeigen sofort eine Retry-Nachricht statt stiller Spinner
+- **File-Write-Anzeige** — Lange Single-Line-Writes (z.B. minified JSON) werden in der UI truncated statt ueber viele Screens paginiert
+- **`/doctor` Layout** — Status-Icons; `f`-Taste laesst Claude die gemeldeten Probleme direkt beheben
+- **`/config` Labels** — Klarere Bezeichnungen und Beschreibungen
+- **Skill-Descriptions** — Listing-Cap von 250 auf 1.536 Zeichen erhoeht; Startup-Warnung wenn Description truncated wird
+- **`WebFetch`** — Entfernt `<style>` und `<script>` Inhalte; CSS-lastige Seiten erschoepfen das Content-Budget nicht mehr vor dem eigentlichen Text
+- **Stale-Worktree-Cleanup** — Worktrees mit squash-mergten PRs werden entfernt statt unbegrenzt zu bleiben
+- **MCP-Large-Output Truncation-Prompt** — Format-spezifische Rezepte (`jq` fuer JSON, berechnete Read-Chunk-Groessen fuer Text)
+
+#### Fixes
+
+- Bilder in queued Messages (waehrend Claude arbeitet) gingen verloren
+- Leerer Bildschirm wenn Prompt-Input in langen Conversations auf zweite Zeile umbricht
+- Leading Whitespace beim Copy mehrzeiliger Antworten im Fullscreen
+- Leading Whitespace in Assistant-Messages getrimmt — brach ASCII-Art und Diagramme
+- Verstuemmelte Bash-Ausgabe bei klickbaren File-Links (Python `rich`/`loguru`)
+- `alt+enter` / `Ctrl+J` fuegt Newlines wieder korrekt ein (Regression in 2.1.100)
+- Doppelter "Creating worktree"-Text in EnterWorktree/ExitWorktree
+- Queued User-Prompts verschwanden aus Focus-Mode
+- One-Shot Scheduled-Tasks feuerten wiederholt bei verpasstem Post-Fire-Cleanup
+- Inbound-Channel-Notifications nach erster Message still verworfen (Team/Enterprise)
+- Marketplace-Plugins mit `package.json`/Lockfile hatten Dependencies nicht auto-installiert
+- Marketplace Auto-Update liess offizielle Marketplace in broken State wenn Plugin-Prozess Dateien offen hielt
+- "Resume this session with..."-Hinweis fehlte nach `/resume`, `--worktree`, `/branch`
+- Feedback-Survey-Shortcuts feuerten mitten in laengeren Prompts
+- stdio-MCP-Server mit malformed Output haengte Session statt "Connection closed"
+- MCP-Tools fehlten in erster Turn von Headless/Remote-Trigger-Sessions bei asynchronen MCP-Verbindungen
+- `/model` Picker auf Bedrock (Non-US Regions) persistierte invalide `us.*` IDs
+- 429-Rate-Limit-Errors zeigten rohes JSON statt sauberer Meldung (API-Key, Bedrock, Vertex)
+- Crash bei Resume mit malformed Text-Blocks
+- `/help` verlor Tab-Bar, Shortcuts, Footer bei kleiner Terminal-Hoehe
+- Malformed `keybindings.json`-Werte wurden still geladen statt klar abgelehnt
+- `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` in einem Projekt disablete Usage-Metrics fuer alle Projekte
+- Washed-Out 16-Color-Palette bei Ghostty/Kitty/Alacritty/WezTerm/foot/rio/Contour ueber SSH/mosh
+- Bash-Tool schlug `acceptEdits`-Mode vor waehrend Exit aus Plan-Mode ein Downgrade gewesen waere
+
+### Aenderungen v2.1.101
+
+#### Neue Features
+
+- **`/team-onboarding`** — Command generiert Teammate-Ramp-Up-Guide aus lokaler Claude-Code-Nutzung
+- **OS CA Certificate Store Trust** — Enterprise-TLS-Proxies funktionieren ohne Extra-Setup; `CLAUDE_CODE_CERT_STORE=bundled` fuer nur-gebundelte CAs
+- **`/ultraplan` & Remote-Session-Features** — Auto-Creation einer Default-Cloud-Environment statt erzwungenem Web-Setup
+
+#### Verbesserungen
+
+- **Brief-Mode Retry** — Bei Plain-Text-Antwort statt Structured-Message wird einmal retryed
+- **Focus-Mode Summaries** — Claude schreibt selbstenthaltene Summaries weil der User nur die Final-Message sieht
+- **Tool-not-available-Errors** — Erklaeren warum und wie fortzufahren ist wenn das Tool existiert, aber im aktuellen Context nicht verfuegbar
+- **Rate-Limit-Retry-Messages** — Zeigen welches Limit getroffen wurde und wann es resettet
+- **Refusal-Error-Messages** — Enthalten API-provided Explanation
+- **`claude -p --resume <name>`** — Akzeptiert Session-Titles aus `/rename` oder `--name`
+- **Settings-Resilienz** — Unrecognized Hook-Event-Names in `settings.json` ignorieren nicht mehr die gesamte Datei
+- **`allowManagedHooksOnly`** — Plugin-Hooks aus force-enabled Plugins via Managed-Settings laufen jetzt
+- **`/plugin` & `claude plugin update`** — Warnung bei Marketplace-Refresh-Fehler statt still stale Version
+- **Plan-Mode** — "Refine with Ultraplan" versteckt wenn User-Org/Auth-Setup kein Claude-Code-Web hat
+- **Beta-Tracing** — Honoriert `OTEL_LOG_USER_PROMPTS`, `OTEL_LOG_TOOL_DETAILS`, `OTEL_LOG_TOOL_CONTENT`
+- **SDK `query()`** — Bereinigt Subprocess und Temp-Files bei `break` aus `for await` oder `await using`
+
+#### Security-Fixes
+
+- **CRITICAL:** Command-Injection-Vulnerability im POSIX `which`-Fallback der LSP-Binary-Detection
+
+#### Fixes
+
+- Memory-Leak bei langen Sessions mit historischen Message-List-Kopien im Virtual-Scroller
+- `--resume`/`--continue` verlor Conversation-Context bei grossen Sessions (Loader-Anchor auf Dead-End-Branch)
+- `--resume` Chain-Recovery wechselte in unrelated Subagent-Conversation
+- Crash bei `--resume` mit Edit/Write-Tool-Result ohne `file_path`
+- Hardcoded 5-Min-Request-Timeout brach slow Backends (Local-LLMs, Extended-Thinking)
+- `permissions.deny` Rules ueberschreiben `permissionDecision: "ask"` aus PreToolUse-Hooks
+- `--setting-sources` ohne `user` ignorierte `cleanupPeriodDays` — loeschte History > 30 Tage
+- Bedrock SigV4-Auth scheiterte mit 403 wenn `ANTHROPIC_AUTH_TOKEN`/`apiKeyHelper`/`ANTHROPIC_CUSTOM_HEADERS` Authorization-Header setzte
+- `claude -w <name>` scheiterte mit "already exists" nach Stale-Worktree-Cleanup
+- Subagents erbten keine MCP-Tools aus dynamisch-injizierten Servern
+- Sub-Agents in isolierten Worktrees bekamen keinen Read/Edit-Zugriff innerhalb des eigenen Worktrees
+- Sandboxed Bash-Commands scheiterten mit `mktemp: No such file or directory` nach Boot
+- `claude mcp serve` Tool-Calls fehl in Clients die `outputSchema` validieren
+- `RemoteTrigger.run` sendete leeren Body
+- `/resume` Picker diverse Fixes (Narrow-Default-View, Preview auf Windows-Terminal, cwd in Worktrees, Session-not-found-Errors)
+- Grep-Tool ENOENT bei stalem embedded ripgrep (VS Code Auto-Update, macOS App Translocation) — Self-Heal ueber System-`rg`
+- `/btw` schrieb Konversations-Kopie auf Platte bei jedem Use
+- `/context` Free-Space/Messages-Breakdown widersprach Header-Prozent
+- Plugin-Issues: Slash-Commands mit duplicate `name:`, `/plugin update` `ENAMETOOLONG`, Discover zeigte already-installed, Directory-Source stale Version-Cache, Skills honorierten `context: fork`/`agent` nicht
+- `/mcp` Menu bot OAuth-Actions fuer MCP-Server mit `headersHelper` — jetzt Reconnect
+- `ctrl+]`, `ctrl+\`, `ctrl+^` Keybindings feuerten nicht in Terminals mit Raw C0 Control-Bytes
+- Custom Keybindings (`~/.claude/keybindings.json`) luden nicht bei Bedrock/Vertex
+- `claude --continue -p` continued keine `-p`/SDK-Sessions
+- Remote-Control-Issues: Worktrees entfernt bei Crash, Connection-Failures nicht im Transcript
+- `/insights` liess manchmal Report-File-Link weg
+- [VSCode] File-Attachment unter Chat-Input loeschte sich nicht wenn letzter Editor-Tab geschlossen wurde
 
 ### Aenderungen v2.1.98
 

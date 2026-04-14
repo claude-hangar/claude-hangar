@@ -327,4 +327,14 @@ Patch releases:
 
 ---
 
-As of: 2026-04-09 (updated for Astro 6.1.5, Vite 8.0.8)
+## 6.1.6 — April 2026
+
+- Fix: Actions failed with `ActionsWithoutServerOutputError` when using `output: 'static'` together with an adapter (-> PR #16202)
+- Fix: Improved handling of special characters in inline `<script>` content — previously prone to HTML escaping issues (-> PR #16303)
+- Fix: SCSS and CSS module file changes triggered a full page reload instead of hot-updating styles in place during development (-> PR #14924)
+
+Pure bugfix release — no breaking changes, no new features.
+
+---
+
+As of: 2026-04-14 (updated for Astro 6.1.6)

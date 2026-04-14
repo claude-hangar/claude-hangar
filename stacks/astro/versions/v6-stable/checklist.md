@@ -146,4 +146,4 @@ This checklist is for projects already successfully running on 6.x.
 
 ---
 
-As of: 2026-04-09 (updated for Astro 6.1.5, Vite 8.0.8, Zod 4.3.6 — 6.1.5 fixes: Picture component build error with prerendered pages + content collection render(), Fragment streaming sync content blocked until async siblings completed, UnoCSS dev mode with client router, astro add cloudflare compatibility_date set to today, dlv dependency removed)
+As of: 2026-04-14 (updated for Astro 6.1.6, Vite 8.0.8, Zod 4.3.6 — 6.1.6 fixes: Actions `ActionsWithoutServerOutputError` with `output: 'static'` + adapter, better special-char handling in inline `<script>` content, SCSS/CSS-module file changes now hot-update instead of full reload. 6.1.5 fixes: Picture component build error with prerendered pages + content collection render(), Fragment streaming sync content blocked until async siblings completed, UnoCSS dev mode with client router, astro add cloudflare compatibility_date set to today, dlv dependency removed)
