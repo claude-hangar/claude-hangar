@@ -454,6 +454,33 @@ test \
   '{"used_percentage":45}'
 
 # ============================================================
+# 10b. pre-compact.sh — snapshot + optional block gate
+# ============================================================
+
+echo ""
+echo "--- pre-compact ---"
+
+# Default: no blocking env var — should always exit 0
+test \
+  "should exit 0 when block gate disabled (default)" \
+  0 \
+  "pre-compact.sh" \
+  '{"cwd":"/tmp"}'
+
+test \
+  "should exit 0 on empty input when block gate disabled" \
+  0 \
+  "pre-compact.sh" \
+  '{}'
+
+# Opt-in gate: HANGAR_BLOCK_COMPACT=1 — without wip markers, still allow
+HANGAR_BLOCK_COMPACT=1 test \
+  "should exit 0 with gate enabled when no wip markers" \
+  0 \
+  "pre-compact.sh" \
+  '{"cwd":"/tmp"}'
+
+# ============================================================
 # 11. task-completed-gate.sh — 4-Level Quality Gate
 # ============================================================
 

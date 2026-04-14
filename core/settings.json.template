@@ -231,6 +231,18 @@
       "args": ["-y", "@upstash/context7-mcp"]
     }
   },
+  "permissions": {
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(rm -r /:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(npm publish:*)",
+      "Bash(docker system prune:*)",
+      "Bash(docker rmi:*)"
+    ]
+  },
   "language": "{{LANGUAGE}}",
   "alwaysThinkingEnabled": true,
   "autoUpdatesChannel": "latest",

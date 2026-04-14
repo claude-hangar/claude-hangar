@@ -9,6 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+#### Freshness Opportunities — Claude Code v2.1.105 follow-through (2026-04-14)
+- **`core/hooks/pre-compact.sh`** — Opt-in Block-Gate via `HANGAR_BLOCK_COMPACT=1`: blockiert `/compact` wenn aktive `in_progress`-Tasks + uncommitted Changes + kein `HANDOFF.md`. Exit 2 mit erklaerender stderr-Nachricht (Resolve-Optionen). Nutzt die neue Block-Semantik aus Claude Code v2.1.105 PreCompact-Hook.
+- **`core/settings.json.template`** — `permissions.deny` Sektion mit 8 destruktiven Bash-Patterns (rm -rf, rm -r /, git reset --hard, git push --force, git push -f, npm publish, docker system prune, docker rmi). Deklarative Defense-in-Depth zusaetzlich zu `permission-denied-retry.sh`. Nutzt v2.1.101-Fix: deny-Rules ueberschreiben Hook `permissionDecision: "ask"`.
+- **`docs/monitors.md`** — Migrations-Guide fuer das neue `monitors` Plugin-Manifest-Feld aus v2.1.105. Kandidaten-Liste (cost-tracker, token-warning, batch-format-collector) fuer spaetere Migration, sobald Schema-Beispiele stabilisieren.
+- **`docs/troubleshooting.md`** — Neuer Abschnitt "Network / TLS": Corporate TLS/MITM-Proxy loest sich mit v2.1.101 OS-CA-Store-Trust ohne Extra-Config; Opt-out `CLAUDE_CODE_CERT_STORE=bundled`. Slow-Stream-Abschnitt zu v2.1.105 5-min-timeout.
+- **`tests/test-hooks.sh`** — 3 neue Tests fuer pre-compact Block-Gate (default disabled, empty input, enabled without wip markers).
+- **`TODO.md`** — Neuer Nice-to-have N1: Migration continuous-poll-Hooks zu Plugin-Monitors sobald Schema stabilisiert.
+
+### Changed
+
+#### Freshness Sync — Claude Code v2.1.105 + Astro 6.1.6 + SvelteKit 2.57.1 (2026-04-14)
+- **`docs/claude-code-referenz.md`** — Header auf v2.1.105 (13. April 2026) aktualisiert; neue Abschnitte fuer v2.1.101 und v2.1.105 (EnterWorktree path-Param, blockierende PreCompact-Hooks, `monitors` Plugin-Manifest-Feld, `/proactive` Alias, `/team-onboarding`, OS-CA-Store-Trust, CRITICAL command-injection fix im LSP `which`-Fallback, zahlreiche Resume/Permission/MCP/Plugin-Fixes)
+- **`stacks/astro/versions/v6-beta/changelog.md`** — Eintrag fuer Astro 6.1.6 ergaenzt (Actions `ActionsWithoutServerOutputError` bei `output: 'static'` + Adapter, Special-Chars in inline `<script>`, SCSS/CSS-Module HMR statt Full-Reload); As-of-Date auf 2026-04-14 gesetzt
+- **`stacks/astro/versions/v6-beta/reference-links.md`** + **`stacks/astro/versions/v6-stable/checklist.md`** + **`stacks/astro/versions/v6-stable/reference-links.md`** — As-of auf 2026-04-14 (Astro 6.1.6)
+- **`stacks/sveltekit/versions/kit2-svelte5/checklist.md`** — As-of auf 2026-04-14 (SvelteKit 2.57.1 Patch: strictere `redirect()`-Validation, `BODY_SIZE_LIMIT` auf chunked requests, Default-Values als Fallbacks, Form-Typings fuer Union-Types relaxed; Svelte 5.55.3 Patch: HMR fuer dynamische Components, @const-Blockers, Derived-Freeze nach Effect-Destroy, deferred Error-Boundary in Forks, Reactivity-Loss-False-Positives reduziert)
+- **`core/skills/design-system/SKILL.md`** — Description erweitert um spezifischere Trigger-Terms (layout, spacing, shadow, gradient, animation, theme, dark mode, cta, section, landing page, hero section). Profitiert vom neuen v2.1.105 Skill-Description-Cap (250 -> 1536 Zeichen).
+
+### Added
+
 #### Full Audit & Upgrade — Session 2 (2026-04-11)
 - **5 new skills** — `/review-team`, `/debug-team`, `/security-team` (team presets with parallel agents), `/hook-gen` (natural language to hook configs), `/export-rules` (Cursor/Windsurf/Copilot format export)
 - **`core/lib/merge-settings.js`** — Deep-merge engine for settings.json: appends missing hooks per event (deduplicates by command), adds missing MCP servers, preserves all user configuration

@@ -1,8 +1,9 @@
 ---
 name: design-system
 description: >
-  Context-aware design intelligence with curated databases for styles, palettes, typography, UX rules, and wow effects.
-  Use when: "design", "colors", "typography", "component", "card", "button", "hero", "ui", "palette", "tailwind pattern", "style", "wow", "font".
+  Context-aware design intelligence with curated CSV databases for styles, palettes, typography, UX rules, and wow effects.
+  Provides industry-matched color palettes, font pairings, layout patterns, spacing/radius/shadow scales, gradient recipes, micro-animations, and accessibility-safe UX rules. Stack-agnostic — outputs design decisions for any frontend (Astro, SvelteKit, Next.js, React).
+  Use when: "design", "colors", "typography", "component", "card", "button", "hero", "ui", "palette", "tailwind pattern", "style", "wow", "font", "layout", "spacing", "shadow", "gradient", "animation", "theme", "dark mode", "cta", "section", "landing page", "hero section".
 effort: high
 user-invocable: true
 argument-hint: "[component|palette|typography]"

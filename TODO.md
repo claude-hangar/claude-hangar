@@ -6,6 +6,17 @@
 
 ---
 
+## NICE-TO-HAVE — Pending Schema Stabilization
+
+### N1: Migrate continuous Hangar scripts to Plugin Monitors (v2.1.105+)
+- **What:** Migrate `cost-tracker.sh` and `token-warning.sh` from PostToolUse hooks to background monitors declared in `monitors/monitors.json`. These scripts are continuous (poll state each tick), not event-driven, so a monitor matches their shape better.
+- **Where:** `.claude-plugin/plugin.json` (add `"monitors": "./monitors/monitors.json"`), new `monitors/monitors.json`
+- **Why:** Claude Code v2.1.105 introduces a `monitors` top-level manifest key that auto-arms at session start or on skill invoke. A monitor streams stdout lines back to the model as events — the natural fit for polling/tailing scripts.
+- **Blocker:** The schema of entries inside `monitors.json` is referenced in the plugins-reference but not yet shown in a stable example. Migrate once the official docs or an authoritative plugin publishes a concrete example.
+- **Tracking doc:** `docs/monitors.md`
+
+---
+
 ## MUST — Broken/Deprecated (fix now)
 
 ### M1: Fix deprecated MCP server references

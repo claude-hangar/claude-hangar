@@ -148,4 +148,26 @@ apt-get install -y shellcheck
 - Set `MCP_CONNECTION_NONBLOCKING=true` for faster startup
 - Use `if` conditions on hooks (Claude Code 2.1.85+) to reduce process spawns
 - Run `/compact` when context utilization exceeds 70%
+
+## Network / TLS
+
+### Corporate TLS / MITM proxy blocks Claude Code
+
+**Symptom:** API requests fail with TLS handshake errors, `unable to verify the first certificate`, or `self-signed certificate in certificate chain` — typical in enterprise networks with a TLS-terminating proxy (Zscaler, Netskope, Palo Alto, etc.) injecting its own root certificate.
+
+**Fix (Claude Code 2.1.101+):** By default the CLI now trusts the OS certificate store, so enterprise root CAs added by your IT team are picked up automatically without extra configuration. No environment variable needed.
+
+**Opt out** (rare — only if the OS store is broken or you want strict bundled CAs):
+
+```bash
+export CLAUDE_CODE_CERT_STORE=bundled
+```
+
+**Also useful:**
+- `NODE_EXTRA_CA_CERTS=/path/to/corp-ca.pem` — still honored as a fallback
+- `HTTPS_PROXY=http://proxy.corp:8080` — explicit proxy routing
+
+### Slow or hanging API streams
+
+**Fix (Claude Code 2.1.105+):** Stalled streams now abort after 5 minutes of no data and retry non-streaming automatically instead of hanging indefinitely. If you still see hangs, check corporate proxy idle-timeout settings — many are below 5 min and cut streams mid-response.
 - Use `/codebase-map` after `/compact` to restore essential context
