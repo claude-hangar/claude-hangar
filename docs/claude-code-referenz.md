@@ -1,9 +1,27 @@
 # Claude Code CLI – Vollstaendige Referenz
 
-## Stand: v2.1.105 (13. April 2026)
+## Stand: v2.1.110 (16. April 2026)
 
 > v2.1.100 ist ein Re-Release von v2.1.98 (identischer Code, npm dist-tag Promotion).
 > v2.1.99, v2.1.102, v2.1.103 wurden nicht veroeffentlicht.
+
+### Aenderungen v2.1.110
+
+#### Neue Features
+
+- **Push Notification Tool** — Claude kann Push-Notifications aufs Handy senden (neues Tool: `PushNotification`)
+- **`/tui` Command** — Flicker-Free Fullscreen-Rendering (Alt-Screen-Mode)
+- **`/focus` Command** — Separater Focus-View-Toggle; `Ctrl+O` zeigt jetzt nur das Transcript
+- **`tui` Setting** — Aktiviert den TUI-Modus dauerhaft
+
+### Aenderungen v2.1.108
+
+#### Neue Features
+
+- **`/recap` Command** — Context-Recap bei Rueckkehr zu einer Session (kuerzer als `/resume`, schneller als HANDOFF.md lesen)
+- **Skill Tool ruft Built-in Commands auf** — `/init`, `/review`, `/security-review` sind jetzt via Skill-Tool aufrufbar und discoverable
+- **`ENABLE_PROMPT_CACHING_1H`** — Env-Var fuer 1-Stunden Prompt-Cache-TTL
+- **`FORCE_PROMPT_CACHING_5M`** — Env-Var um 5-Minuten-TTL zu erzwingen
 
 ### Aenderungen v2.1.105
 
@@ -559,6 +577,7 @@ Automatische Aktionen die an bestimmten Punkten im Agentic Loop ausgeführt werd
 | PreToolUse | Vor jedem Tool-Aufruf | Validierung, Sicherheitschecks |
 | PostToolUse | Nach jedem Tool-Aufruf | Linting, Formatting, Tests |
 | Stop | Session endet | Cleanup, Notifications |
+| PreCompact | Vor Compaction | Zustand sichern, Compaction blockieren (Exit 2 oder `{"decision":"block"}`) |
 | SubagentStart | Sub-Agent gestartet | Observability, Ressourcen-Tracking |
 | SubagentStop | Sub-Agent fertig | Ergebnis-Verarbeitung |
 | TaskCreated | Task wird erstellt (TaskCreate) | Logging, Validierung, Task-Policies |
@@ -809,6 +828,8 @@ Claude Code bevorzugt dedizierte Tools ueber Bash-Aequivalente:
 | WebSearch | Web-Suche mit aktuellen Ergebnissen |
 | ToolSearch | Deferred Tools (MCP etc.) laden/entdecken |
 | Skill | User-invocable Skills ausfuehren (/commit, /audit etc.) |
+| Monitor | Events aus Background-Scripts streamen |
+| PushNotification | Push-Notifications aufs Handy senden |
 
 ### Task-Management (modernes System)
 
@@ -867,6 +888,9 @@ Claude Code bevorzugt dedizierte Tools ueber Bash-Aequivalente:
 | /keybindings | Custom Keyboard Shortcuts konfigurieren |
 | /copy | Letzte Antwort kopieren |
 | /help | Hilfe anzeigen |
+| /recap | Context-Recap bei Session-Rueckkehr |
+| /focus | Focus-View Toggle (Ctrl+O = Transcript) |
+| /tui | Fullscreen TUI-Modus |
 
 ## 10.2 Keyboard Shortcuts
 
@@ -876,7 +900,7 @@ Claude Code bevorzugt dedizierte Tools ueber Bash-Aequivalente:
 | Shift+Tab | Plan-Modus ein/aus (auto-accept edits) |
 | Shift+Enter | Newline einfuegen (iTerm2, WezTerm, Ghostty, Kitty) |
 | Ctrl+G | Externen Editor oeffnen (auch in AskUserQuestion "Other"-Input) |
-| Ctrl+O | Verbose-Modus (Hook-Output sichtbar) |
+| Ctrl+O | Transcript-Only-Modus (frueher Verbose-Modus; `/focus` fuer separaten Focus-View) |
 | Ctrl+B | Bash-Commands und Agents im Hintergrund starten |
 | /fast | Fast-Modus Toggle (Opus 4.6 mit schnellerem Output) |
 
@@ -976,6 +1000,8 @@ Plugins können auf spezifische Git-Commit-SHAs gepinnt werden für Reproduzierb
 | CLAUDE_STREAM_IDLE_TIMEOUT_MS | Streaming Idle Watchdog Threshold (Default: 90s) |
 | ANTHROPIC_DEFAULT_{OPUS,SONNET,HAIKU}_MODEL_SUPPORTS | Capability-Override fuer 3P-Modelle (Bedrock/Vertex/Foundry) |
 | ANTHROPIC_DEFAULT_{OPUS,SONNET,HAIKU}_MODEL_NAME | Label im `/model`-Picker fuer 3P-Modelle |
+| ENABLE_PROMPT_CACHING_1H | 1-Stunden Prompt-Cache-TTL |
+| FORCE_PROMPT_CACHING_5M | 5-Minuten Prompt-Cache-TTL erzwingen |
 
 ---
 
@@ -1104,3 +1130,10 @@ Ab SDK v0.86.0 bietet Anthropic die **Managed Agents API** (Beta):
 - Named Path Parameters (statt positional)
 - URI Encoding Changes fuer Pfad-Parameter
 - Bestehende API-Clients muessen aktualisiert werden
+
+### SDK v0.89.0 — Modell-Deprecation
+
+- **Opus 4** und **Sonnet 4** als deprecated markiert
+- Neue Generation: **Opus 4.6** (`claude-opus-4-6`) und **Sonnet 4.6** (`claude-sonnet-4-6`)
+- **Advisor Tool API** (Beta) — neuer Tool-Typ in v0.87.0
+- **Vertex EU Region Support** — v0.88.0
