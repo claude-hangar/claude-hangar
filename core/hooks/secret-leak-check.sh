@@ -121,7 +121,7 @@ fi
 
 if [ -n "$WARNINGS" ]; then
   REASON="SECRET-LEAK WARNING in ${FILE_PATH}: ${WARNINGS}Please check if secrets are present."
-  node -e "console.log(JSON.stringify({hookSpecificOutput:{permissionDecision:'block',permissionDecisionReason:process.argv[1]}}))" "$REASON"
+  node -e "console.log(JSON.stringify({hookSpecificOutput:{hookEventName:'PreToolUse',permissionDecision:'block',permissionDecisionReason:process.argv[1]}}))" "$REASON"
   exit 2
 fi
 

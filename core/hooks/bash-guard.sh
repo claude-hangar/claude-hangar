@@ -99,7 +99,7 @@ block_if '\bDROP\s+(TABLE|DATABASE)\b' \
 
 if [ -n "$BLOCKED" ]; then
   REASON="BASH-COMMAND-GUARD: Dangerous command blocked!\n\n${BLOCKED}\nCommand: $(echo "$COMMAND" | head -c 200)\n\nPlease use a safe command or ask the user for confirmation."
-  node -e "console.log(JSON.stringify({hookSpecificOutput:{permissionDecision:'block',permissionDecisionReason:process.argv[1]}}))" "$REASON"
+  node -e "console.log(JSON.stringify({hookSpecificOutput:{hookEventName:'PreToolUse',permissionDecision:'block',permissionDecisionReason:process.argv[1]}}))" "$REASON"
   exit 2
 fi
 
@@ -137,19 +137,19 @@ if echo "$COMMAND" | grep -q 'git commit'; then
     VALID_PATTERN='^(feat|fix|refactor|docs|test|chore|style|perf|ci|build|revert)(\([a-z0-9_-]+\))?!?:[[:space:]].+'
 
     if ! echo "$SUBJECT" | grep -qE "$VALID_PATTERN"; then
-      node -e "console.log(JSON.stringify({hookSpecificOutput:{permissionDecision:'block',permissionDecisionReason:'COMMIT-MESSAGE: Not a Conventional Commit format. Expected: type(scope): description. Types: feat, fix, refactor, docs, test, chore, style, perf, ci, build, revert. Got: ' + process.argv[1]}}))" "$SUBJECT"
+      node -e "console.log(JSON.stringify({hookSpecificOutput:{hookEventName:'PreToolUse',permissionDecision:'block',permissionDecisionReason:'COMMIT-MESSAGE: Not a Conventional Commit format. Expected: type(scope): description. Types: feat, fix, refactor, docs, test, chore, style, perf, ci, build, revert. Got: ' + process.argv[1]}}))" "$SUBJECT"
       exit 2
     fi
 
     # Length check (max 72 chars for subject)
     if [ ${#SUBJECT} -gt 72 ]; then
-      node -e "console.log(JSON.stringify({hookSpecificOutput:{permissionDecision:'block',permissionDecisionReason:'COMMIT-MESSAGE: Subject too long (' + process.argv[1].length + ' chars, max 72). Please shorten.'}}))" "$SUBJECT"
+      node -e "console.log(JSON.stringify({hookSpecificOutput:{hookEventName:'PreToolUse',permissionDecision:'block',permissionDecisionReason:'COMMIT-MESSAGE: Subject too long (' + process.argv[1].length + ' chars, max 72). Please shorten.'}}))" "$SUBJECT"
       exit 2
     fi
 
     # No trailing period
     if echo "$SUBJECT" | grep -q '\.$'; then
-      echo '{"hookSpecificOutput":{"permissionDecision":"block","permissionDecisionReason":"COMMIT-MESSAGE: Subject ends with period — please remove."}}'
+      echo '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"block","permissionDecisionReason":"COMMIT-MESSAGE: Subject ends with period — please remove."}}'
       exit 2
     fi
   fi
@@ -225,7 +225,7 @@ if echo "$COMMAND" | grep -q 'git push'; then
     if [ -n "$SHA_WARNING" ]; then
       REASON+="\n\nAdvisory:\n${SHA_WARNING}"
     fi
-    node -e "console.log(JSON.stringify({hookSpecificOutput:{permissionDecision:'block',permissionDecisionReason:process.argv[1]}}))" "$REASON"
+    node -e "console.log(JSON.stringify({hookSpecificOutput:{hookEventName:'PreToolUse',permissionDecision:'block',permissionDecisionReason:process.argv[1]}}))" "$REASON"
     exit 2
   fi
 
