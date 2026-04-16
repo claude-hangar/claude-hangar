@@ -188,4 +188,4 @@ Finding prefix: `NXT-NN`
 
 ---
 
-As of: 2026-04-09 (updated for Next.js 16.2.3, React 19, App Router, Turbopack)
+As of: 2026-04-16 (updated for Next.js 16.2.4, React 19, App Router, Turbopack — 16.2.4 fixes: Turbopack filesystem watcher follow_symlinks(false), Safari ?ts= cache-buster scoped to CSS/font assets only in Pages Router, boolean/number primitives in next.config defines, recomputation loop fix on cell cleanup)

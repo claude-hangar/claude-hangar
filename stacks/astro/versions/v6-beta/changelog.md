@@ -327,6 +327,14 @@ Patch releases:
 
 ---
 
+## 6.1.7 — April 2026
+
+- Fix: Remote image dimensions were not validated during static builds on Netlify (-> PR #16027)
+- Fix: `--port` flag was ignored after a Vite-triggered server restart (e.g. when a `.env` file changes) (-> PR #16311)
+- **SECURITY Fix:** `/_image` endpoint accepted arbitrary `f=svg` query parameter and served non-SVG content as `image/svg+xml`. Now validates source is actually SVG before honoring `f=svg` (-> PR #16316)
+
+Pure bugfix release — no breaking changes, no new features. Security fix included.
+
 ## 6.1.6 — April 2026
 
 - Fix: Actions failed with `ActionsWithoutServerOutputError` when using `output: 'static'` together with an adapter (-> PR #16202)
@@ -337,4 +345,4 @@ Pure bugfix release — no breaking changes, no new features.
 
 ---
 
-As of: 2026-04-14 (updated for Astro 6.1.6)
+As of: 2026-04-16 (updated for Astro 6.1.7)

@@ -47,4 +47,4 @@
 
 ---
 
-As of: 2026-04-14 (updated for Astro 6.1.6, Vite 8.0.8, Zod 4.3.6)
+As of: 2026-04-16 (updated for Astro 6.1.7, Vite 8.0.8, Zod 4.3.6)
