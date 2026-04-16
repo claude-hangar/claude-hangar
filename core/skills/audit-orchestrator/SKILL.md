@@ -1,28 +1,84 @@
 ---
 name: audit-orchestrator
 description: >
-  Orchestrates /audit + /project-audit + /astro-audit + /sveltekit-audit + /db-audit + /auth-audit combinations.
-  Use when: "full audit", "audit everything", "complete audit".
+  Universal Pre-Scan → Analysis → Optimization → Report orchestrator for ANY project type —
+  web apps (Astro/SvelteKit/Next), infrastructure/homelab repos, CLI tools, libraries,
+  backend services, monorepos, data/ML projects, docs. Self-detects project type and runs
+  the matching analysis track. Session state lives in `.audit-session/<date>-<slug>/` with
+  INDEX.md + STATUS.md so any instance (or a different LLM) can resume after a crash.
+  Delegates to /audit + /project-audit + /astro-audit + /sveltekit-audit + /db-audit +
+  /auth-audit for web projects. Use when: "full audit", "audit everything", "complete audit",
+  "infra audit", "homelab audit", "repo audit", "orchestrate audit", "pre-scan analysis
+  optimization report".
 effort: high
 user-invocable: true
-argument-hint: "report"
+argument-hint: "report | resume | <session-slug>"
 ---
 
 <!-- AI-QUICK-REF
 ## /audit-orchestrator — Quick Reference
-- **No standalone mode** — triggered by "full audit" / "audit everything"
-- **Detects:** Which audits are needed (/audit, /project-audit, /astro-audit, /sveltekit-audit, /db-audit, /auth-audit)
-- **Sequencing:** Beta/RC → framework audit first, Stable → parallel
-- **Pre-Audit:** GitHub + VPS check before project audits
-- **3 Execution Modes:** Team (parallel) | Manual (sequential) | Runner (autonomous)
-- **State:** .audit-orchestrator-state.json (v3)
-- **Checkpoints:** [CHECKPOINT: decision] for audit combination + execution mode
+- **Universal mode (default)** — works for any project type via self-detection
+- **Four phases:** 01-prescan → 02-analysis → 03-optimization → 04-report (each with its own folder)
+- **Session directory:** `.audit-session/<YYYY-MM-DD>-<slug>/` with INDEX.md + STATUS.md
+- **Resume protocol:** any instance reads STATUS.md → continues where prior stopped
+- **Project-type detection:** web (astro/sveltekit/next), infra (docker/iac/homelab), lang (py/go/rust/node), monorepo, docs, data-ml, generic
+- **Web specialization:** delegates to /audit, /{framework}-audit, /project-audit, /db-audit, /auth-audit
+- **Execution Modes:** Team (parallel) | Manual (sequential) | Runner (autonomous)
+- **Legacy state:** .audit-orchestrator-state.json (v3) still written for web-framework path
 -->
 
-# /audit-orchestrator — Intelligent Audit Combination
+# /audit-orchestrator — Universal Orchestrator
 
-Meta-skill that automatically detects which audits a project needs and coordinates them.
-Prevents gaps and duplicate work between the audit skills.
+Meta-skill that runs a project through **Pre-Scan → Analysis → Optimization → Report** on any kind of codebase. Self-detects the project type, picks the right analysis track, and writes all state into a resumable session directory.
+
+## Two Modes
+
+| Mode | When | What runs |
+|------|------|-----------|
+| **Universal (default)** | Any project — infra, homelab, CLI, library, monorepo, docs, data/ML, web, generic | Four-phase workflow, project-profile-driven analysis track (see `universal-workflow.md`) |
+| **Web Orchestration (specialization)** | Project detected as `web-astro`, `web-sveltekit`, or `web-nextjs` | Same four phases, but Phase 2 delegates to `/audit` + `/{framework}-audit` + `/project-audit` + optional `/db-audit` / `/auth-audit` per the rules below |
+
+The universal mode is always entered first. If Phase 1 (Pre-Scan) detects a supported web framework, Phase 2 activates the web orchestration path. For any other project type, Phase 2 runs the general + specialty analysis tracks described in `universal-workflow.md`.
+
+## Session Directory
+
+Every run creates `.audit-session/<YYYY-MM-DD>-<slug>/` with:
+
+```
+INDEX.md                 # TOC + navigation
+STATUS.md                # Live session state — read first on resume
+01-prescan/              # detection + project profile
+02-analysis/             # findings + opportunities + fix queue
+03-optimization/         # applied changes + deferred + deviations
+04-report/REPORT.md      # canonical deliverable
+```
+
+- Full directory schema + file templates: **`session-schema.md`**.
+- Phase-by-phase execution (inputs, actions, outputs, exit criteria): **`universal-workflow.md`**.
+- Legacy web-specific state (`.audit-orchestrator-state.json` v3): **`state-schema.md`** (still written when the web orchestration path is active; coexists with the session directory).
+
+## Resume Protocol (Crash / Handoff / New Instance)
+
+A fresh LLM or a different AI (or the same instance after a crash) picks up a session like this:
+
+1. `ls .audit-session/` → find the target session directory.
+2. Read `INDEX.md` — understand the structure.
+3. Read `STATUS.md` — learn the current phase, state, and "next action".
+4. Claim the session: update STATUS.md `active instance` and `last updated` before the first tool call.
+5. Continue from the next-action line.
+
+**STATUS.md is always current.** It is updated at every phase transition and after every ~5 fix commits in Phase 3, and flipped to `paused` on exit. Because findings/TODOs/changes live in phase folders as plain Markdown, the entire session is portable — another LLM, or the user reading by hand, can pick it up without running any tool.
+
+## Problem solved by this skill
+
+An Astro project needs:
+- `/audit` for performance, SEO, a11y, privacy compliance, security
+- `/astro-audit` for version-specific migration/best practices
+- `/project-audit` for Git, CI/CD, testing, maintenance
+
+Without orchestration: user must decide manually, duplicate work on security/infra.
+
+An infra/homelab repo needs different things again (Docker hygiene, Compose V2, Traefik, service inventory vs. running services, backup state, cert expiry) — the orchestrator detects this and runs the infra track instead.
 
 ## Problem
 
@@ -35,16 +91,44 @@ Without orchestration: user must decide manually, duplicate work on security/inf
 
 ## Solution: Auto-Detection + Audit Plan
 
+### Step 0 — Session Init (always)
+
+Before any detection, create the session directory:
+
+1. Slug = `<YYYY-MM-DD>-<short-descriptor>` (see `session-schema.md`).
+2. Create `.audit-session/<slug>/` with empty phase folders.
+3. Write initial `INDEX.md` (phases all `pending`) and `STATUS.md` (`state: in_progress`, `phase: 01-prescan`, `next action: detect project type`).
+4. From this point on, **every phase transition and every ~5 fixes updates STATUS.md**. This is what makes the session crash-resilient.
+
 ### Step 1 — Scan Project
 
-Same detection as `/audit` + `/project-audit`:
-- package.json, config files, Dockerfile, .github/, .claude/
-- Detect frontend framework (Astro, Next, Hugo, etc.)
-- Detect backend (Fastify, Express, etc.)
-- Detect project type (management-repo, backend-service, etc.)
-- **Detect output mode:** `output: "static"` vs. `output: "server"` (from astro.config.*)
+Same detection as `/audit` + `/project-audit`, plus universal signals:
+- package.json, pyproject.toml, go.mod, Cargo.toml, Dockerfile, docker-compose*.yml, .tf, ansible.cfg, .github/, .claude/, registry.json
+- Detect frontend framework (Astro, Next, SvelteKit, Hugo, etc.)
+- Detect backend (Fastify, Express, FastAPI, etc.)
+- Detect **project type** using the universal decision table in `universal-workflow.md`:
+  web-astro | web-sveltekit | web-nextjs | node-app | node-lib | python | go | rust |
+  infra-docker | infra-iac | infra-homelab | meta-automation | monorepo | docs | data-ml | generic
+- **Detect output mode:** `output: "static"` vs. `output: "server"` (from astro.config.*) — web only
 - **Related projects:** `audit-context.md` → check `relatedProjects` (e.g., forms backend)
 - **Detect beta/unstable version:** Version with `-beta`, `-rc`, `-alpha` suffix → prioritize migration audit
+
+Write the result to `01-prescan/project-profile.md` using the profile template (see `session-schema.md`). The profile drives Phase 2 track selection:
+
+| Detected project type | Phase 2 tracks |
+|-----------------------|----------------|
+| web-astro / web-sveltekit / web-nextjs | general + web-framework (delegates to existing /audit orchestration below) |
+| infra-docker | general + infra (Docker hygiene, Compose V2, rootless, secrets) |
+| infra-iac | general + infra (tf/tofu/ansible state, drift, secrets) |
+| infra-homelab | general + infra + ops (inventory vs. live, certs, backups, disk, retention) |
+| python / go / rust / node-app / node-lib | general + language-specific (lint, types, tests, CVEs, build repro) |
+| monorepo | general + per-package loop (each package under `02-analysis/packages/<name>/`) |
+| docs | general + docs (link rot, meta, freshness, structure) |
+| data-ml | general + data-ml (deps, notebooks, reproducibility, dataset provenance) |
+| meta-automation | general + ci (workflow sanity, pinned actions, secret scopes) |
+| generic | general only |
+
+**Rule:** The general track (git hygiene, CI sanity, secret scan, dependency freshness, license posture, docs freshness) runs for every project. Specialty tracks are additive.
 
 ### Step 1b — Infrastructure Scan (Pre-Audit)
 
@@ -489,14 +573,24 @@ Runtime: 12 min
 
 ## Rules
 
+- **Session directory is canonical** — `.audit-session/<date>-<slug>/` holds INDEX.md, STATUS.md, and four phase folders. STATUS.md must stay current (update at phase transitions and every ~5 fix commits).
+- **Any instance can resume** — because state is plain Markdown in the session directory, a crashed session can be continued by a new instance, a different model, or a human. The resume protocol is: read INDEX.md → read STATUS.md → claim the session → continue from the "next action" line.
+- **Four phases always run** — Pre-Scan, Analysis, Optimization, Report. Empty phases are documented, not skipped.
+- **Project type drives the track** — Phase 1 writes `project-profile.md`; Phase 2 picks tracks from `universal-workflow.md`. Web projects additionally activate the web-orchestration specialization below.
 - **Orchestrator plans + coordinates** — the actual audits run via their own skills (manually or as teammates)
 - **Team mode optional** — only if `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is set AND user chooses
 - **Teammates use /auto** — autonomous run, no manual start/continue
-- **State files remain separate** — each skill has its own state file, orchestrator state is overview
+- **Legacy state coexists** — each sub-skill keeps its own state file, and the web-specific `.audit-orchestrator-state.json` (v3) is still written when the web orchestration path is active; universal Markdown state is the primary surface for resume.
 - **Orchestrator state** tracks overview + phase mapping + sequencing + team status
 - **Pre-audit by orchestrator** — freshness check + GitHub/VPS checks done by orchestrator itself, not by teammate
 - **Beta/RC always first** — migration audit before quality audit for unstable versions
 - **Static filter active** — automatically skip SSR-specific checks for `output: "static"`
-- **Crash not fatal + self-healing** — teammate crash does not end the overall audit, state survives, manual fallback possible. In team mode: detect stalled workers (no state update > 5 min), restart once automatically before falling back to manual. Guard concurrent state file writes to prevent corruption (inspired by GSD v2 parallel worker patterns)
-- **Combined report** via `/audit-orchestrator report` — summarizes all audit reports
+- **Crash not fatal + self-healing** — teammate crash does not end the overall audit, state survives, manual fallback possible. In team mode: detect stalled workers (no state update > 5 min), restart once automatically before falling back to manual. Guard concurrent state file writes to prevent corruption (inspired by GSD v2 parallel worker patterns).
+- **Combined report** via `/audit-orchestrator report` or naturally as the Phase 4 output (`04-report/REPORT.md`).
 - **Regulatory standards** — explicitly check applicable privacy, accessibility, and compliance regulations — separate section in combined report
+
+## Reference Files
+
+- `universal-workflow.md` — the four-phase workflow, project-type tracks, severity scale, exit criteria.
+- `session-schema.md` — session directory layout, INDEX.md / STATUS.md / findings / TODO / changes templates, ID conventions.
+- `state-schema.md` — legacy `.audit-orchestrator-state.json` v3 schema (web-orchestration path).

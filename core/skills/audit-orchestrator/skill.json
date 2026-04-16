@@ -1,11 +1,25 @@
 {
   "name": "audit-orchestrator",
-  "version": "1.0.0",
-  "description": "Orchestrates /audit + /project-audit + /astro-audit + /sveltekit-audit + /db-audit + /auth-audit combinations.",
+  "version": "2.0.0",
+  "description": "Universal Pre-Scan -> Analysis -> Optimization -> Report orchestrator for any project type (web, infra, homelab, CLI, library, backend, monorepo, docs, data/ML). Self-detects project type; state lives in .audit-session/<date>-<slug>/ with INDEX.md + STATUS.md for crash-resilient resume. Delegates to /audit + /project-audit + /astro-audit + /sveltekit-audit + /db-audit + /auth-audit when a web framework is detected.",
   "category": "audit",
   "risk": "safe",
-  "triggers": ["full audit", "audit everything", "complete audit"],
+  "triggers": [
+    "full audit",
+    "audit everything",
+    "complete audit",
+    "infra audit",
+    "homelab audit",
+    "repo audit",
+    "orchestrate audit",
+    "pre-scan analysis optimization report",
+    "resume audit session"
+  ],
   "platforms": { "claude-code": "supported" },
   "dependencies": ["audit", "project-audit"],
-  "dataFiles": []
+  "dataFiles": [
+    "universal-workflow.md",
+    "session-schema.md",
+    "state-schema.md"
+  ]
 }

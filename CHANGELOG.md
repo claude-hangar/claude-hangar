@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+#### Audit-Orchestrator — Universal Mode + Resumable Session Directory (2026-04-16)
+- **`core/skills/audit-orchestrator/universal-workflow.md`** (NEU) — Project-type-agnostischer Pre-Scan -> Analyse -> Optimierung -> Report Workflow. Entscheidungstabelle fuer 16 Project-Types (web-astro/sveltekit/nextjs, infra-docker/iac/homelab, python/go/rust/node-app/node-lib, monorepo, docs, data-ml, meta-automation, generic). Jede Phase mit Inputs/Actions/Outputs/Exit-Criteria. Severity-Skala CRITICAL/HIGH/MEDIUM/LOW. Resume-Protokoll fuer neue Instanzen.
+- **`core/skills/audit-orchestrator/session-schema.md`** (NEU) — Session-Directory-Layout `.audit-session/<YYYY-MM-DD>-<slug>/` mit INDEX.md + STATUS.md + 4 Phase-Ordnern (01-prescan, 02-analysis, 03-optimization, 04-report). Templates fuer INDEX.md, STATUS.md, findings-Tabelle (ID-Konvention SEC-/DEP-/GIT-/CI-/INFRA-/MIG-...), TODO.md mit Severity-Gruppen, changes.md. Resume-Konventionen: STATUS.md last-updated ISO-8601, "next action"-Zeile, "active instance"-Claim vor erstem Tool-Call.
+- **`core/skills/audit-orchestrator/SKILL.md`** — Umgeschrieben als Universal-Orchestrator. Neuer Intro mit "Two Modes" (Universal default / Web Orchestration Specialization). Session-Directory und Resume-Protokoll als erste Abschnitte. Step 0 "Session Init" ergaenzt (legt Directory + INDEX.md + STATUS.md an). Step 1 erweitert um universal Project-Type-Decision. Rules-Sektion erweitert um Session-Directory-Regeln und "Any instance can resume". Reference-Files-Abschnitt verweist auf alle 3 Markdown-Schemas.
+- **`core/skills/audit-orchestrator/skill.json`** — Version `2.0.0`. Description spiegelt Universal-Modus wider (nutzt die neue 1536-Zeichen-Description-Cap aus v2.1.105). Triggers ergaenzt um `infra audit`, `homelab audit`, `repo audit`, `orchestrate audit`, `pre-scan analysis optimization report`, `resume audit session`. `dataFiles` verweist auf `universal-workflow.md`, `session-schema.md`, `state-schema.md`.
+- **Crash-Resilienz:** Session-State lebt in Plain-Markdown statt JSON — jede fremde Instanz (auch anderes LLM) liest INDEX.md + STATUS.md und macht weiter. Legacy `.audit-orchestrator-state.json` bleibt fuer Web-Path erhalten (Koexistenz).
+
 #### Freshness Sync — Claude Code v2.1.111 + Opus 4.7 (2026-04-16)
 - **`core/lib/defaults.json`** — `models.opus` auf `claude-opus-4-7` gehoben (neues Flagship-Modell, 16. April 2026). Alias-Chain `opus` -> `claude-opus-4-7` greift in allen Agents automatisch.
 - **`tests/test-models.sh`** — `VALID_FULL_IDS` enthaelt jetzt `claude-opus-4-7` (zusaetzlich zu 4-6, Sonnet 4-6, Haiku 4-5-20251001). Test validiert weiterhin Defaults + Agent-Frontmatter.
