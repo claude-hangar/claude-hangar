@@ -5,16 +5,16 @@ The statusline is a single-line display at the bottom of the Claude Code TUI sho
 ## What the Statusline Shows
 
 ```
-Opus 4.6 | my-session | project@main * | ████████░░ 450k/1.0m 45% | hi | 5h 32% | 7d 15% | $0.42 | 12k/min ~8t | 25m
+Opus 4.7 | my-session | project@main * | ████████░░ 450k/1.0m 45% | xhi | 5h 32% | 7d 15% | $0.42 | 12k/min ~8t | 25m
 ```
 
 | Segment | Description |
 |---------|-------------|
-| Model | Active model name (e.g., `Opus 4.6`) |
+| Model | Active model name (e.g., `Opus 4.7`) |
 | Session | Session name (if set via `/rename`) |
 | Directory | Working dir, git branch, dirty indicator (`*`) |
 | Context | Progress bar + used/total tokens + percentage |
-| Effort | Reasoning effort level (low/med/hi) |
+| Effort | Reasoning effort level (low/med/hi/xhi/max) |
 | 5h / 7d | Rate limit utilization + reset time |
 | Extra | Extra usage credits (if enabled) |
 | Cost | Session cost in USD |

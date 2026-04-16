@@ -144,7 +144,7 @@ The default profile and all other configurable values are defined in `core/lib/d
 The statusline script (`~/.claude/statusline-command.sh`) displays real-time session info:
 
 ```
-Opus 4.6 | my-project@main * | ████████░░ 80k/1m 80% | hi | 5h 45% | 7d 23% | $0.42 | 12k/min | 23m
+Opus 4.7 | my-project@main * | ████████░░ 80k/1m 80% | xhi | 5h 45% | 7d 23% | $0.42 | 12k/min | 23m
 ```
 
 | Segment | Description |

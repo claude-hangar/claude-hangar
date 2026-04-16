@@ -13,7 +13,7 @@ TESTS=0
 # Aliases: short names used in agent frontmatter
 # Full IDs: complete model identifiers used in defaults.json
 VALID_ALIASES="opus|sonnet|haiku"
-VALID_FULL_IDS="claude-opus-4-6|claude-sonnet-4-6|claude-haiku-4-5-20251001"
+VALID_FULL_IDS="claude-opus-4-7|claude-opus-4-6|claude-sonnet-4-6|claude-haiku-4-5-20251001"
 
 echo "============================================================"
 echo "Claude Hangar — Model Reference Validation"

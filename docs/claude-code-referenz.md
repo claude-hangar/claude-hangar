@@ -1,9 +1,54 @@
 # Claude Code CLI – Vollstaendige Referenz
 
-## Stand: v2.1.110 (16. April 2026)
+## Stand: v2.1.111 (16. April 2026)
 
 > v2.1.100 ist ein Re-Release von v2.1.98 (identischer Code, npm dist-tag Promotion).
 > v2.1.99, v2.1.102, v2.1.103 wurden nicht veroeffentlicht.
+
+### Aenderungen v2.1.111
+
+#### Neue Features
+
+- **Claude Opus 4.7 (`claude-opus-4-7`)** — Neues Flagship-Modell (16. April 2026). Bessere Long-Horizon-Autonomie, staerkere Systems-Engineering- und Code-Reasoning-Leistung ueber das komplette 1M-Token Context-Window, hoehere Vision-Aufloesung (bis 2.576px lange Kante), deutlich praezisere Instruction-Following. Pricing: $5/$25 pro MTok (>200K: $10/$37.50).
+- **`xhigh` Effort-Level** — Neue Stufe zwischen `high` und `max`, nur fuer Opus 4.7. Andere Modelle fallen auf `high` zurueck. Steuerbar via `/effort`, `--effort` und Model-Picker.
+- **`/effort` interaktiver Slider** — Ohne Argument aufgerufen zeigt `/effort` einen Arrow-Key-Slider mit Enter-Bestaetigung.
+- **Auto-Mode** — Fuer Max-Subscriber bei Opus 4.7 default-aktiv (kein `--enable-auto-mode` mehr noetig).
+- **`/less-permission-prompts` (Built-in Skill)** — Scannt Transcripts nach haeufigen Read-Only Bash/MCP-Calls und schlaegt priorisierte Allowlist fuer `.claude/settings.json` vor. Hangar liefert einen eigenen Skill mit gleichem Namen — der Built-in koexistiert (Aufrufname `/less-permission-prompts`).
+- **`/ultrareview`** — Cloud-basierter Multi-Agent-Review: Ohne Argument reviewed den aktuellen Branch, mit `<PR#>` reviewed einen konkreten GitHub-PR.
+- **"Auto (match terminal)" Theme** — Folgt dem Dark/Light-Mode des Terminals (`/theme`).
+- **PowerShell-Tool (Windows Rollout)** — Progressiv ausgerollt; Opt-in/out via `CLAUDE_CODE_USE_POWERSHELL_TOOL`. Linux/macOS: `CLAUDE_CODE_USE_POWERSHELL_TOOL=1` aktiviert es (benoetigt `pwsh` auf PATH).
+- **`OTEL_LOG_RAW_API_BODIES`** — Emittiert volle API-Request/Response-Bodies als OpenTelemetry-Log-Events (Debug).
+
+#### Verbesserungen
+
+- **Read-only Bash ohne Permission-Prompt** — Kommandos mit Glob-Patterns (`ls *.ts`) und `cd <project-dir> && …` triggern keinen Prompt mehr.
+- **Subcommand-Typo-Suggest** — `claude udpate` -> "Did you mean `claude update`?".
+- **Plan-Filenames** — Plan-Dateien heissen nach dem Prompt (z.B. `fix-auth-race-snug-otter.md`) statt Random-Words.
+- **`/setup-vertex` + `/setup-bedrock`** — Zeigt echten `settings.json`-Pfad (bei `CLAUDE_CONFIG_DIR`), seedet Modell-Kandidaten aus bestehenden Pins, bietet "with 1M context"-Option fuer unterstuetzte Modelle.
+- **`/skills` Sort-by-Token-Count** — `t` toggelt Sortierung nach geschaetztem Token-Count.
+- **`Ctrl+U` loescht Input-Buffer komplett** — Vorher: bis Zeilenanfang. `Ctrl+Y` stellt wieder her.
+- **`Ctrl+L`** — Forciert Full-Screen-Redraw zusaetzlich zum Input-Clear.
+- **Transcript-View-Footer** — Zeigt `[` (dump to scrollback) und `v` (open in editor) Shortcuts.
+- **Truncated-Paste-Marker** — Der "+N lines"-Hinweis ist jetzt eine volle Breite-Linie.
+- **Headless `--output-format stream-json`** — Enthaelt `plugin_errors` im Init-Event bei dependency-demoted Plugins.
+- **Unterdrueckte spurious Errors** — Decompression-, Network- und transiente Fehlermeldungen verschwinden aus der TUI bei normalem Betrieb.
+- **Nicht-Streaming-Fallback** — v2.1.110-Cap auf Retries revertiert (hatte Long-Waits gegen Outright-Failures getauscht).
+
+#### Fixes
+
+- Terminal-Display-Tearing in iTerm2 + tmux bei Terminal-Notifications
+- `@`-File-Suggestions re-scannten ganzes Projekt pro Turn in Non-Git-Cwds
+- LSP-Diagnostics von vor einem Edit erschienen danach — Model re-readte unnoetig
+- `/resume` Tab-Complete resumete arbitrary Session statt Picker zu zeigen
+- `/context` Grid-Rendering mit Extra-Leerzeilen
+- `/clear` droppte `/rename`-Session-Namen (Statusline verlor `session_name`)
+- Plugin-Dependency-Errors unterscheiden jetzt conflicting/invalid/complex Version-Requirements
+- Non-existenter `commit` Skill zeigte "Unknown skill: commit" fuer User ohne custom `/commit`
+- 429 Rate-Limit-Errors auf Bedrock/Vertex/Foundry referenzierten status.claude.com (nur Anthropic-operated)
+- Feedback-Surveys erschienen Back-to-Back nach Dismiss
+- Bare URLs in Bash/PowerShell/MCP-Output nicht klickbar bei Terminal-Wrap
+- Windows: `CLAUDE_ENV_FILE` und SessionStart-Hook-Env-Files wirken jetzt (vorher No-Op)
+- Windows: Permission-Rules mit Drive-Letter-Pfaden korrekt root-anchored, Case-insensitive matching
 
 ### Aenderungen v2.1.110
 
@@ -256,7 +301,7 @@
 - Remote Control /poll Rate 300x reduziert (10min statt 1-2s)
 - VS Code: Plan-Dokument-Ansicht mit Kommentaren
 - VS Code: Native MCP-Server-Verwaltung via `/mcp`
-- Default Opus 4.6 auf Bedrock, Vertex und Microsoft Foundry (war Opus 4.1)
+- Default Opus 4.6 auf Bedrock, Vertex und Microsoft Foundry (war Opus 4.1); Opus 4.7 seit v2.1.111 verfuegbar (u.a. AWS Bedrock)
 
 ---
 
@@ -279,25 +324,30 @@ Claude Code ist ein agentisches CLI-Tool, das Codebases liest, Befehle ausführt
 
 | Modell | Einsatz | Preis (Input/Output per MTok) |
 |--------|---------|-------------------------------|
-| Opus 4.6 | Komplexes Reasoning, Architektur | $5 / $25 (>200K: $10/$37.50) |
+| Opus 4.7 | Flagship — Long-Horizon-Autonomy, Systems-Engineering, praezise Instructions | $5 / $25 (>200K: $10/$37.50) |
+| Opus 4.6 | Vorherige Opus-Generation, weiter verfuegbar | $5 / $25 (>200K: $10/$37.50) |
 | Sonnet 4.6 | Tägliche Entwicklung (neuestes Sonnet) | Günstiger |
 | Sonnet 4.5 | Tägliche Entwicklung | Günstiger |
 | Haiku 4.5 | Sub-Agenten, schnelle Aufgaben | ~15x günstiger als Opus |
 
-**Empfehlung**: Sonnet 4.6 als Default, Haiku fuer Sub-Agenten/Exploration, Opus fuer schwere Reasoning-Aufgaben.
+**Empfehlung**: Opus 4.7 als Default fuer Reasoning/Architektur, Sonnet 4.6 fuer taegliche Entwicklung, Haiku fuer Sub-Agenten/Exploration.
 
 **Opusplan-Modus**: Opus für Planung + Sonnet für Ausführung (Kosten-Hybrid).
 
-**Fast Mode**: Verfügbar für Opus 4.6 – schnellere Antworten bei einfacheren Aufgaben. Toggle mit `/fast`.
+**Fast Mode**: Verfügbar für Opus 4.6 – schnellere Antworten bei einfacheren Aufgaben. Toggle mit `/fast`. (Fuer Opus 4.7: stattdessen Effort-Levels via `/effort` nutzen.)
 
-**Adaptive Thinking**: Opus 4.6 entscheidet selbst wann und wie intensiv er denkt — kein manuelles Toggle noetig.
+**Adaptive Thinking**: Opus 4.6/4.7 entscheiden selbst wann und wie intensiv sie denken — kein manuelles Toggle noetig.
+
+**Effort-Levels** (`/effort` oder `--effort`): `low`, `medium`, `high`, `xhigh` (nur Opus 4.7), `max`. `xhigh` liegt zwischen `high` und `max` und ist ein Opus-4.7-Feature — andere Modelle fallen auf `high` zurueck. Ohne Argument oeffnet `/effort` einen interaktiven Slider.
+
+**Auto-Mode**: Fuer Max-Subscriber bei Opus 4.7 default-aktiv (vorher `--enable-auto-mode` noetig).
 
 **Modell-Wechsel**: Alt+P waehrend der Eingabe — kein Neustart noetig.
 
 ## Context Window
 
 - Standard: 200K Tokens
-- Opus 4.6: 1M Tokens (Beta)
+- Opus 4.6 / Opus 4.7: 1M Tokens (Opus 4.7 mit staerkerer Long-Context-Retrieval-Leistung)
 - Max Output: 128K Tokens
 - Skill-Budget: 2% des Context Windows für Skill-Beschreibungen
 
@@ -891,6 +941,10 @@ Claude Code bevorzugt dedizierte Tools ueber Bash-Aequivalente:
 | /recap | Context-Recap bei Session-Rueckkehr |
 | /focus | Focus-View Toggle (Ctrl+O = Transcript) |
 | /tui | Fullscreen TUI-Modus |
+| /effort | Effort-Level setzen (low/medium/high/xhigh/max); ohne Argument interaktiver Slider |
+| /ultrareview | Cloud-basierter Multi-Agent-Code-Review (Branch oder `<PR#>`) |
+| /less-permission-prompts | Scannt Transcripts und schlaegt Allowlist-Regeln vor (Built-in seit v2.1.111) |
+| /theme | Theme-Auswahl inkl. "Auto (match terminal)" |
 
 ## 10.2 Keyboard Shortcuts
 
@@ -902,7 +956,7 @@ Claude Code bevorzugt dedizierte Tools ueber Bash-Aequivalente:
 | Ctrl+G | Externen Editor oeffnen (auch in AskUserQuestion "Other"-Input) |
 | Ctrl+O | Transcript-Only-Modus (frueher Verbose-Modus; `/focus` fuer separaten Focus-View) |
 | Ctrl+B | Bash-Commands und Agents im Hintergrund starten |
-| /fast | Fast-Modus Toggle (Opus 4.6 mit schnellerem Output) |
+| /fast | Fast-Modus Toggle (Opus 4.6 mit schnellerem Output; fuer Opus 4.7 stattdessen `/effort`) |
 
 **Clickable File Paths:** Dateipfade sind anklickbar (OSC 8 Hyperlinks) im Terminal.
 
@@ -1135,5 +1189,6 @@ Ab SDK v0.86.0 bietet Anthropic die **Managed Agents API** (Beta):
 
 - **Opus 4** und **Sonnet 4** als deprecated markiert
 - Neue Generation: **Opus 4.6** (`claude-opus-4-6`) und **Sonnet 4.6** (`claude-sonnet-4-6`)
+- **Flagship 2026-04-16:** **Opus 4.7** (`claude-opus-4-7`) mit `xhigh` Effort-Level
 - **Advisor Tool API** (Beta) — neuer Tool-Typ in v0.87.0
 - **Vertex EU Region Support** — v0.88.0

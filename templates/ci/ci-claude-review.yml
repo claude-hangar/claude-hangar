@@ -44,8 +44,9 @@ jobs:
           # Optional: customize the review prompt
           # direct_prompt: "Review this PR for security issues and code quality"
 
-          # Optional: use a specific model (default: claude-sonnet-4-5-20250514)
-          # model: "claude-sonnet-4-6-20260424"
+          # Optional: use a specific model (default: latest Sonnet)
+          # model: "claude-sonnet-4-6"
+          # model: "claude-opus-4-7"
 
           # Optional: set max turns for the review
           # max_turns: 10

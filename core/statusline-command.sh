@@ -73,7 +73,7 @@ round() {
     (.workspace.git_worktree // "" | tostring)
 ] | @tsv' 2>/dev/null) || true
 
-# Strip parenthetical suffix from model name (e.g., "Opus 4.6 (1M context)" -> "Opus 4.6")
+# Strip parenthetical suffix from model name (e.g., "Opus 4.7 (1M context)" -> "Opus 4.7")
 model_name="${model_name% (*}"
 
 [ "${size:-0}" -eq 0 ] 2>/dev/null && size=1000000
@@ -185,6 +185,8 @@ out+="${sep}"
 case "$effort_level" in
     low)    out+="${dim}low${rst}" ;;
     medium) out+="${orange}med${rst}" ;;
+    xhigh)  out+="${green}xhi${rst}" ;;
+    max)    out+="${green}max${rst}" ;;
     *)      out+="${green}hi${rst}" ;;
 esac
 

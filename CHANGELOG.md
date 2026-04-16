@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+#### Freshness Sync — Claude Code v2.1.111 + Opus 4.7 (2026-04-16)
+- **`core/lib/defaults.json`** — `models.opus` auf `claude-opus-4-7` gehoben (neues Flagship-Modell, 16. April 2026). Alias-Chain `opus` -> `claude-opus-4-7` greift in allen Agents automatisch.
+- **`tests/test-models.sh`** — `VALID_FULL_IDS` enthaelt jetzt `claude-opus-4-7` (zusaetzlich zu 4-6, Sonnet 4-6, Haiku 4-5-20251001). Test validiert weiterhin Defaults + Agent-Frontmatter.
+- **`core/statusline-command.sh`** — Effort-Case erweitert um neue Level aus v2.1.111: `xhigh` -> `xhi`, `max` -> `max`. Vorher faelschlich als `hi` gerendert. Strip-Comment auf "Opus 4.7 (1M context)" aktualisiert.
+- **`docs/claude-code-referenz.md`** — Header auf v2.1.111 (16. April 2026); vollstaendiger Aenderungs-Abschnitt fuer v2.1.111 mit Features (Opus 4.7, `xhigh` Effort, `/effort`-Slider, Auto-Mode, `/less-permission-prompts` Built-in, `/ultrareview`, "Auto (match terminal)" Theme, PowerShell-Tool Windows, `OTEL_LOG_RAW_API_BODIES`), Verbesserungen und Fixes. Modell-Tabelle ergaenzt (Opus 4.7 als Flagship), Context-Window-Abschnitt zeigt 1M fuer 4.6+4.7, neuer Effort-Levels-Block, Commands-Tabelle erweitert um `/effort`, `/ultrareview`, `/less-permission-prompts`, `/theme`.
+- **`docs/configuration.md` + `docs/tutorials/statusline-customization.md`** — Beispiel-Statuslines auf `Opus 4.7` + `xhi` Effort aktualisiert; Effort-Level-Liste auf `low/med/hi/xhi/max` erweitert.
+- **`templates/ci/ci-claude-review.yml`** — Model-Hint-Kommentar zeigt aktuelle Optionen (`claude-sonnet-4-6`, `claude-opus-4-7`); stale `sonnet-4-5-20250514` Referenz entfernt.
+
 #### Freshness Opportunities — Claude Code v2.1.105 follow-through (2026-04-14)
 - **`core/hooks/pre-compact.sh`** — Opt-in Block-Gate via `HANGAR_BLOCK_COMPACT=1`: blockiert `/compact` wenn aktive `in_progress`-Tasks + uncommitted Changes + kein `HANDOFF.md`. Exit 2 mit erklaerender stderr-Nachricht (Resolve-Optionen). Nutzt die neue Block-Semantik aus Claude Code v2.1.105 PreCompact-Hook.
 - **`core/settings.json.template`** — `permissions.deny` Sektion mit 8 destruktiven Bash-Patterns (rm -rf, rm -r /, git reset --hard, git push --force, git push -f, npm publish, docker system prune, docker rmi). Deklarative Defense-in-Depth zusaetzlich zu `permission-denied-retry.sh`. Nutzt v2.1.101-Fix: deny-Rules ueberschreiben Hook `permissionDecision: "ask"`.
