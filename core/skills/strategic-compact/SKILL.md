@@ -115,3 +115,19 @@ to continue with degraded context. Reference: oh-my-opencode v3.16.0 added a sim
 cap to prevent infinite compaction cycles.
 
 Inspired by ECC's strategic-compaction skill and GSD v2's fresh-context-per-task concept.
+
+## Post-Compact Recovery: /recap
+
+After compaction, use `/recap` (Claude Code v2.1.108+) for quick context recovery instead of re-reading all files. `/recap` generates a focused summary of what was happening before compaction — faster than `/handoff read` and more targeted than re-reading STATUS.md.
+
+**Flow:** `/strategic-compact now` → compaction happens → `/recap` → resume work with context.
+
+## Tiered Context Injection
+
+For projects with large context requirements, consider GSD v2's tiered context injection pattern (v2.67.0+) which achieves 65%+ context reduction by loading context in tiers:
+
+1. **Always loaded** — Project identity, active phase, critical decisions
+2. **On-demand** — File-level details, implementation specifics
+3. **Never loaded** — Completed phases, archived decisions
+
+This pattern complements strategic-compact: instead of compacting everything, inject only the tier relevant to the current task. Reference: GSD v2 Decision Scope Cascade.

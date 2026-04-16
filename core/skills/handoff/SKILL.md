@@ -217,6 +217,16 @@ When `/handoff clean`:
 - **Proportional detail** — complex session = detailed handoff, quick fix = brief handoff
 - **Iron Law: Evidence over memory** — reference git log and file state, not session recall
 
+## Lightweight Alternative: /recap
+
+For quick context recovery without a full handoff, Claude Code v2.1.108+ offers `/recap` — a built-in command that generates a context recap when returning to a session. Use `/recap` when:
+
+- **Returning after a short break** — faster than reading HANDOFF.md
+- **After /compact** — quick re-orientation without full context reload
+- **Mid-session context loss** — when you forgot what you were doing
+
+**Decision tree:** Short break → `/recap`. End of session → `/handoff create`. New person → `/handoff create` (full context needed).
+
 ## Integration
 
 - `session-stop.sh` can remind about `/handoff` if significant work was done

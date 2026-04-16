@@ -5,7 +5,7 @@ description: >
   Use when: "export rules", "cursor rules", "windsurf rules", "export-rules", "convert to mdc".
 effort: medium
 user-invocable: true
-argument-hint: "[cursor|windsurf|copilot|all]"
+argument-hint: "[cursor|windsurf|copilot|cline|all]"
 ---
 
 # /export-rules — Cross-IDE Rule Export
@@ -19,6 +19,7 @@ Convert Claude Hangar skills and rules into formats compatible with other AI cod
 | Cursor | `.cursor/rules/*.mdc` | One .mdc file per rule |
 | Windsurf | `.windsurfrules` | Single rules file |
 | GitHub Copilot | `.github/copilot-instructions.md` | Single instructions file |
+| Cline | `.clinerules` | Single rules file |
 
 ## Instructions
 
@@ -27,6 +28,7 @@ Convert Claude Hangar skills and rules into formats compatible with other AI cod
 From `$ARGUMENTS`:
 - `cursor` → Generate Cursor .mdc rules
 - `windsurf` → Generate Windsurf rules file
+- `cline` → Generate Cline rules file
 - `copilot` → Generate Copilot instructions
 - `all` → Generate all formats
 - No argument → Ask which format(s) to generate
@@ -79,7 +81,29 @@ Create a single `.windsurfrules` file at the project root:
 {{Extracted from development-workflow.md}}
 ```
 
-### Step 5: Generate — GitHub Copilot
+### Step 5: Generate — Cline
+
+Create a single `.clinerules` file at the project root:
+
+```markdown
+# Project Rules
+
+## Code Quality
+{{Extracted from coding-style.md}}
+
+## Security
+{{Extracted from security.md}}
+
+## Language-Specific
+{{Extracted from detected language rules}}
+
+## Workflow
+{{Extracted from development-workflow.md}}
+```
+
+**Note:** Cline uses a flat rules file similar to Windsurf. The format is identical but the filename differs (`.clinerules` vs `.windsurfrules`).
+
+### Step 6: Generate — GitHub Copilot
 
 Create `.github/copilot-instructions.md`:
 
@@ -96,7 +120,7 @@ Create `.github/copilot-instructions.md`:
 {{From security.md}}
 ```
 
-### Step 6: Report
+### Step 7: Report
 
 ```markdown
 ## Export Complete
@@ -105,6 +129,7 @@ Create `.github/copilot-instructions.md`:
 |--------|-------|----------|
 | Cursor | N rules | .cursor/rules/*.mdc |
 | Windsurf | 1 file | .windsurfrules |
+| Cline | 1 file | .clinerules |
 | Copilot | 1 file | .github/copilot-instructions.md |
 
 Total rules exported: N
