@@ -12,7 +12,7 @@ description: >
   optimization report".
 effort: high
 user-invocable: true
-argument-hint: "report | resume | <session-slug>"
+argument-hint: "report | resume | dry-run | <session-slug>"
 ---
 
 <!-- AI-QUICK-REF
@@ -37,6 +37,23 @@ Meta-skill that runs a project through **Pre-Scan → Analysis → Optimization 
 |------|------|-----------|
 | **Universal (default)** | Any project — infra, homelab, CLI, library, monorepo, docs, data/ML, web, generic | Four-phase workflow, project-profile-driven analysis track (see `universal-workflow.md`) |
 | **Web Orchestration (specialization)** | Project detected as `web-astro`, `web-sveltekit`, or `web-nextjs` | Same four phases, but Phase 2 delegates to `/audit` + `/{framework}-audit` + `/project-audit` + optional `/db-audit` / `/auth-audit` per the rules below |
+
+## Dry-Run Preview (RepoLens-inspired)
+
+Invoke with `dry-run` argument to preview the full plan without firing any sub-agents or writing session state:
+
+```
+/audit-orchestrator dry-run
+```
+
+Dry-run output prints:
+1. **Detected project type** and confidence (no Read of large files beyond fingerprint check)
+2. **Planned Phase-2 tracks** — which audits/agents would run and why
+3. **Estimated cost envelope** — tool calls × `HANGAR_COST_PER_CALL_USD` (default 0.02 USD)
+4. **Parallelization plan** — which steps are independent, which serialize
+5. **Session directory that would be created** — path only, not materialized
+
+No `.audit-session/` is written, no agents are spawned. Safe to run on any repo for planning. Exit after printing the plan.
 
 The universal mode is always entered first. If Phase 1 (Pre-Scan) detects a supported web framework, Phase 2 activates the web orchestration path. For any other project type, Phase 2 runs the general + specialty analysis tracks described in `universal-workflow.md`.
 

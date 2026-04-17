@@ -37,7 +37,7 @@ maxTurns: 10
 | `name` | Yes | Matches filename without `.md` |
 | `description` | Yes | What it does + trigger phrases |
 | `model` | Yes | `opus` (recommended), `sonnet`, or `haiku` |
-| `effort` | No | `low`, `medium` (default), `high` — controls model reasoning depth |
+| `effort` | No | `low`, `medium` (default), `high`, `xhigh`, `max` — controls model reasoning depth. `xhigh` (v2.1.111+) sits between `high` and `max` and is Opus-4.7-only; other models fall back to `high`. Use `xhigh` for deep-reasoning agents (architect, planner, deep analysis, security review); `high` for focused reviews; `medium`/`low` for mechanical tasks |
 | `tools` | Yes | Comma-separated allowed tools |
 | `disallowedTools` | No | Explicitly blocked tools |
 | `isolation` | No | `none` (default) or `worktree` |

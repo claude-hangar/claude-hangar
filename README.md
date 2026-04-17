@@ -25,10 +25,10 @@ Most Claude Code configs are personal dotfiles — useful to read, hard to reuse
 - **Multi-project orchestration** — manage configs for multiple repos from one place
 - **Modular stacks** — pick only what you need (`bash integrate.sh <stack>`) with `--with`/`--without` component control
 - **Battle-tested hooks** that prevent real incidents (secret leaks, destructive commands, context overflow)
-- **31 skills** from project scanning to pre-PR verification, context optimization, and meta-governance
-- **27 lifecycle hooks** with 4-level quality gates, config protection, MCP health checks, design quality guards, and smart context preservation
-- **21 agents** for specialized tasks, code review, TDD enforcement, performance analysis, and autonomous workflows
-- **19 governance rules** (common + language-specific) always-on code quality
+- **41 skills** from project scanning to pre-PR verification, context optimization, session recap, effort tuning, stack lenses, and meta-governance
+- **31 lifecycle hooks** with 4-level quality gates, config protection, MCP health checks, design quality guards, permission-request inspection, budget caps, and smart context preservation
+- **22 agents** for specialized tasks (code review, TDD enforcement, performance analysis, MCP server development, autonomous workflows) — deep-reasoning agents run at `effort: xhigh` (v2.1.111+)
+- **20 governance rules** (common + language-specific) always-on code quality
 - **3 context modes** — dev, research, review
 - **Cross-platform** — Linux, macOS, and Windows (Git Bash)
 
@@ -65,9 +65,9 @@ cd ~/.claude-hangar && bash setup.sh
 [+] Prerequisites: git ✓  node ✓
 [+] Structure validation passed
 [i] Deploying to /home/user/.claude/...
-[+] Deployed: Hooks (27 scripts)
-[+] Deployed: Agents (21 definitions)
-[+] Deployed: Skills (31 commands)
+[+] Deployed: Hooks (31 scripts)
+[+] Deployed: Agents (22 definitions)
+[+] Deployed: Skills (41 commands)
 [+] Deployed: Shared lib
 [+] Deployed: Statusline
 [+] Deployed: settings.json (from template)

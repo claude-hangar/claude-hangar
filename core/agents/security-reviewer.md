@@ -6,7 +6,7 @@ description: >
   Use when user mentions "security check", "is this secure",
   "check before deploy", or wants a quick security review without full audit.
 model: opus
-effort: high
+effort: xhigh
 tools: Read, Glob, Grep, Bash, WebFetch, WebSearch, Write, Edit
 isolation: worktree
 memory: project

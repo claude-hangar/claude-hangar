@@ -1,9 +1,15 @@
 # Claude Code CLI – Vollstaendige Referenz
 
-## Stand: v2.1.111 (16. April 2026)
+## Stand: v2.1.112 (17. April 2026)
 
 > v2.1.100 ist ein Re-Release von v2.1.98 (identischer Code, npm dist-tag Promotion).
 > v2.1.99, v2.1.102, v2.1.103 wurden nicht veroeffentlicht.
+
+### Aenderungen v2.1.112
+
+#### Fixes
+
+- **Opus 4.7 Auto-Mode** — "claude-opus-4-7 is temporarily unavailable" Fehlermeldung im Auto-Mode behoben. Reiner Hotfix auf v2.1.111.
 
 ### Aenderungen v2.1.111
 

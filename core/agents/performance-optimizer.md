@@ -5,7 +5,7 @@ description: >
   optimizes bundles, detects memory leaks, and verifies Core Web Vitals. Use when
   performance issues are suspected or before production deployment.
 model: opus
-effort: high
+effort: xhigh
 tools: Read, Grep, Glob, Bash, WebSearch, WebFetch
 maxTurns: 40
 ---

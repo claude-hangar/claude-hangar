@@ -46,6 +46,54 @@ If any of these occur, STOP and escalate:
 - A dependency is missing that wasn't in the plan
 - Scope expansion detected (fixing things not in the plan)
 
+### DONE-Streak Convergence
+
+Adopted from RepoLens: demand a stable consensus before terminating. Prevents
+premature exit on a single "looks done" signal and prevents infinite runs by
+requiring the same result N ticks in a row.
+
+```bash
+source "$HOME/.claude/lib/done-streak.sh"
+done_streak_init "$LOOP_ID"
+
+# After each iteration:
+if conditions_satisfied; then
+  done_streak_tick "$LOOP_ID" DONE
+else
+  done_streak_tick "$LOOP_ID" WORKING   # resets counter
+fi
+
+if done_streak_reached "$LOOP_ID"; then
+  echo "Terminating: stable DONE for $HANGAR_DONE_STREAK_N consecutive ticks"
+  exit 0
+fi
+```
+
+Default streak target: 3 (override via `HANGAR_DONE_STREAK_N`).
+
+### Resume-State (Checkpoint Resume)
+
+Persist progress to `.loop-state.json` after every step. On resume, read the
+state and continue from the last completed step instead of restarting:
+
+```json
+{
+  "loop_id": "my-task",
+  "started_at": "2026-04-17T10:00:00Z",
+  "current_step": 5,
+  "total_steps": 12,
+  "last_commit": "abc1234",
+  "streak_count": 1,
+  "status": "paused"
+}
+```
+
+On start:
+1. Check for `.loop-state.json`
+2. If present and `status != "completed"` — prompt "Resume from step N?"
+3. If confirmed, skip completed steps
+4. If declined or stale (>24h), archive and start fresh
+
 ## Safety Guardrails
 
 1. **No destructive operations** without explicit confirmation

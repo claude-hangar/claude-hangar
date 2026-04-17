@@ -7,7 +7,7 @@ description: >
   "analyze", "how does X relate to Y", "explain the system",
   or complex questions requiring multi-file analysis.
 model: opus
-effort: high
+effort: xhigh
 tools: Read, Glob, Grep, Bash, WebFetch, WebSearch
 memory: project
 maxTurns: 35

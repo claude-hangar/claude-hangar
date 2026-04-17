@@ -9,6 +9,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+#### Claude Code v2.1.111/112 Alignment + RepoLens Patterns (2026-04-17)
+
+**Claude Code v2.1.111/112 optimizations:**
+- **`effort: xhigh`** — 7 deep-reasoning agents upgraded from `high` to the new `xhigh` effort level (v2.1.111): `architect`, `planner`, `explorer-deep`, `harness-optimizer`, `performance-optimizer`, `refactor-agent`, `security-reviewer`. Preserves focused-review agents at `high`.
+- **`core/hooks/permission-request-inspect.sh` (NEW)** — PermissionRequest hook (v2.1.110) that re-checks the `updatedInput` produced by upstream hooks against an extended deny-pattern set. Closes the bypass lane where a hook could sanitize a dangerous command past the engine deny rules. Blocks `curl|sh`, reverse shells, credential exfil, `sudo rm -rf`, `/dev/tcp` sockets, `nc -e`.
+- **`core/settings.json.template`** — New env vars: `ENABLE_PROMPT_CACHING_1H=true` (v2.1.108 1-hour cache TTL), `HANGAR_BLOCK_COMPACT`, `HANGAR_BUDGET_USD`, `HANGAR_DONE_STREAK_N`. New root key `autoScrollEnabled: true` (v2.1.110 fullscreen mode). New `PermissionRequest` hook wiring.
+
+**RepoLens-inspired additions:**
+- **`core/lib/done-streak.sh` (NEW)** — DONE-streak convergence helper. Source-able library exposing `done_streak_init/tick/reached/reset/count`. Prevents premature `loop-operator` exits on the first "looks done" signal and prevents infinite runs by requiring N consecutive stable ticks. Default N=3, override via `HANGAR_DONE_STREAK_N`. State in `~/.claude/.streaks/<id>.count`.
+- **`core/agents/loop-operator.md`** — New sections "DONE-Streak Convergence" (use of done-streak.sh) and "Resume-State" (`.loop-state.json` format for interrupted runs with restart-from-step).
+- **`core/hooks/cost-tracker.sh`** — Budget-cap enhancement. Reads `HANGAR_BUDGET_USD` + `HANGAR_COST_PER_CALL_USD` (default 0.02), estimates session cost, writes budget alerts to `~/.claude/.metrics/budget-alerts.jsonl` at 80% / 100% thresholds. Stderr warning on threshold crossing.
+- **`core/skills/audit-orchestrator/SKILL.md`** — New `dry-run` argument mode: previews detected project type, planned Phase-2 tracks, estimated cost envelope, parallelization plan — without spawning agents or materializing session directory.
+- **`stacks/astro/lenses/` (NEW)** — Lens pattern scaffold: 2 example lenses (`content-collections.md`, `view-transitions.md`) + authoring `README.md`. Granular single-concern audit modules with `category` tags and `effort_min/effort_max` for orchestrator cost estimation. Stack README documents the pattern for all stacks.
+
+**New agents and skills:**
+- **`core/agents/mcp-builder.md` (NEW)** — MCP server development specialist (Opus, xhigh). Designs, scaffolds, tests, packages MCP servers for stdio/HTTP/SSE/WebSocket transports. Tool schema quality rules, auth-flow patterns (OAuth PKCE, bearer, API-key), Claude Code integration checklist.
+- **`core/skills/session-recap/SKILL.md` (NEW)** — Human-readable recap from Hangar pre-compact snapshot, equivalent to CC `/recap` (v2.1.108) but survives compaction and handoff boundaries. Three modes: `brief`, `full`, `tasks-only`.
+- **`core/skills/effort-tuner/SKILL.md` (NEW)** — Recommends optimal effort level via cheap heuristics (breadth × novelty × risk × reversibility × dependency depth). Maps score 0–10 to `low`/`medium`/`high`/`xhigh`/`max`. Flags anti-patterns (`max` on trivial, `low` on security).
+
+**Counts:** 41 skills (+3), 31 hooks (+1), 22 agents (+1). Plugin version `1.2.0`.
+
 #### Audit-Orchestrator — Universal Mode + Resumable Session Directory (2026-04-16)
 - **`core/skills/audit-orchestrator/universal-workflow.md`** (NEU) — Project-type-agnostischer Pre-Scan -> Analyse -> Optimierung -> Report Workflow. Entscheidungstabelle fuer 16 Project-Types (web-astro/sveltekit/nextjs, infra-docker/iac/homelab, python/go/rust/node-app/node-lib, monorepo, docs, data-ml, meta-automation, generic). Jede Phase mit Inputs/Actions/Outputs/Exit-Criteria. Severity-Skala CRITICAL/HIGH/MEDIUM/LOW. Resume-Protokoll fuer neue Instanzen.
 - **`core/skills/audit-orchestrator/session-schema.md`** (NEU) — Session-Directory-Layout `.audit-session/<YYYY-MM-DD>-<slug>/` mit INDEX.md + STATUS.md + 4 Phase-Ordnern (01-prescan, 02-analysis, 03-optimization, 04-report). Templates fuer INDEX.md, STATUS.md, findings-Tabelle (ID-Konvention SEC-/DEP-/GIT-/CI-/INFRA-/MIG-...), TODO.md mit Severity-Gruppen, changes.md. Resume-Konventionen: STATUS.md last-updated ISO-8601, "next action"-Zeile, "active instance"-Claim vor erstem Tool-Call.

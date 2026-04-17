@@ -16,6 +16,17 @@ Framework-specific extensions for Claude Code. Each stack provides audit skills,
 | **Security** | `security/` | — | Security scanning (Snyk) via MCP |
 | **Docker** | `docker/` | — | Docker/container CLAUDE.md snippet |
 
+## Lens Pattern (RepoLens-inspired)
+
+Stacks can optionally provide **lenses** — granular, single-concern audit modules that orchestrators dispatch in parallel. Example: `stacks/astro/lenses/content-collections.md`.
+
+Each lens declares:
+- `name`, `stack`, `category` — for discovery
+- `effort_min`, `effort_max` — expected tool-call count for cost estimation
+- single-responsibility scope — one concern per lens, no bundled checks
+
+Lenses are consumed by `/audit-orchestrator` (dry-run shows which lenses would run) and by the stack's primary audit skill. See `stacks/astro/lenses/README.md` for the authoring template.
+
 ## Directory Structure
 
 ```

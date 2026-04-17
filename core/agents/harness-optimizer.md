@@ -5,7 +5,7 @@ description: >
   rules, context modes, agents) and recommends improvements for reliability,
   performance, and token efficiency.
 model: opus
-effort: high
+effort: xhigh
 tools: Read, Grep, Glob, Bash, WebSearch
 maxTurns: 40
 ---
