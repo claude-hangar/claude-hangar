@@ -71,10 +71,48 @@ No phase is skipped. If a phase has nothing to do, it documents that explicitly 
 **Actions (track-dependent):**
 - **General track (always):** git hygiene, CI sanity, secret scan, dependency freshness, license posture, docs freshness, missing README sections, TODO/FIXME debt.
 - **Web-framework track:** delegate to `/audit`, `/{framework}-audit`, `/project-audit` per existing SKILL.md orchestration — findings land in this phase.
+- **Lens dispatch (any stack with lenses):** discover `stacks/{stack}/lenses/*.md` matching detected stack, dispatch one sub-agent per lens by category. See "Lens Dispatch Protocol" below.
 - **Infra track:** Docker image hygiene, Compose V2 compliance, Traefik routing sanity, rootless/user separation, secret mounting, port exposure, TLS config, backup state, monitoring coverage.
 - **Python/Go/Rust tracks:** type coverage, lint config, test coverage, dependency CVEs, build reproducibility.
 - **Monorepo track:** iterate packages — each package is its own analysis sub-block under `02-analysis/packages/{name}/`.
 - **Homelab track:** service inventory vs. running services, cert expiry, disk budgets, backup recency, log retention.
+
+### Lens Dispatch Protocol
+
+When the detected stack has a `stacks/{stack}/lenses/` directory, the orchestrator
+dispatches lenses as parallel sub-agents instead of executing analysis monolithically.
+Pattern adapted from RepoLens lens-based-auditing — narrow specialists outperform a
+single broad reviewer.
+
+**Discovery:**
+1. After Phase 1 sets project type, list `stacks/{stack}/lenses/*.md` (skip `README.md`).
+2. Parse each lens frontmatter for `name`, `category`, `effort_min`, `effort_max`.
+3. Build a dispatch plan grouped by `category` (security, performance, migration, ...).
+
+**Dispatch:**
+- Selection: by default run all lenses for the detected stack. User may pass
+  `--lens <name>` (single) or `--category <cat>` (filter) to scope.
+- Concurrency: parallel via `superpowers:dispatching-parallel-agents`, capped by
+  `HANGAR_LENS_MAX_PARALLEL` (default 4) — same semaphore pattern as the
+  RepoLens-inspired done-streak helper in `core/lib/done-streak.sh`.
+- Per lens: spawn an Explorer agent with the lens body as task brief, project path
+  as scope. Lens body already declares its own report template + severity mapping.
+- Cost gate: orchestrator sums `effort_max` across selected lenses, multiplies by
+  `HANGAR_COST_PER_CALL_USD`, compares to `HANGAR_BUDGET_USD`. Aborts with a plan
+  preview if budget would be exceeded.
+
+**Aggregation:**
+- Each lens writes its report to `02-analysis/lenses/{lens-name}.md`.
+- Findings extracted from lens reports merge into `02-analysis/findings.md` with
+  `id` prefixed by lens (e.g., `LENS-SVK-SLS-01` for sveltekit/server-load-security).
+- Severities preserved from the lens; orchestrator does not re-rank.
+
+**Stacks currently providing lenses:**
+- `stacks/astro/lenses/` — content-collections, view-transitions
+- `stacks/sveltekit/lenses/` — server-load-security, form-actions-csrf, runes-migration
+- `stacks/database/lenses/` — migration-safety, index-strategy, transaction-boundaries
+
+When a stack has no lens directory, fall back to the legacy track's monolithic audit.
 
 **Outputs:**
 - `02-analysis/README.md` — phase goal + track(s) executed.

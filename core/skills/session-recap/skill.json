@@ -1,0 +1,11 @@
+{
+  "name": "session-recap",
+  "version": "1.0.0",
+  "description": "Summarize the pre-compact snapshot produced by the PreCompact hook into a human-readable recap — works across sessions even without telemetry.",
+  "category": "workflow",
+  "risk": "safe",
+  "triggers": ["recap", "where did we stop", "what was going on", "session summary", "catch me up", "session-recap"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

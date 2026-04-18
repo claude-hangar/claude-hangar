@@ -15,11 +15,11 @@ argument-hint: "scan | full | history"
 <!-- AI-QUICK-REF
 ## /opensource-readiness — Quick Reference
 - **Modes:** scan (HEAD only, fast) | full (HEAD + community readiness) | history (git log scan, slow)
-- **13 Lens Categories** — adopted from RepoLens open-source-readiness domain
+- **10 Lens Categories** — adapted from RepoLens open-source-readiness domain (13 lenses consolidated into 10 for Hangar)
 - **Finding-IDs:** OSR-S-01 (secrets), OSR-L-01 (license), OSR-I-01 (internal exposure),
   OSR-G-01 (git history), OSR-C-01 (community), OSR-D-01 (docs), OSR-A-01 (attribution),
   OSR-B-01 (branding), OSR-P-01 (PII), OSR-R-01 (reproducibility)
-- **Severity:** BLOCKER (do not publish) > CRITICAL > HIGH > MEDIUM > LOW
+- **Severity:** CRITICAL (do not publish) > HIGH > MEDIUM > LOW (Hangar-wide convention, no BLOCKER tier)
 - **State:** .opensource-readiness-state.json
 - **Complements:** security-scan (Claude Code config) and secret-leak-check hook (HEAD only)
 -->
@@ -65,9 +65,14 @@ just staged changes. Flags: API keys, JWT tokens, AWS keys, private keys, databa
 with embedded passwords, `.env` files committed by accident.
 
 ### OSR-G — Git History Secrets (history mode only)
-Run `git log --all -p -G '<pattern>'` for each secret pattern. Critical: secrets rotated
-in HEAD but still recoverable via `git show <old-sha>` are still leaked. Recommends
-`git filter-repo` or BFG with concrete commands; never executes them.
+Secrets rotated in HEAD but still recoverable via `git show <old-sha>` remain leaked.
+**Performance warning:** `git log --all -p -G '<pattern>'` on a 10k+ commit repo takes
+minutes to hours. Lens enforces a wall-clock time cap via
+`HANGAR_OSR_HISTORY_MAX_SECONDS` (default 120) and an optional `--since <date>`
+scope limit. For large repos, lens recommends delegating to a dedicated scanner
+(`gitleaks detect --redact --log-opts='--all --since=<date>'` or `trufflehog git`)
+rather than pattern-by-pattern git traversal. Recommends `git filter-repo` or BFG
+with concrete commands for remediation; never executes them.
 
 ### OSR-L — License Compliance
 - Project has a LICENSE file at root.
@@ -126,19 +131,19 @@ Standard Hangar report format:
 ```markdown
 # Open-Source Readiness Report — <repo> — <date>
 
-**Verdict:** READY | NOT READY (N blockers) | NEEDS REVIEW
+**Verdict:** READY | NOT READY (N critical blockers) | NEEDS REVIEW
 
 ## Findings (grouped by severity)
 
-### BLOCKER — must fix before publishing
+### CRITICAL — must fix before publishing
 - OSR-S-01 (file:line) — AWS access key found in `src/config.ts`
-- OSR-G-03 — `OPENAI_API_KEY` recoverable in commit a1b2c3d (rotate + filter-repo)
-
-### CRITICAL
+- OSR-G-03 (commit a1b2c3d) — `OPENAI_API_KEY` recoverable in git history (rotate + filter-repo)
 - OSR-L-01 — Missing LICENSE file at repo root
+
+### HIGH
 - OSR-I-02 (5 files) — Internal hostname `vpn.acme.corp` referenced
 
-### HIGH / MEDIUM / LOW
+### MEDIUM / LOW
 ...
 
 ## Recommended actions
@@ -157,16 +162,27 @@ Standard Hangar report format:
   "lastRun": "2026-04-18T10:00:00Z",
   "mode": "scan|full|history",
   "verdict": "ready|not-ready|needs-review",
-  "summary": { "blocker": 0, "critical": 0, "high": 0, "medium": 0, "low": 0 },
+  "summary": { "critical": 0, "high": 0, "medium": 0, "low": 0 },
   "findings": [
     {
       "id": "OSR-S-01",
-      "severity": "blocker",
+      "severity": "critical",
       "lens": "secret-leaks",
       "file": "src/config.ts",
       "line": 42,
+      "commit_sha": null,
       "message": "AWS access key pattern detected",
       "recommendation": "Move to environment variable, rotate key"
+    },
+    {
+      "id": "OSR-G-03",
+      "severity": "critical",
+      "lens": "git-history",
+      "file": null,
+      "line": null,
+      "commit_sha": "a1b2c3d",
+      "message": "OPENAI_API_KEY recoverable in historical commit",
+      "recommendation": "Rotate key, then rewrite history via filter-repo + force-push"
     }
   ]
 }
@@ -176,11 +192,22 @@ Standard Hangar report format:
 
 - **Read-only.** Never modifies files, never rewrites git history. Suggests commands
   for the user to run themselves.
-- **No false intimacy with private data.** When flagging PII, do not echo the value
-  into the report — use a redacted hash.
-- **History mode is opt-in.** It is slow on large repos; users must explicitly request it.
+- **No false intimacy with private data.** When flagging PII or internal identifiers,
+  do not echo the value into the report. Use a truncation pattern (`jo***@l***.com`)
+  rather than a hash — short strings like emails are trivially reversible against a
+  rainbow table even when hashed.
+- **Internal-domain detection.** OSR-I needs to know "what is internal" — lens reads
+  `git config user.email` to derive the likely company domain, and also accepts an
+  explicit `HANGAR_OSR_INTERNAL_DOMAINS` env var (comma-separated). Falls back to a
+  generic pattern scan if neither is available.
+- **License-compatibility matrix.** OSR-L distinguishes: MIT/BSD/Apache-2.0 mutually
+  compatible; LGPL OK as dynamic dependency; MPL-2.0 file-level copyleft;
+  GPL/AGPL viral. AGPL is flagged separately since it affects network-deployed code.
+- **History mode is opt-in** and subject to `HANGAR_OSR_HISTORY_MAX_SECONDS`
+  (default 120). On timeout, lens reports "partial scan — delegate to gitleaks/trufflehog".
 - **Complements, does not replace,** `security-scan` (Claude Code config focus) and
-  the `secret-leak-check` hook (HEAD on commit).
+  the `secret-leak-check` hook (HEAD on commit). Secret-pattern list is shared via
+  `core/lib/secret-patterns.json` (single source of truth for both).
 - **Trademark/branding lens is advisory only.** Tool cannot verify trademark status —
   flags suspicious patterns for human review.
 

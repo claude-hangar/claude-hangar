@@ -1,0 +1,11 @@
+{
+  "name": "gsd-orchestrate",
+  "version": "1.0.0",
+  "description": "Orchestrate GSD (Get-Shit-Done) workflows across planning, execution, verification, and shipping phases.",
+  "category": "workflow",
+  "risk": "safe",
+  "triggers": ["gsd orchestrate", "gsd workflow", "run gsd", "gsd pipeline"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

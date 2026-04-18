@@ -1,0 +1,11 @@
+{
+  "name": "docs-team",
+  "version": "1.0.0",
+  "description": "Launch parallel documentation agents: detect changes, update docs, verify completeness against the codebase.",
+  "category": "documentation",
+  "risk": "safe",
+  "triggers": ["docs team", "docs-team", "update docs", "documentation sweep", "stale docs"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

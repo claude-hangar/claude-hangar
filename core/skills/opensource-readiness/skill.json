@@ -1,0 +1,11 @@
+{
+  "name": "opensource-readiness",
+  "version": "1.0.0",
+  "description": "Pre-publication audit. Catches what other skills miss: secrets in git history, license compliance, internal exposure, attribution gaps, community-readiness files, PII in fixtures, build reproducibility.",
+  "category": "security",
+  "risk": "safe",
+  "triggers": ["open source readiness", "ready to publish", "going public", "pre-publish audit", "publish check", "open-source audit", "osr"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

@@ -1,0 +1,11 @@
+{
+  "name": "debug-team",
+  "version": "1.0.0",
+  "description": "Launch parallel debugging agents for systematic root-cause analysis.",
+  "category": "debug",
+  "risk": "safe",
+  "triggers": ["debug team", "help me debug", "debug-team", "find the bug", "root cause the bug"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": ["error-analyzer"],
+  "dataFiles": []
+}

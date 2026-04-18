@@ -1,0 +1,11 @@
+{
+  "name": "review-team",
+  "version": "1.0.0",
+  "description": "Launch parallel code review agents for comprehensive multi-perspective review.",
+  "category": "review",
+  "risk": "safe",
+  "triggers": ["review team", "full review", "multi-review", "review-team", "multi-perspective review"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

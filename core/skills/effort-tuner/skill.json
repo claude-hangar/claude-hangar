@@ -1,0 +1,11 @@
+{
+  "name": "effort-tuner",
+  "version": "1.0.0",
+  "description": "Analyze the current task and recommend the optimal Claude Code effort level (low | medium | high | xhigh | max) based on complexity heuristics.",
+  "category": "workflow",
+  "risk": "safe",
+  "triggers": ["effort tuner", "what effort", "effort level", "which effort should I use", "effort recommendation"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

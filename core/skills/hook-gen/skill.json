@@ -1,0 +1,11 @@
+{
+  "name": "hook-gen",
+  "version": "1.0.0",
+  "description": "Generate Claude Code hook configurations from natural language descriptions.",
+  "category": "workflow",
+  "risk": "safe",
+  "triggers": ["create hook", "add hook", "hook for", "when X happens do Y", "hook-gen", "generate hook"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

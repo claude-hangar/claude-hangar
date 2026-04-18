@@ -1,0 +1,11 @@
+{
+  "name": "refactor-team",
+  "version": "1.0.0",
+  "description": "Launch parallel refactoring agents: restructure code in isolated worktree, write tests to lock behavior, review result.",
+  "category": "refactor",
+  "risk": "safe",
+  "triggers": ["refactor team", "refactor-team", "safe refactor", "restructure code"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": ["refactor-agent", "test-writer", "code-reviewer"],
+  "dataFiles": []
+}

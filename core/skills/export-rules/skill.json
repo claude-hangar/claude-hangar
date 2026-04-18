@@ -1,0 +1,11 @@
+{
+  "name": "export-rules",
+  "version": "1.0.0",
+  "description": "Export Claude Hangar skills and rules to other AI coding tool formats (Cursor, Windsurf, Cline).",
+  "category": "export",
+  "risk": "safe",
+  "triggers": ["export rules", "cursor rules", "windsurf rules", "cline rules", "export-rules", "convert to mdc"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": [],
+  "dataFiles": []
+}

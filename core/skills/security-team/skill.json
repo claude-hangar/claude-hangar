@@ -1,0 +1,11 @@
+{
+  "name": "security-team",
+  "version": "1.0.0",
+  "description": "Launch parallel security analysis agents for comprehensive vulnerability assessment.",
+  "category": "security",
+  "risk": "safe",
+  "triggers": ["security team", "security audit", "security-team", "pentest", "vulnerability scan"],
+  "platforms": { "claude-code": "supported" },
+  "dependencies": ["security-reviewer"],
+  "dataFiles": []
+}
