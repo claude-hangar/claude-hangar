@@ -327,6 +327,12 @@ Patch releases:
 
 ---
 
+## 6.1.8 — April 18, 2026
+
+- Fix: Build output files could contain special characters (`!`, `~`, `{`, `}`) in their names, causing deploy failures on platforms like Netlify (-> PR #16367)
+
+Pure bugfix release — no breaking changes, no new features.
+
 ## 6.1.7 — April 2026
 
 - Fix: Remote image dimensions were not validated during static builds on Netlify (-> PR #16027)
@@ -345,4 +351,4 @@ Pure bugfix release — no breaking changes, no new features.
 
 ---
 
-As of: 2026-04-16 (updated for Astro 6.1.7)
+As of: 2026-04-21 (updated for Astro 6.1.8)
