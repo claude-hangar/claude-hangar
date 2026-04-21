@@ -21,7 +21,12 @@ export SESSION_ID="${CLAUDE_SESSION_ID:-$$}"
 # Pass input as environment variable
 export HOOK_INPUT="$INPUT"
 
-# Log session summary and cleanup
+# Log session summary and cleanup — run detached so the hook returns
+# immediately. SessionEnd gives hooks very little time before the session
+# closes, and node cold-start on Windows (~300-800ms) regularly trips the
+# "Hook cancelled" warning. Detaching keeps cleanup alive in the background
+# while the hook itself exits within milliseconds.
+(
 node -e "
 const fs = require('fs');
 const path = require('path');
@@ -72,6 +77,8 @@ for (const pattern of patterns) {
 if (endReason === 'error' || endReason === 'crash') {
   console.error('SESSION-END: Abnormal termination (' + endReason + ') after ' + Math.round(duration/60) + 'min');
 }
-" 2>/dev/null
+" </dev/null >/dev/null 2>&1
+) &
+disown 2>/dev/null || true
 
 exit 0
