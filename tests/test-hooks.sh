@@ -389,6 +389,38 @@ test_config_secret_scan() {
 test_config_secret_scan
 
 # ============================================================
+# 5b. repomind-autosync.sh
+# ============================================================
+
+echo ""
+echo "--- repomind-autosync ---"
+
+test \
+  "should exit 0 when HANGAR_REPOMIND_AUTOSYNC is not set" \
+  0 \
+  "repomind-autosync.sh" \
+  '{"cwd":"."}'
+
+test_autosync_silent_without_config() {
+  local desc="repomind-autosync exits silently when enabled but no .repomind.yml present"
+  TOTAL=$((TOTAL + 1))
+  local tmp
+  tmp=$(mktemp -d 2>/dev/null) || tmp="/tmp/hangar-autosync-$$"
+  local out
+  out=$(echo "{\"cwd\":\"$tmp\"}" | HANGAR_REPOMIND_AUTOSYNC=true bash "$HOOKS_DIR/repomind-autosync.sh" 2>&1)
+  local rc=$?
+  rm -rf "$tmp" 2>/dev/null
+  if [ "$rc" -eq 0 ] && [ -z "$out" ]; then
+    echo "  PASS  $desc"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  $desc (rc=$rc, out=$out)"
+    FAIL=$((FAIL + 1))
+  fi
+}
+test_autosync_silent_without_config
+
+# ============================================================
 # 6. session-stop.sh
 # ============================================================
 
@@ -1278,7 +1310,7 @@ STANDARD_COUNT=$(grep -l 'HOOK_MIN_PROFILE="standard"' "$HOOKS_DIR"/*.sh 2>/dev/
 STRICT_COUNT=$(grep -l 'HOOK_MIN_PROFILE="strict"' "$HOOKS_DIR"/*.sh 2>/dev/null | wc -l)
 PROFILE_TOTAL=$((MINIMAL_COUNT + STANDARD_COUNT + STRICT_COUNT))
 HOOK_FILE_COUNT=$(find "$HOOKS_DIR" -name '*.sh' | wc -l)
-if [ "$PROFILE_TOTAL" -eq "$HOOK_FILE_COUNT" ] && [ "$MINIMAL_COUNT" -eq 3 ] && [ "$STRICT_COUNT" -eq 6 ]; then
+if [ "$PROFILE_TOTAL" -eq "$HOOK_FILE_COUNT" ] && [ "$MINIMAL_COUNT" -eq 3 ] && [ "$STRICT_COUNT" -eq 7 ]; then
   echo "  PASS  profile distribution: $MINIMAL_COUNT minimal, $STANDARD_COUNT standard, $STRICT_COUNT strict (total: $PROFILE_TOTAL)"
   PASS=$((PASS + 1))
 else

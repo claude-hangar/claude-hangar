@@ -181,6 +181,12 @@
             "command": "bash ~/.claude/hooks/session-end.sh",
             "timeout": 30,
             "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/repomind-autosync.sh",
+            "timeout": 15,
+            "async": true
           }
         ]
       }
