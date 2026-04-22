@@ -54,5 +54,14 @@ MEMORY.md
 *.swp
 *.swo
 
-# Claude worktrees
+# Claude worktrees / local per-repo agent state
 .claude/agent-*/
+.claude/agent-memory/
+.claude/worktrees/
+.claude/settings.local.json
+
+# Settings backup files (created by merge operations)
+*/settings.json.pre-merge-*
+*/settings.json.bak-*
+**/settings.json.pre-merge-*
+**/settings.json.bak-*

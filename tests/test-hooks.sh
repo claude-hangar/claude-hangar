@@ -364,6 +364,30 @@ test \
   "session-start.sh" \
   '{"cwd":"."}'
 
+# Config-secret-scan: warn when fake HOME contains a settings.json with a GitHub PAT pattern
+test_config_secret_scan() {
+  local desc="session-start warns when ~/.claude/settings.json contains a GitHub PAT"
+  TOTAL=$((TOTAL + 1))
+  local tmp_home
+  tmp_home=$(mktemp -d 2>/dev/null) || tmp_home="/tmp/hangar-test-home-$$"
+  mkdir -p "$tmp_home/.claude"
+  # Dummy token matching /ghp_[A-Za-z0-9]{36}/ — synthetic, not a real secret
+  local dummy_token
+  dummy_token="ghp_$(printf 'X%.0s' $(seq 1 36))"
+  printf '{"placeholder":"%s"}' "$dummy_token" > "$tmp_home/.claude/settings.json"
+  local out
+  out=$(echo '{"cwd":"."}' | HOME="$tmp_home" USERPROFILE="$tmp_home" bash "$HOOKS_DIR/session-start.sh" 2>/dev/null)
+  rm -rf "$tmp_home" 2>/dev/null
+  if echo "$out" | grep -q "CONFIG-SECRET WARNING"; then
+    echo "  PASS  $desc"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  $desc (expected CONFIG-SECRET WARNING in output)"
+    FAIL=$((FAIL + 1))
+  fi
+}
+test_config_secret_scan
+
 # ============================================================
 # 6. session-stop.sh
 # ============================================================

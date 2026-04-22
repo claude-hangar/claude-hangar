@@ -137,6 +137,44 @@ if [ -n "$FRONTEND_HINT" ]; then
   CONTEXT+="$FRONTEND_HINT\n"
 fi
 
+# Config-Secret-Scan — catch secrets in ~/.claude/settings.json(.local) on every session start
+# Complements secret-leak-check.sh which only runs on Write/Edit, not on manual edits outside Claude.
+CONFIG_LEAK=$(node -e "
+  const fs = require('fs'), path = require('path');
+  const home = process.env.USERPROFILE || process.env.HOME || '';
+  if (!home) { process.exit(0); }
+  const files = [
+    path.join(home, '.claude', 'settings.json'),
+    path.join(home, '.claude', 'settings.local.json'),
+  ];
+  const patterns = [
+    [/ghp_[A-Za-z0-9]{36}/, 'GitHub PAT'],
+    [/gho_[A-Za-z0-9]{36}/, 'GitHub OAuth token'],
+    [/ghs_[A-Za-z0-9]{36}/, 'GitHub App token'],
+    [/github_pat_[A-Za-z0-9_]{22,}/, 'GitHub fine-grained PAT'],
+    [/sk-ant-[A-Za-z0-9_-]{20,}/, 'Anthropic API key'],
+    [/sk-proj-[A-Za-z0-9]{20,}/, 'OpenAI project key'],
+    [/AKIA[0-9A-Z]{16}/, 'AWS access key'],
+    [/(postgres|mysql|mongodb):\/\/[^:\s\"']+:[^@\s\"']+@/, 'DB URL with inline credentials'],
+    [/-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----/, 'Private key block'],
+  ];
+  const hits = [];
+  for (const f of files) {
+    try {
+      const body = fs.readFileSync(f, 'utf8');
+      for (const [re, label] of patterns) {
+        if (re.test(body)) hits.push(path.basename(f) + ': ' + label);
+      }
+    } catch (e) { /* file missing — ignore */ }
+  }
+  if (hits.length > 0) {
+    console.log('CONFIG-SECRET WARNING — secrets found in global config: ' + hits.join(' | ') + '. Rotate and remove immediately.');
+  }
+" 2>/dev/null) || true
+if [ -n "$CONFIG_LEAK" ]; then
+  CONTEXT+="$CONFIG_LEAK\n"
+fi
+
 # Write session start timestamp (used by cost-tracker and desktop-notify)
 date +%s > "$HOME/.claude/.session-start" 2>/dev/null || true
 
