@@ -80,6 +80,7 @@ jobs:
               | grep -v 'CONTRIBUTING' \
               | grep -v 'SECURITY' \
               | grep -v 'secret-leak-check' \
+              | grep -v 'scrub-session-secrets' \
               | grep -v 'test-hooks' \
               | grep -v 'writing-hooks' \
               | grep -v 'session-start' \
