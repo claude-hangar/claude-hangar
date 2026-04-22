@@ -1,6 +1,21 @@
 node_modules/
 dist/
 
+# Python build artefacts (repomind etc.)
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+*.egg-info/
+build/
+.venv/
+venv/
+
 # Local machine config (path overrides)
 .local-config.json
 
