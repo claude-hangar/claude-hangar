@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+#### Hook Hardening + Metadata Sync (2026-04-21)
+
+**Hook reliability (Windows Git Bash):**
+- **`core/hooks/session-end.sh`** — Detach cleanup block in a backgrounded subshell (`( node -e "..." </dev/null >/dev/null 2>&1 ) & disown`). SessionEnd terminates the hook process aggressively on Windows; node cold-start (~300-800ms) regularly tripped Claude Code's "Hook cancelled" warning. The detach pattern returns from the hook within milliseconds while cleanup/logging continues asynchronously.
+- **`core/settings.json.template`** — Added `SubagentStart` and `SubagentStop` wiring for `subagent-tracker.sh` (parity with `hooks/hooks.json` plugin manifest). Template users installed via `setup.sh` previously lost subagent lifecycle tracking.
+- **`core/settings.json.template`** — Added explicit `timeout` on every hook entry (3-30s based on workload). Added `async: true` to long-running hooks (`session-end`, `stop-batch-format`, `batch-format-collector`, `design-quality-check`, `task-created-init`).
+
+**Metadata sync (counts + repo):**
+- **`.claude-plugin/plugin.json`** — Skill count `41` → `42`, Claude Code target `v2.1.112` → `v2.1.116`.
+- **`.claude-plugin/marketplace.json`** — Version `1.1.0` → `1.2.0`, counts corrected to `42 skills, 22 agents, 31 hooks, 9 framework stacks`.
+- **`skills_index.json`** — Regenerated from `core/skills/*/SKILL.md` frontmatter. `skillCount: 42`, `generated: 2026-04-21`. Adds `effort-tuner`, `gsd-orchestrate`, `opensource-readiness`, `session-recap` (present in repo since 2026-04-16 but missing from index).
+- **`README.md`** — CI/Release badges and skill count synced (`41` → `42`). Repo org `claude-hangar` → `lazaridis-com` to match actual GitHub homepage in `plugin.json`.
+
 #### Claude Code v2.1.111/112 Alignment + RepoLens Patterns (2026-04-17)
 
 **Claude Code v2.1.111/112 optimizations:**

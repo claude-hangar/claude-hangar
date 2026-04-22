@@ -10,9 +10,9 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/claude-hangar/claude-hangar/actions/workflows/ci.yml"><img src="https://github.com/claude-hangar/claude-hangar/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/lazaridis-com/claude-hangar/actions/workflows/ci.yml"><img src="https://github.com/lazaridis-com/claude-hangar/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
-  <a href="https://github.com/claude-hangar/claude-hangar/releases"><img src="https://img.shields.io/github/v/release/claude-hangar/claude-hangar" alt="Release"></a>
+  <a href="https://github.com/lazaridis-com/claude-hangar/releases"><img src="https://img.shields.io/github/v/release/lazaridis-com/claude-hangar" alt="Release"></a>
 </p>
 
 ---
@@ -25,7 +25,7 @@ Most Claude Code configs are personal dotfiles — useful to read, hard to reuse
 - **Multi-project orchestration** — manage configs for multiple repos from one place
 - **Modular stacks** — pick only what you need (`bash integrate.sh <stack>`) with `--with`/`--without` component control
 - **Battle-tested hooks** that prevent real incidents (secret leaks, destructive commands, context overflow)
-- **41 skills** from project scanning to pre-PR verification, context optimization, session recap, effort tuning, stack lenses, and meta-governance
+- **42 skills** from project scanning to pre-PR verification, context optimization, session recap, effort tuning, stack lenses, and meta-governance
 - **31 lifecycle hooks** with 4-level quality gates, config protection, MCP health checks, design quality guards, permission-request inspection, budget caps, and smart context preservation
 - **22 agents** for specialized tasks (code review, TDD enforcement, performance analysis, MCP server development, autonomous workflows) — deep-reasoning agents run at `effort: xhigh` (v2.1.111+)
 - **20 governance rules** (common + language-specific) always-on code quality

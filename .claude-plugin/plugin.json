@@ -1,6 +1,6 @@
 {
   "name": "claude-hangar",
-  "description": "Production-grade Claude Code environment with 41 skills, 22 agents, 31 hooks, and 9 framework stacks — optimized for Claude Code v2.1.112",
+  "description": "Production-grade Claude Code environment with 42 skills, 22 agents, 31 hooks, and 9 framework stacks — optimized for Claude Code v2.1.116",
   "version": "1.2.0",
   "author": {
     "name": "Claude Hangar Contributors",
