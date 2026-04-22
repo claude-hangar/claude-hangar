@@ -606,6 +606,28 @@ Runtime: 12 min
 - **Combined report** via `/audit-orchestrator report` or naturally as the Phase 4 output (`04-report/REPORT.md`).
 - **Regulatory standards** — explicitly check applicable privacy, accessibility, and compliance regulations — separate section in combined report
 
+## Anti-Stall Rules (Subagent-Safe Execution)
+
+When this skill runs inside a subagent (spawned via `Agent`), the parent stream watchdog kills workers that produce no output for ~600s. Long silent scans (deep Grep, multi-file Read loops, recursive walks) can exceed that window even on small repos.
+
+**Every audit-orchestrator run — especially inside a subagent — MUST:**
+
+1. **Heartbeat every ≤120s** — emit a single-line progress marker (`[progress] phase=01 step=3/12 elapsed=85s`) between tool batches. A completed tool call counts as output; a 600s silent Grep does not.
+2. **Chunk Phase 1 fingerprinting** — detect project type via **at most 5 Glob + 3 Read** calls before writing `project-profile.md`. Deep scans happen in Phase 2, never Phase 1.
+3. **Cap Phase 2 per-track work units** — split each track (security, deps, docs, drift, CI) into independent chunks of ≤10 tool calls. Write incremental findings to `02-analysis/findings/` after each chunk so crash-resume loses at most one chunk.
+4. **Never block on a single tool call >180s** — use explicit Bash `timeout 120s <cmd>` for scans that could hang (find, grep-r on huge trees, `gh api` without pagination).
+5. **Prefer parallel tool calls** — independent Greps/Reads go in one tool-call batch, not sequential. Each batch emits output to the parent; sequential chains starve the watchdog.
+6. **Fail-soft on stalled subtasks** — if a single track runs >5min with no new findings written, mark it `skipped-stall` in STATUS.md and continue. Do not re-retry; log for user review.
+
+**Subagent-invocation contract:** when the orchestrator is spawned as an `Agent`, the *caller* must pass a **scoped chunk**, not "run the whole audit". Example:
+
+```
+GOOD: Agent(prompt="Run audit-orchestrator Phase 1 prescan only for <repo>. Return project-profile.md contents. Cap: 15 tool calls, 4min.")
+BAD:  Agent(prompt="Run full audit on <repo>.")
+```
+
+The bad pattern is what stalls — 4 phases × N tracks × M files > watchdog window. Callers chaining this skill across phases should spawn **one agent per phase** and synthesize between.
+
 ## Reference Files
 
 - `universal-workflow.md` — the four-phase workflow, project-type tracks, severity scale, exit criteria.
